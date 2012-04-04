@@ -1,0 +1,182 @@
+<?php
+/**
+ * This file is part of ZeDb
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace ZeDb;
+use Zend\Db\Adapter\Adapter,
+    Zend\Db\ResultSet\ResultSet,
+    Zend\Db\TableGateway\TableGateway,
+    string;
+/**
+ * Model Class
+ * Loads mapper entities from the database and stores them in a local container for later use.
+ * Saves entities into the local container before flushing them to the database.
+ * Also contains methods for easy access to the most common queries used on the database.
+ *
+ * @package ZeDb
+ * @author Cosmin Harangus <cosmin@zendexperts.com>
+ */
+class Model extends TableGateway implements ModelInterface
+{
+    /**
+     * @var string
+     */
+    protected $entityClass = '\ZeDb\Entity';
+    protected $primaryKey = 'id';
+    /**
+     * @var array
+     */
+    protected $_entities = array();
+    /**
+     * @var array
+     */
+    protected $_localEntities = array();
+
+
+    /**
+     * @param array $options
+     * @param \Zend\Db\Adapter\Adapter $adapter
+     */
+    public function __construct(Adapter $adapter,$options = null)
+    {
+        if (!$options){
+            $options=array();
+        }
+        //set the table name from config if specified or take it from the child class
+        if (array_key_exists('tableName', $options)){
+            $tableName = $options['tableName'];
+        }else $tableName = $this->tableName;
+
+        //set the entity class from the config or from the child class if none defined
+        if (array_key_exists('entityClass', $options)){
+            $entityClass = trim($options['entityClass'],'\\');
+        }else $entityClass = trim($this->entityClass,'\\');
+
+        //init the result set to return instances of the entity class
+        $this->entityClass = $entityClass;
+        $resultSet = new ResultSet(new $entityClass);
+        //init the parent class
+        parent::__construct($tableName, $adapter, null, $resultSet);
+    }
+
+    public function setPrimaryKey($primaryKey)
+    {
+        $this->primaryKey = $primaryKey;
+        return $this;
+    }
+
+    /**
+     * @return \ZeDb\Registry
+     */
+    public function getRegistry()
+    {
+        return Module::getRegistry();
+    }
+
+    /**
+     * Persists an entity into the model
+     * @param mixed $entities
+     * @return Model
+     */
+    public function persist($entities)
+    {
+        if ($entities instanceof EntityInterface){
+            if ($entities[$this->primaryKey]){
+                $this->_entities[$entities[$this->primaryKey]] = $entities;
+            }
+            $this->_localEntities[] = $entities;
+        }elseif (is_array($entities)){
+            foreach($entities as $entity){
+                if ($entity[$this->primaryKey]){
+                    $this->_entities[$entity[$this->primaryKey]] = $entity;
+                }
+                $this->_localEntities[] = $entity;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Saves the persisted entities into the database
+     * @return Model
+     */
+    public function flush()
+    {
+        foreach($this->_localEntities as $key => $entity){
+            $entity = $this->save($entity);
+            $this->_entities[$entity[$this->primaryKey]] = $entity;
+            unset($this->_localEntities[$key]);
+        }
+        return $this;
+    }
+
+    /**
+     * Save an entity directly in the database
+     * @param EntityInterface $entity
+     * @return EntityInterface
+     */
+    public function save(EntityInterface $entity)
+    {
+        $data = $entity->toArray();
+
+        if ($data[$this->primaryKey]){
+            $this->update($data, array($this->primaryKey => $data[$this->primaryKey]));
+        }else{
+            unset($data[$this->primaryKey]);
+            $this->insert($data);
+            $id = $this->lastInsertId;
+            $data[$this->primaryKey] = $id;
+            $entity->exchangeArray($data);
+        }
+        return $entity;
+    }
+
+    /**
+     * Get an entity by Id
+     * @param int $id
+     * @return EntityInterface | null
+     */
+    public function get($id)
+    {
+        //Load from repository if found
+        if(array_key_exists($id,$this->_entities)){
+            return $this->_entities[$id];
+        }
+
+        //Load from the database otherwise
+        $resultSet = $this->select(array($this->primaryKey=>$id));
+        $entity = $resultSet->current();
+
+        //Save in the repository for later use
+        $this->_entities[$entity[$this->primaryKey]] = $entity;
+        return $entity;
+    }
+
+    /**
+     * Create entity from array
+     * @param array|null $data
+     * @return mixed
+     */
+    public function create($data = null){
+        $entityClass = $this->entityClass;
+        $entity = new $entityClass();
+        if ($data){
+            $entity->exchangeArray($data);
+        }
+        return $entity;
+    }
+
+    /**
+     * Return the entity class handled by the model
+     * @return string
+     */
+    public function getEntityClass()
+    {
+        return $this->entityClass;
+    }
+}

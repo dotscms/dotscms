@@ -1,0 +1,14 @@
+<h1>A 404 error occurred</h1>
+<h2>{{message}}</h2>
+
+{% if _isset(exception) and _is_a(exception,'\Exception') %}
+
+<h3>Exception information:</h3>
+<p>
+    <h4>Message:</h4>
+    <pre>{{ exception.getMessage() }}</pre>
+    <h4>Stack trace:</h4>
+    <pre>{{ exception.getTraceAsString() | raw}}</pre>
+</p>
+
+{% endif %}
