@@ -5,16 +5,6 @@ return array(
             'alias' => array(
                 'zedb' => 'ZeDb\Registry'
             ),
-            'Zend\Db\Adapter\Adapter'=>array(
-                'parameters'=>array(
-                    'driver'=>array(
-                        'driver' => 'Pdo_Mysql', //'MySqli',
-                        'database' => 'zf2dev',
-                        'username' => 'root',
-                        'password' => ''
-                    )
-                )
-            ),
             'Core\Db\Model\User'=>array(
                 'parameters' => array(
                     'options'=>array(

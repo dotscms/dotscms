@@ -107,6 +107,23 @@ class Entity /*extends ResultSet\Row*/ implements EntityInterface
     }
 
     /**
+     * @param $offset
+     * @param $value
+     */
+    public function __set($offset, $value)
+    {
+        $this->offsetSet($offset, $value);
+    }
+
+    /**
+     * @param $offset
+     * @return mixed
+     */
+    public function __get($offset){
+        return $this->offsetGet($offset);
+    }
+
+    /**
      * Offset to unset
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      * @param mixed $offset The offset to unset.

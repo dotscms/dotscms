@@ -12,7 +12,7 @@ class IndexController extends ActionController
 
         $model = $db->get('Core\Db\Entity\User');
         $user = $model->get(1);
-        var_dump($user);
+        $user->username = 'admin2';
 //        $model->persist($user);
 //        $model->flush();
         return array();

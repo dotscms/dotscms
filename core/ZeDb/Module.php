@@ -31,7 +31,7 @@ class Module implements AutoloaderProvider
     public function init(Manager $moduleManager)
     {
         $events = StaticEventManager::getInstance();
-//        $events->attach('bootstrap', 'bootstrap', array($this, 'initDbRegistry'), 20000);
+        $events->attach('bootstrap', 'bootstrap', array($this, 'initDbRegistry'), 20000);
     }
 
     /**
