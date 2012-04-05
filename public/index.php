@@ -9,9 +9,9 @@ date_default_timezone_set('Europe/Bucharest');
 require_once (getenv('ZF2_PATH') ?: dirname(BASE_PATH).'/vendor/ZendFramework2/library') . '/Zend/Loader/AutoloaderFactory.php';
 Zend\Loader\AutoloaderFactory::factory(array(
     'Zend\Loader\StandardAutoloader' => array(
-//        'namespaces' => array(
-//            'Ze' => BASE_PATH.'/vendor/Ze/',
-//        ),
+        'namespaces' => array(
+            'Ze' => BASE_PATH.'/vendor/Ze/',
+        ),
     ),
 ));
 $appConfig = include 'config/application.config.php';
@@ -29,11 +29,13 @@ $moduleManager->events()->attachAggregate($defaultListeners);
 $moduleManager->loadModules();
 
 // Create application, bootstrap, and run
-//$bootstrap   = new Ze\Bootstrap($defaultListeners->getConfigListener()->getMergedConfig());
-//$bootstrap
-//    ->bootstrap() ->run() ->send();
+$bootstrap = new Ze\Bootstrap($defaultListeners->getConfigListener()->getMergedConfig());
+$bootstrap
+    ->bootstrap()
+    ->run()
+    ->send();
 
-$bootstrap   = new Zend\Mvc\Bootstrap($defaultListeners->getConfigListener()->getMergedConfig());
-$application = new Zend\Mvc\Application;
-$bootstrap->bootstrap($application);
-$application->run()->send();
+//$bootstrap   = new Zend\Mvc\Bootstrap($defaultListeners->getConfigListener()->getMergedConfig());
+//$application = new Zend\Mvc\Application;
+//$bootstrap->bootstrap($application);
+//$application->run()->send();

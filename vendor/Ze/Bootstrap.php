@@ -4,7 +4,7 @@ namespace Ze;
 use Zend\Mvc\Bootstrap as DefaultBootstrap,
     Zend\Mvc\Application,
     Zend\Mvc\AppContext,
-    Core\Application\Context;
+    Ze\Application\Context;
 
 class Bootstrap extends DefaultBootstrap
 {

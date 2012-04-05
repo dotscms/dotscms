@@ -2,11 +2,9 @@
 return array(
     'modules' => array(
         'ZeTwig',
-//        'ZeDebug',
         'ZeDb',
-        'ZeAuth',
         'Core',
-        'DefaultTpl', //Template
+        'ZeTpl', //Template
     ),
     'module_listener_options' => array( 
         'config_cache_enabled' => false,
