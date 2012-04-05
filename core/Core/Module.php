@@ -14,21 +14,18 @@ class Module implements AutoloaderProvider
      * Start point for any module
      * @param \Zend\Module\Manager $moduleManager
      */
-    public function init(Manager $moduleManager)
-    {
-//        $events = StaticEventManager::getInstance();
-//        $events->attach('Zend\Mvc\Application', 'route', array($this, 'initializeCore'), -100000);
+    public function init(Manager $moduleManager){
+
     }
 
     /**
      * Get module autoloader configuration
      * @return array
      */
-    public function getAutoloaderConfig()
-    {
+    public function getAutoloaderConfig() {
         return array(
             'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
+                __DIR__ . '/autoload/classmap.php',
             ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
@@ -42,9 +39,11 @@ class Module implements AutoloaderProvider
      * Get core configuration array
      * @return array
      */
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
+    public function getConfig(){
+        $definitions = include __DIR__ . '/config/module.di.config.php';
+        $config = include __DIR__ . '/config/module.config.php';
+        $config = array_merge_recursive($definitions, $config);
+        return $config;
     }
 
 }

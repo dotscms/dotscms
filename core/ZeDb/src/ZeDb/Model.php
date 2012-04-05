@@ -37,7 +37,6 @@ class Model extends TableGateway implements ModelInterface
      */
     protected $_localEntities = array();
 
-
     /**
      * @param array $options
      * @param \Zend\Db\Adapter\Adapter $adapter

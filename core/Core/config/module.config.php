@@ -1,20 +1,14 @@
 <?php
 return array(
     'di' => array(
-        'definition' => array(
-            'class' => array(
-                'Zend\Mvc\Router\RouteStack' => array(
-                    'instantiator' => array(
-                        'Zend\Mvc\Router\Http\TreeRouteStack',
-                        'factory'
-                    ),
-                ),
-            ),
-        ),
         'instance' => array(
             'alias' => array(
                 'core-index' => 'Core\Controller\IndexController',
             ),
+
+            /**
+             * Template files and path to default template folder
+             */
             'Zend\View\Resolver\TemplateMapResolver' => array(
                 'parameters' => array(
                     'map'  => array(
@@ -26,10 +20,33 @@ return array(
             'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
                     'paths'  => array(
-                        'application' => __DIR__ . '/../views',
+                        'core' => __DIR__ . '/../views',
                     ),
                 ),
             ),
+
+            /**
+             * Database entities and models
+             */
+            'Core\Db\Model\User' => array(
+                'parameters' => array(
+                    'options' => array(
+                        'tableName' => 'users',
+                        'entityClass' => 'Core\Db\Entity\User',
+                    ),
+                ),
+            ),
+            'ZeDb\Registry' => array(
+                'parameters' => array(
+                    'models' => array(
+                        'Core\Db\Entity\User' => 'Core\Db\Model\User'
+                    ),
+                ),
+            ),
+
+            /**
+             * Default core routes
+             */
             'Zend\Mvc\Router\RouteStack' => array(
                 'parameters' => array(
                     'routes' => array(
@@ -60,6 +77,7 @@ return array(
                     ),
                 ),
             ),
+
         ),
     ),
 );
