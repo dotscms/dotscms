@@ -10,8 +10,9 @@ class IndexController extends ActionController
     {
         $db = $this->locator->get('zedb');
 
-        $model = $db->get('Core\Db\Entity\User');
+        $model = $db->get('ZeAuth\Db\Entity\User');
         $user = $model->get(1);
+        var_dump($user);
         $user->username = 'admin2';
 //        $model->persist($user);
 //        $model->flush();

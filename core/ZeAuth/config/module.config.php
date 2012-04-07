@@ -1,7 +1,7 @@
 <?php
 return array(
     'ze-auth' => array(
-        'user_model_class'          => 'ZeAuth\Model\User',
+        'user_model_class'          => 'ZeAuth\Db\Model\User',
         'identity_type'             => 'username', //username, email_address, both
         'remember_me'               => 60*60*24*2,
         'enable_display_name'       => false,

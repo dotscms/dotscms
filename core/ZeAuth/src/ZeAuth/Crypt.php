@@ -1,8 +1,6 @@
 <?php
 namespace ZeAuth;
 
-use ZeAuth\Module;
-
 class Crypt
 {
     /**

@@ -4,7 +4,6 @@ namespace ZeAuth\Controller;
 // GLOBAL REQUIREMENTS
 use Zend\Mvc\Controller\ActionController,
 // CLOSED REQUIREMENTS
-    ZeAuth\Service\Auth,
     ZeAuth\Module;
 
 class AuthController extends ActionController

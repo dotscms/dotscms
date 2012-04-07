@@ -1,12 +1,12 @@
 <?php
-namespace Core\Db\Entity;
+namespace ZeAuth\Db\Entity;
 
 use ZeDb\Entity,
     ZeAuth\Db\Mapper as AuthMapper;
 
 class User extends Entity implements AuthMapper
 {
-    protected $_data=array(
+    protected $_data = array(
         'id'            => null,
         'username'      => '',
         'email'         => '',
@@ -39,7 +39,7 @@ class User extends Entity implements AuthMapper
      * @param string|null $date
      * @return ZeAuth\Db\Mapper
      */
-    public function setLastLogin($date)
+    public function setLastLogin($date = null)
     {
         $this->_data['last_login'] = $date;
         return $this;

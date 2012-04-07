@@ -38,7 +38,7 @@ class User implements Db\Mapper
     /**
      * Set the last login field to a specific date or to now
      * @param string|null $date
-     * @return ZeAuth\Db\Mapper
+     * @return \ZeAuth\Db\Mapper
      */
     public function setLastLogin($date = null)
     {
@@ -51,7 +51,7 @@ class User implements Db\Mapper
 
     /**
      * Persist the object into the database
-     * @return ZeAuth\Db\Mapper
+     * @return \ZeAuth\Db\Mapper
      */
     public function save()
     {

@@ -10,7 +10,7 @@
 namespace ZeDb;
 use Zend\Db\Adapter\Adapter,
     Zend\Db\ResultSet\ResultSet,
-    Zend\Db\TableGateway\TableGateway,
+    ZeDb\TableGateway,
     string;
 /**
  * Model Class
@@ -41,8 +41,7 @@ class Model extends TableGateway implements ModelInterface
      * @param array $options
      * @param \Zend\Db\Adapter\Adapter $adapter
      */
-    public function __construct(Adapter $adapter,$options = null)
-    {
+    public function __construct(Adapter $adapter,$options = null){
         if (!$options){
             $options=array();
         }
@@ -63,17 +62,37 @@ class Model extends TableGateway implements ModelInterface
         parent::__construct($tableName, $adapter, null, $resultSet);
     }
 
-    public function setPrimaryKey($primaryKey)
-    {
+    /**
+     * Return the entity class handled by the model
+     * @return string
+     */
+    public function getEntityClass(){
+        return $this->entityClass;
+    }
+
+    /**
+     * Set the primary key field
+     * @param $primaryKey
+     * @return Model
+     */
+    public function setPrimaryKey($primaryKey){
         $this->primaryKey = $primaryKey;
         return $this;
     }
 
     /**
+     * Get the name of the primary key field
+     * @return string
+     */
+    public function getPrimaryKey(){
+        return $this->primaryKey;
+    }
+
+    /**
+     * Get the registry instance that contains all the modules
      * @return \ZeDb\Registry
      */
-    public function getRegistry()
-    {
+    public function getRegistry(){
         return Module::getRegistry();
     }
 
@@ -82,8 +101,7 @@ class Model extends TableGateway implements ModelInterface
      * @param mixed $entities
      * @return Model
      */
-    public function persist($entities)
-    {
+    public function persist($entities){
         if ($entities instanceof EntityInterface){
             if ($entities[$this->primaryKey]){
                 $this->_entities[$entities[$this->primaryKey]] = $entities;
@@ -104,8 +122,7 @@ class Model extends TableGateway implements ModelInterface
      * Saves the persisted entities into the database
      * @return Model
      */
-    public function flush()
-    {
+    public function flush(){
         foreach($this->_localEntities as $key => $entity){
             $entity = $this->save($entity);
             $this->_entities[$entity[$this->primaryKey]] = $entity;
@@ -119,8 +136,7 @@ class Model extends TableGateway implements ModelInterface
      * @param EntityInterface $entity
      * @return EntityInterface
      */
-    public function save(EntityInterface $entity)
-    {
+    public function save(EntityInterface $entity){
         $data = $entity->toArray();
 
         if ($data[$this->primaryKey]){
@@ -136,27 +152,6 @@ class Model extends TableGateway implements ModelInterface
     }
 
     /**
-     * Get an entity by Id
-     * @param int $id
-     * @return EntityInterface | null
-     */
-    public function get($id)
-    {
-        //Load from repository if found
-        if(array_key_exists($id,$this->_entities)){
-            return $this->_entities[$id];
-        }
-
-        //Load from the database otherwise
-        $resultSet = $this->select(array($this->primaryKey=>$id));
-        $entity = $resultSet->current();
-
-        //Save in the repository for later use
-        $this->_entities[$entity[$this->primaryKey]] = $entity;
-        return $entity;
-    }
-
-    /**
      * Create entity from array
      * @param array|null $data
      * @return mixed
@@ -164,18 +159,56 @@ class Model extends TableGateway implements ModelInterface
     public function create($data = null){
         $entityClass = $this->entityClass;
         $entity = new $entityClass();
-        if ($data){
+        if ($data) {
             $entity->exchangeArray($data);
         }
         return $entity;
     }
 
     /**
-     * Return the entity class handled by the model
-     * @return string
+     * Get an entity by Id
+     * @param int $id
+     * @return EntityInterface | null
      */
-    public function getEntityClass()
-    {
-        return $this->entityClass;
+    public function get($id){
+        //Load from repository if found
+        if(array_key_exists($id,$this->_entities)){
+            return $this->_entities[$id];
+        }
+
+        //Load from the database otherwise
+        $entity = $this->getById($id);
+        if (!$entity) {
+            return null;
+        }
+
+        //Save in the repository for later use
+        $this->_entities[$entity[$this->primaryKey]] = $entity;
+        return $entity;
     }
+
+    /**
+     * Handles all function calls to the model.
+     * Defines magic functions for retrieving records by columns with order and limit.
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($name, $args){
+        if (substr($name, 0, 3) == 'get'){
+            $entities = parent::__call($name, $args);
+            if (!$entities){
+                return null;
+            }elseif (is_array($entities)){
+                foreach($entities as $entity) {
+                    $this->_entities[$entity[$this->primaryKey]] = $entity;
+                }
+            }else if ($entities instanceof EntityInterface){
+                $this->_entities[$entities[$this->primaryKey]] = $entities;
+            }
+            return $entities;
+        }
+        return parent::__call($name, $args);
+    }
+
 }

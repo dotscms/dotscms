@@ -27,7 +27,7 @@ interface Mapper
      * @param string|null $date
      * @return ZeAuth\Db\Mapper
      */
-    public function setLastLogin($date);
+    public function setLastLogin($date = null);
 
     /**
      * Persist the object into the database
