@@ -47,7 +47,7 @@ class AuthController extends ActionController
     {
         $service = $this->getLocator()->get('ze-auth-service_auth');
         $service->logout();
-        $this->redirect()->toRoute('ze-auth');
+        return $this->redirect()->toRoute('ze-auth');
     }
 
 }

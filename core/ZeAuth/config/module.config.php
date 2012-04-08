@@ -8,7 +8,7 @@ return array(
         'require_activation'        => true,
         'login_after_registration'  => true,
         'registration_form_captcha' => true,
-        'password_hash_algorithm'   => 'sha1', // sha1, md5, blowfish, sha512, sha256
+        'password_hash_algorithm'   => 'plain', // plain, sha1, md5, blowfish, sha512, sha256
         'home_route'=>'home',
         'restricted_routes'         => array(),
         'unrestricted_routes'       => array(

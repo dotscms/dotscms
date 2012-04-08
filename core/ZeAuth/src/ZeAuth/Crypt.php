@@ -18,6 +18,8 @@ class Crypt
                 return $this->sha1($password, $salt);
             case 'md5':
                 return $this->md5($password, $salt);
+            case 'plain';
+                return $this->plain($password);
         }
         throw new Exception('Invalid credential encryption algorithm specified');
     }
@@ -31,6 +33,10 @@ class Crypt
     public function sha1($password='', $salt='')
     {
         return sha1($password.$salt);
+    }
+
+    public function plain($password=''){
+        return $password;
     }
 
     /**

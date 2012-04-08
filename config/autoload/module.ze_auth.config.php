@@ -30,7 +30,7 @@ return array(
                                 'logout' => array(
                                     'type' => 'Zend\Mvc\Router\Http\Literal',
                                     'options' => array(
-                                        'route' => '/logout/',
+                                        'route' => 'logout/',
                                         'defaults' => array(
                                             'controller' => 'ze-auth-auth',
                                             'action'     => 'logout',

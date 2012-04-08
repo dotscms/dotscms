@@ -22,5 +22,7 @@ class Bootstrap extends DefaultBootstrap
     {
         $context = Context::getInstance();
         $context->setApplication($application);
+        $manager = $application->getLocator()->get('Zend\Session\SessionManager');
+        $manager->start();
     }
 }
