@@ -24,12 +24,13 @@ class AuthController extends ActionController
                 // Login the user and redirect to the home route
                 $data = $this->request->post()->toArray();
                 $result = $service->login($data);
+                // on successfull login redirect to homepage.
                 if ( $result === true ){
-                    $this->redirect()->toRoute($homeRoute);
-                } else {
-                    foreach($result as $key=>$error){
-                        $form->$key->addError($error);
-                    }
+                    return $this->redirect()->toRoute($homeRoute);
+                }
+                // otherwise display the errors in the form
+                foreach($result as $key=>$error){
+                    $form->$key->addError($error);
                 }
             }
         }
