@@ -1,5 +1,4 @@
 <?php
-
 namespace Core\Controller;
 
 use Zend\Mvc\Controller\ActionController;
@@ -12,8 +11,8 @@ class IndexController extends ActionController
 
         $model = $db->get('ZeAuth\Db\Entity\User');
         $user = $model->get(1);
-//        var_dump($user);
         $user->username = 'admin2';
+//        var_dump($this->plugin('auth')->user());
 //        $model->persist($user);
 //        $model->flush();
         return array();

@@ -1,6 +1,8 @@
 <?php
+/*
+ * @namespace
+ */
 namespace ZeAuth;
-
 use Zend\Module\Manager,
     Zend\Module\ModuleEvent,
     Zend\EventManager\StaticEventManager,

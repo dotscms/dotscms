@@ -1,8 +1,9 @@
 <?php
+/**
+ * @namespace
+ */
 namespace ZeAuth\Service;
-
-use Zend\Authentication\Storage\Session as AuthenticationSession,
-    Zend\Authentication\Result as AuthenticationResult,
+use Zend\Authentication\AuthenticationService,
     Zend\EventManager\EventCollection,
     Zend\EventManager\EventManager,
     Zend\Mvc\MvcEvent,
@@ -19,6 +20,16 @@ class Auth
      * @var \Zend\EventManager\EventCollection
      */
     private $events;
+    /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
+    private $auth;
+
+    public function __construct()
+    {
+        $this->auth = new AuthenticationService();
+    }
+
     /**
      * Set the event manager instance used by this context
      * 
@@ -95,20 +106,11 @@ class Auth
             }
 
             // If logged in then go to the requested url
-            $storage = new AuthenticationSession();
-            if (!$storage->isEmpty() && $storage->read() instanceof AuthenticationResult){
+            if ($this->auth->hasIdentity()){
                 return false;
             }
 
             //@todo: Find a way to redirect based on the route name
-//            $router = $e->getRouter();
-//            $router = new \Zend\Mvc\Router\Http\TreeRouteStack();
-
-//            $url =$e->getRequest()->getRequestUri() .$e->getRequest()->getBasePath() . $router->assemble(array(), array('name'=>'ze-auth'));
-//            var_dump($url);
-//            $request = \Zend\Http\Request::fromString($url);
-//            $matchedRoute = $router->match($request);
-
             $matchedRoute->setParam('controller','ze-auth-auth');
             $matchedRoute->setParam('action','index');
             $e->setRouteMatch($matchedRoute);
@@ -140,23 +142,7 @@ class Auth
         }
 
         if ( $identity && $credential ){
-            $model = Module::locator()->get('ze-auth-model_user');
-            $identity_type = Module::getOption('identity_type');
-            switch($identity_type){
-                case 'username':
-                    $mapper = $model->getByUsername($identity);
-                    break;
-                case 'email_address':
-                    $mapper = $model->getByEmailAddress($identity);
-                    break;
-                default:
-                    if ( strpos($identity,'@') === false ){
-                        $mapper = $model->getByUsername($identity);
-                    } else {
-                        $mapper = $model->getByEmailAddress($identity);
-                    }
-                    break;
-            }
+            $mapper = $this->getUserByIdentity($identity);
             if (!$mapper){
                 return array('identity'=>'Invalid identity specified');
             }
@@ -166,11 +152,50 @@ class Auth
             if (!$this->_isValidCredential($password, $salt, $credential)){
                 return array('credential'=>'Invalid credential specified');
             }
-            $result = new AuthenticationResult(AuthenticationResult::SUCCESS,$identity);
-            $session = new AuthenticationSession();
-            $session->write($result);
+            //on successfull login save the identity in the storage
+            if ($this->auth->hasIdentity()){
+                $this->auth->clearIdentity();
+            }
+            $this->auth->getStorage()->write($identity);
         }
         return true;
+    }
+
+    /**
+     * Get the logged user
+     * @return mixed
+     */
+    public function getLoggedUser()
+    {
+        $identity = $this->auth->getIdentity();
+        return $this->getUserByIdentity($identity);
+    }
+
+    /**
+     * Get a user by the configured identity type
+     * @param $identity
+     * @return mixed
+     */
+    protected function getUserByIdentity($identity)
+    {
+        $model = Module::locator()->get('ze-auth-model_user');
+        $identity_type = Module::getOption('identity_type');
+        switch ($identity_type) {
+            case 'username':
+                $mapper = $model->getByUsername($identity);
+                break;
+            case 'email_address':
+                $mapper = $model->getByEmailAddress($identity);
+                break;
+            default:
+                if (strpos($identity, '@') === false) {
+                    $mapper = $model->getByUsername($identity);
+                } else {
+                    $mapper = $model->getByEmailAddress($identity);
+                }
+                break;
+        }
+        return $mapper;
     }
 
     /**
@@ -179,8 +204,7 @@ class Auth
      */
     public function logout()
     {
-        $storage = new AuthenticationSession();
-        $storage->clear();
+        $this->auth->clearIdentity();
     }
 
     /**
@@ -189,8 +213,7 @@ class Auth
      */
     public function isLoggedIn()
     {
-        $storage = new AuthenticationSession();
-        return (!$storage->isEmpty() && $storage->read() instanceof AuthenticationResult);
+        return $this->auth->hasIdentity();
     }
 
     /**

@@ -9,10 +9,10 @@ return array(
         'login_after_registration'  => true,
         'registration_form_captcha' => true,
         'password_hash_algorithm'   => 'plain', // plain, sha1, md5, blowfish, sha512, sha256
-        'home_route'=>'home',
+        'home_route'                => 'home',
         'restricted_routes'         => array(),
         'unrestricted_routes'       => array(
-            'ze-auth'=>array('ze-auth-auth')
+            'ze-auth' => array('ze-auth-auth')
         )
     ),
     'di' => array(
@@ -41,19 +41,23 @@ return array(
                     ),
                 ),
             ),
-            #NOT USED
-//            'Zend\Mvc\Controller\PluginLoader' => array(
-//                'parameters' => array(
-//                    'map' => array(
-//                        'user'        => 'ZeAuth\View\Helper\User',
-//                    ),
-//                ),
-//            ),
-//            'ZeAuth\View\Helper\User' => array(
-//                'parameters' => array(
-//
-//                ),
-//            ),
+
+            'Zend\Mvc\Controller\PluginLoader' => array(
+                'parameters' => array(
+                    'map' => array(
+                        'auth'        => 'ZeAuth\Plugin\Auth',
+                    ),
+                ),
+            ),
+
+            'Zend\View\HelperLoader' => array(
+                'parameters' => array(
+                    'map' => array(
+                        'auth' => 'ZeAuth\Plugin\Auth',
+                    ),
+                ),
+            ),
+
         ),
     ),
 );

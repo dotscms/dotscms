@@ -13,10 +13,15 @@ class Context
      */
     private static $_instance = null;
     /**
+     * @var \Zend\Mvc\AppContext
+     */
+    private $application = null;
+
+    /**
      * @static
      * @return Context
      */
-    public static function getInstance()
+    public static function instance()
     {
         if (!static::$_instance){
             static::$_instance = new static();
@@ -24,11 +29,6 @@ class Context
         return static::$_instance;
     }
 
-
-    /**
-     * @var \Zend\Mvc\AppContext
-     */
-    private $application = null;
     /**
      * @param \Zend\Mvc\AppContext $application
      */
@@ -36,13 +36,19 @@ class Context
     {
         $this->application = $application;
     }
+
     /**
      * @return \Zend\Mvc\AppContext
      */
-    public function getApplication()
+    public function application()
     {
         return $this->application;
     }
-	
-	
+
+    /**
+     * @return \Zend\Di\Locator
+     */
+	public function locator(){
+        return $this->application->getLocator();
+    }
 }

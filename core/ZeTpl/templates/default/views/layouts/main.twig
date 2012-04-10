@@ -1,23 +1,16 @@
 {% block bodyContent %}
-    <div class="topbar">
-        <div class="fill">
-            <div class="container">
-                <a class="brand" href="{{ url('home') }}">ProjectQuery</a>
-                <ul class="nav">
-                    <li class="active"><a href="{{ url('home') }}">Home</a></li>
-                </ul>
-            </div>
-        </div>
-    </div> <!-- /topbar -->
+    {{ dots().adminNav() | raw }}
 
     {% trigger "something" on test with {'first':1, 'second':'something'} %}
     {% render "Core:Index:displayThis" with {'first':1, 'second':'something'}%}
+
+    {{ auth().user().username }}
 
     <div class="container">
         {% block content %}{% endblock %}
 
         <footer>
-            <p>&copy; 2006 - 2012 by Around25 Srl. All rights reserved.</p>
+            <p>&copy; 2006 - {{ "now"|date("Y") }} by Around25 Srl. All rights reserved.</p>
         </footer>
     </div> <!-- /container -->
 {% endblock %}
