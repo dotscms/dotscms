@@ -17,14 +17,4 @@ class IndexController extends ActionController
 //        $model->flush();
         return array();
     }
-
-    public function displayThisAction()
-    {
-        return array();
-    }
-
-    public function restrictedAction()
-    {
-        return array();
-    }
 }

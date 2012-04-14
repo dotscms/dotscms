@@ -1,0 +1,9 @@
+#dotsAdminBar{}
+body{top:30px;position: relative;}
+.dots {}
+.dots .modal-body form fieldset legend{font-weight: bold; color:#777;}
+.dots .modal-body form fieldset p.hint{padding: 3px 0 0 0;}
+.dots .modal-body form fieldset textarea{width:300px;}
+.dots .modal-body form dt{width:120px;float:left;clear:left;padding:5px 3px 3px 3px; text-align: right;}
+.dots .modal-body form dd{margin-left: 120px;position: relative;}
+.dots .modal-body form dd ul.errors{color:red;}

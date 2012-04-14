@@ -1,0 +1,10 @@
+<li class="dropdown" id="dots_pages_admin_nav">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li><a id="dots_pages_admin_add" href="{{ url('dots-pages', {action:'add'}) }}"><i class="icon-plus"></i> Add page</a></li>
+        {% if (editable) %}
+        <li><a id="dots_pages_admin_edit" href="{{ url('dots-pages', {action:'edit'}) }}"><i class="icon-pencil"></i> Edit current page</a></li>
+        <li><a id="dots_pages_admin_remove" href="{{ url('dots-pages', {action:'remove'}) }}"><i class="icon-remove"></i> Remove page</a></li>
+        {% endif %}
+    </ul>
+</li>

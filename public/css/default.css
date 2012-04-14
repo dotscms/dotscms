@@ -21,16 +21,14 @@ input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webki
 input[type=submit], input[type=button], button{background-color: rgba(82, 168, 236, 0.8);border-color:rgba(82, 168, 236, 0.8);color:#FFF;font-weight: bold;padding: 3px 6px;}
 label, input, select, textarea{font-family: Tahoma;}
 label{float:none;width:auto;padding: 0px;}
-dl{overflow: hidden;}
-dl dt{padding: 4px 5px 0 0;font-size:13px;line-height:18px;float:left;width:100px;text-align:right;color:#404040;clear:left;}
-dl dd{padding: 0 0 6px 0;float:left;margin-left: 4px;}
-dl dd ul.errors li{color:#b94a48;list-style: none;}
-dl dd input{padding: 3px;}
-ul, ol{margin: 0 0 0px 0px;}
-/* Top Bar */
-.topbar{height: 30px;}
-.topbar h3 a, .topbar .brand{padding: 0px 10px 0px 10px; line-height: 24px;}
-.topbar div > ul a, .nav a{padding: 5px 10px 5px 10px;}
+.login dl{overflow: hidden;}
+.login dl dt{padding: 4px 5px 0 0;font-size:13px;line-height:18px;float:left;width:100px;text-align:right;color:#404040;clear:left;}
+.login dl dd{padding: 0 0 6px 0;float:left;margin-left: 4px;}
+.login dl dd ul.errors li{color:#b94a48;list-style: none;}
+.login dl dd input{padding: 3px;}
+
+.login dl dd label{display:inline;}
+.login ul, ol{margin: 0 0 0px 0px;}
 
 /* Login Box */
 .login{width:370px;border: solid 1px #c6edf9;padding: 0 0 0px 0;margin: 70px auto 100px auto;}

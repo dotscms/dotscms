@@ -27,6 +27,7 @@ class Model extends TableGateway implements ModelInterface
      * @var string
      */
     protected $entityClass = '\ZeDb\Entity';
+    protected $tableName = null;
     protected $primaryKey = 'id';
     /**
      * @var array
