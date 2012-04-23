@@ -58,18 +58,14 @@ class PageMeta extends Form
             )
         );
 
-        $this->setDecorators(array(
-            'FormElements',
-            'FormDecorator',
-        ));
+    }
 
-        $this->setDisplayGroupDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'dl')),
-            array('Description',array('placement'=>'prepend')),
-            'Fieldset',
-        ));
-
+    public function getValues($suppressArrayNotation = false)
+    {
+        $data = parent::getValues($suppressArrayNotation);
+        if ($data['expires_after']=='')
+            $data['expires_after'] = null;
+        return $data;
     }
 
 }

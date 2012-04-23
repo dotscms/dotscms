@@ -3,7 +3,7 @@ return array(
     'di' => array(
         'instance' => array(
             'alias' => array(
-
+                'dots-block' => 'Dots\Controller\BlockController',
             ),
 
             /**
@@ -36,20 +36,29 @@ return array(
             ),
 
             /**
+             * Dots Blocks
+             */
+            'ZeTwig\View\Environment' => array(
+                'injections' => array(
+                    'Dots\Block\Extension'
+                ),
+            ),
+
+            /**
              * Routes
              */
             'Zend\Mvc\Router\RouteStack' => array(
                 'parameters' => array(
                     'routes' => array(
-                        'dots-pages' => array(
+                        'dots-block' => array(
                             'type' => 'Zend\Mvc\Router\Http\Segment',
                             'options' => array(
-                                'route' => '/dots-pages[/:action][/]',
+                                'route' => '/dots/block[/:action][/]',
                                 'constraints' => array(
                                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 ),
                                 'defaults' => array(
-                                    'controller' => 'dots-pages',
+                                    'controller' => 'dots-block',
                                     'action' => 'index',
                                 ),
                             ),

@@ -7,3 +7,28 @@ body{top:30px;position: relative;}
 .dots .modal-body form dt{width:120px;float:left;clear:left;padding:5px 3px 3px 3px; text-align: right;}
 .dots .modal-body form dd{margin-left: 120px;position: relative;}
 .dots .modal-body form dd ul.errors{color:red;}
+
+.dots-blocks {
+    border: dashed 1px #DDD;
+    min-height: 16px;
+    margin-top: 22px;padding:2px;
+}
+
+.dots-blocks .dots-block-header {
+    width: 48px;
+    position: absolute;
+    margin-top: -22px;
+}
+
+.dots-blocks .dots-block {
+    border: dashed 1px #AAA;
+    min-height: 16px;
+    margin-top: 22px;
+}
+
+.dots-blocks .dots-block .dots-block-header {
+    width: 48px;
+    position: absolute;
+    margin-top: -20px;
+}
+.ui-state-highlight {background: url('/images/ui-bg-highlight.png');height:100px;}

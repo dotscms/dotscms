@@ -15,6 +15,7 @@ class PageController extends ActionController
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate($page->template);
+        $viewModel->setVariable('page', $page);
 
         $view = $this->getLocator()->get('view');
 

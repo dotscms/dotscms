@@ -11,7 +11,11 @@ if (!window.Dots.Admin) window.Dots.Admin = {};
  * @param opts
  */
 Dots.Admin.handleDialog = function(opts){
-    $.get(opts.url, function (html) {
+    var params = {};
+    if (opts.params)
+        params = opts.params;
+
+    $.get(opts.url, params, function (html) {
         $('#' + opts.id).remove();
         $('body').append(html);
         $('#' + opts.id).modal();
@@ -78,10 +82,21 @@ Dots.Admin.Handler = {};
  * @param opts
  */
 Dots.Admin.Handler.save = function (event, opts){
-    $('#' + opts.id + " form").ajaxSubmit({
-        dataType:'json',
-        type:'POST',
-        url:opts.url,
+    var form = null;
+    var data = {};
+    if (opts.form){
+        form = opts.form;
+    }else{
+        form = $('#' + opts.id + " form");
+    }
+    if (opts.data){
+        data = opts.data;
+    }
+    form.ajaxSubmit({
+        dataType: 'json',
+        data: data,
+        type: 'POST',
+        url: opts.url,
         success: function(response, status, xhr, form){
             if (!response.success){
                 Dots.Admin.renderErrors(form, response.errors, null);

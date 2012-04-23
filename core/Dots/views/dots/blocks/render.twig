@@ -1,0 +1,7 @@
+<div class="blocks">
+    {% for block in blocks %}
+    <div class="block">
+        {{ block | renderBlock(page) | raw }}
+    </div>
+    {% endfor %}
+</div>

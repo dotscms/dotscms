@@ -1,0 +1,10 @@
+{% extends 'layouts/main'%}
+
+{% block content %}
+    <div style="width:260px;float:right;">
+        {% contentBlock "right" on page %}
+    </div>
+    <div style="width:670px;">
+        {% contentBlock "content" on page %}
+    </div>
+{% endblock %}

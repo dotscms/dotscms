@@ -1,0 +1,8 @@
+<div class="dots-block" data-block="{{ block.id }}" data-block-position="{{block.position}}">
+    <div class="dots-block-header">
+        <a data-action="move-block" href="#move-block"><i class="icon-move"></i></a>
+        <a data-action="edit-block" href="#edit-block"><i class="icon-pencil"></i></a>
+        <a data-action="remove-block" href="#remove-block"><i class="icon-remove"></i></a>
+    </div>
+    {{ block | renderBlock(page) | raw }}
+</div>

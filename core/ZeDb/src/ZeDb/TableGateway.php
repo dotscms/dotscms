@@ -13,6 +13,8 @@ class TableGateway extends Gateway
         '/^getAllBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAll',
         '/^getLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getLike',
         '/^getAllLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAllLike',
+
+        '/^removeBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__removeBy',
     );
 
     public function __call($name, $args){
@@ -29,6 +31,21 @@ class TableGateway extends Gateway
             }
         }
         throw new Exception('Invalid method called: ' . $name);
+    }
+
+    private function __removeBy($matches, $args)
+    {
+        $where = $this->_parseWhere($matches, $args);
+        $order = $this->_parseOrder($matches);
+        $limit = $this->_parseLimit($matches);
+
+        $result = $this->delete(function ($select) use ($where, $order, $limit)
+        {
+            $select->where($where);
+            //@todo set order
+            //@todo set limit
+        });
+        return $result;
     }
 
     private function __getBy($matches, $args){
@@ -54,7 +71,7 @@ class TableGateway extends Gateway
         $resultSet = $this->select(function ($select) use ($where, $order, $limit)
         {
             $select->where($where);
-            //@todo set order
+            $select->order($order);
             //@todo set limit
         });
         return $resultSet;
@@ -66,6 +83,9 @@ class TableGateway extends Gateway
             $fields = explode('And', $matches['fields']);
             $fields = $this->__normalizeKeys($fields);
             $where = array_combine($fields, $args);
+        }else{
+            //handle by columns
+            $where = $args[0];
         }
         return $where;
     }
@@ -82,6 +102,11 @@ class TableGateway extends Gateway
                     $order[$value] = 'ASC';
             }
         }
+//        $orderBy = array();
+//        foreach($order as $k=>$v){
+//            $orderBy[]= "$k $v";
+//        }
+//        return implode(', ', $orderBy);
         return $order;
     }
 

@@ -37,7 +37,7 @@ class Entity /*extends ResultSet\Row*/ implements EntityInterface
     public function save()
     {
         $model = $this->getModel();
-        $model->save($this);
+        return $model->save($this);
     }
 
     /**
@@ -46,7 +46,7 @@ class Entity /*extends ResultSet\Row*/ implements EntityInterface
     public function delete()
     {
         $model = $this->getModel();
-        $model->delete($this);
+        $model->removeById($this->id);
     }
 
     /**

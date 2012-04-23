@@ -1,7 +1,6 @@
 <?php
 namespace DotsPages\Form;
-use Zend\Form\Form,
-    DotsPages\Form\PageMeta;
+use Zend\Form\Form;
 
 class Page extends Form
 {
@@ -47,23 +46,6 @@ class Page extends Form
             )
         );
 
-        // Set decorators for the form
-        $this->setDecorators(array(
-            'FormElements',
-            'FormDecorator',
-        ));
-
-        $this->setDisplayGroupDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'dl')),
-            array('Description',array('placement'=>'prepend')),
-            'Fieldset',
-        ));
-
-        // Add metadata form to the page form
-        $metaForm = new PageMeta();
-        $metaForm->setIsArray(true);
-        $this->addSubForm($metaForm, 'meta');
     }
 
 }

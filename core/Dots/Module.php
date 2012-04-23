@@ -5,7 +5,8 @@ namespace Dots;
 use Zend\Module\Manager,
     Zend\EventManager\Event,
     Zend\EventManager\StaticEventManager,
-    Zend\Module\Consumer\AutoloaderProvider;
+    Zend\Module\Consumer\AutoloaderProvider,
+    Zend\Mvc\MvcEvent;
 
 /**
  * Dots module
@@ -13,6 +14,8 @@ use Zend\Module\Manager,
 class Module implements AutoloaderProvider
 {
     private static $locator;
+    private static $context = null;
+    private static $blockManager = null;
 
     /**
      * Start point for any module
@@ -29,9 +32,17 @@ class Module implements AutoloaderProvider
      * @param \Zend\EventManager\Event $e
      * @return void
      */
-    public function setupLocator(Event $e)
+    public function setupLocator(Event $event)
     {
-        self::$locator = $e->getParam('application')->getLocator();
+        $app = $event->getParam('application');
+        static::$locator = $app->getLocator();
+        static::$blockManager = static::$locator->get('Dots\Block\BlockManager');
+        $app->events()->attach('dispatch', array($this, 'setupContext'));
+    }
+
+    public function setupContext(MvcEvent $event)
+    {
+        static::$context = clone $event;
     }
 
     /**
@@ -69,7 +80,24 @@ class Module implements AutoloaderProvider
      */
     public static function locator()
     {
-        return self::$locator;
+        return static::$locator;
+    }
+
+    /**
+     * @return \Zend\Mvc\MvcEvent
+     */
+    public static function context()
+    {
+        return static::$context;
+    }
+
+    /**
+     * @static
+     * @return \Dots\Block\BlockManager
+     */
+    public static function blockManager()
+    {
+        return static::$blockManager;
     }
 
 }

@@ -4,7 +4,12 @@ namespace DotsPages\Controller;
 use Zend\Mvc\Controller\ActionController,
     Zend\View\Model\ViewModel,
     Zend\Json\Encoder,
-    DotsPages\Form\Page;
+
+    DotsPages\Db\Entity,
+
+    Dots\Form\MultiForm,
+    DotsPages\Form\Page,
+    DotsPages\Form\PageMeta;
 
 class AdminController extends ActionController
 {
@@ -14,24 +19,37 @@ class AdminController extends ActionController
      */
     public function addAction()
     {
-        $form = new Page();
-        if ($this->getRequest()->getMethod()=='POST'){
-            $response = $this->getResponse();
-            if ($form->isValid($this->getRequest()->post()->toArray())){
-                $json = Encoder::encode(array(
-                    'success' => true,
-                    'action' => 'window.location = "/";'
-                ));
-                $response->setContent($json);
-                return $response;
-            }else{
-                $json = Encoder::encode(array(
-                    'success' => false,
-                    'errors' => $form->getMessages()
-                ));
-                $response->setContent($json);
-                return $response;
+        //init used variables
+        $form = new MultiForm( array(
+            'page' => new Page(),
+            'meta' => new PageMeta(),
+        ));
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+
+        //on post return the response as a json string
+        if ($request->getMethod()=='POST'){
+            //handle form errors
+            $errorResponse = $this->handleErrors($form);
+            if ($errorResponse) {
+                return $errorResponse;
             }
+            //get the form values
+            $data = $form->getValues();
+            //save the page entity
+            $page = new Entity\Page();
+            $this->updateObject($page, $data['page']);
+            $page->save();
+            //save the page meta
+            $meta = new Entity\PageMeta();
+            $this->updateObject($meta, $data['meta']);
+            $meta->page_id = $page->id;
+            $meta->save();
+
+            return $this->jsonResponse(array(
+                'success' => true,
+                'action' => 'window.location = "/'. urlencode($page->alias) .'";'
+            ));
         }
 
         return $this->getTeminalView(
@@ -47,7 +65,48 @@ class AdminController extends ActionController
      */
     public function editAction()
     {
-        return $this->getTeminalView();
+        //init used variables
+        $form = new MultiForm(array(
+            'page' => new Page(),
+            'meta' => new PageMeta(),
+        ));
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        $alias = $_REQUEST['alias'];
+        $pageModel = $this->getLocator()->get('DotsPages\Db\Model\Page');
+        $metaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
+        $page = $pageModel->getByAlias($alias);
+        $page_id = $page->id;
+        $meta = $metaModel->getByPageId($page_id);
+
+        //on post return the response as a json string
+        if ($request->getMethod() == 'POST') {
+            //handle form errors
+            $errorResponse = $this->handleErrors($form);
+            if ($errorResponse) {
+                return $errorResponse;
+            }
+            //get the form values
+            $data = $form->getValues();
+            //save the page entity
+            $this->updateObject($page, $data['page']);
+            $page->save();
+            //save the page meta
+            $this->updateObject($meta, $data['meta']);
+            $meta->page_id = $page->id;
+            $meta->save();
+
+            return $this->jsonResponse(array(
+                'success' => true,
+                'action' => 'window.location = "/' . urlencode($page->alias) . '";'
+            ));
+        }
+
+        return $this->getTeminalView(
+            array(
+                'form' => $form
+            )
+        );
     }
 
     /**
@@ -56,8 +115,21 @@ class AdminController extends ActionController
      */
     public function removeAction()
     {
-        return $this->getTeminalView();
+        $alias = $_REQUEST['alias'];
+        $pageModel = $this->getLocator()->get('DotsPages\Db\Model\Page');
+        $pageMetaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
+        $page = $pageModel->getByAlias($alias);
+        $page_id = $page->id;
+        $pageMeta = $pageMetaModel->getByPageId($page_id);
+        $pageMeta->delete();
+        $page->delete();
+        return $this->jsonResponse(array(
+            'success' => true,
+            'action' => 'window.location = "/";'
+        ));
     }
+
+
 
     /**
      * Return a view model that does not render the layout
@@ -70,5 +142,50 @@ class AdminController extends ActionController
         $viewModel = new ViewModel($vars, $options);
         $viewModel->setTerminal(true);
         return $viewModel;
+    }
+
+    /**
+     * Check if the form is valid and return a response object if invalid
+     * @param $form
+     * @return bool|\Zend\Stdlib\ResponseDescription
+     */
+    private function handleErrors($form)
+    {
+        $response = $this->getResponse();
+        $request = $this->getRequest();
+        if (!$form->isValid($request->post()->toArray())) {
+            return $this->jsonResponse(array(
+                'success' => false,
+                'errors' => $form->getMessages()
+            ));
+        }
+        return false;
+    }
+
+    /**
+     * Create a json response based on the data
+     * @param $data
+     * @return \Zend\Stdlib\ResponseDescription
+     */
+    private function jsonResponse ($data)
+    {
+        $response = $this->getResponse();
+        $json = Encoder::encode($data);
+        $response->setContent($json);
+        return $response;
+    }
+
+    /**
+     * Update object with received data
+     * @param $obj
+     * @param $data
+     * @return mixed
+     */
+    private function updateObject($obj, $data)
+    {
+        foreach($data as $key=>$value){
+            $obj->$key = $value;
+        }
+        return $obj;
     }
 }

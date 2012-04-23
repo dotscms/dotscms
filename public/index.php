@@ -5,6 +5,8 @@ defined('BASE_PATH')
 
 chdir(dirname(__DIR__));
 date_default_timezone_set('Europe/Bucharest');
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
 
 require_once (getenv('ZF2_PATH') ?: dirname(BASE_PATH).'/vendor/ZendFramework2/library') . '/Zend/Loader/AutoloaderFactory.php';
 Zend\Loader\AutoloaderFactory::factory(array(
@@ -16,13 +18,10 @@ Zend\Loader\AutoloaderFactory::factory(array(
 ));
 $appConfig = include 'config/application.config.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors','on');
-
 $listenerOptions  = new Zend\Module\Listener\ListenerOptions($appConfig['module_listener_options']);
 
 $defaultListeners = new Zend\Module\Listener\DefaultListenerAggregate($listenerOptions);
-$defaultListeners->getConfigListener()->addConfigGlobPath('config/autoload/*.config.php');
+$defaultListeners->getConfigListener()->addConfigGlobPath("config/autoload/*.config.php");//
 
 $moduleManager = new Zend\Module\Manager($appConfig['modules']);
 $moduleManager->events()->attachAggregate($defaultListeners);
@@ -34,8 +33,3 @@ $bootstrap
     ->bootstrap()
     ->run()
     ->send();
-
-//$bootstrap   = new Zend\Mvc\Bootstrap($defaultListeners->getConfigListener()->getMergedConfig());
-//$application = new Zend\Mvc\Application;
-//$bootstrap->bootstrap($application);
-//$application->run()->send();

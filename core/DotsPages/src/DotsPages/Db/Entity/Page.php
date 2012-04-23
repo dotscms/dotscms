@@ -9,10 +9,9 @@ class Page extends Entity
         'id'                => null,
         'alias'             => '',
         'title'             => '',
-        'meta_keywords'     => '',
-        'meta_description'  => '',
         'template'          => null,
         'language'          => null,
+        'position'          => 1,
         'create_date'       => null,
         'last_update'       => null,
     );
