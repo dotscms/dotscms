@@ -71,7 +71,7 @@ class TableGateway extends Gateway
         $resultSet = $this->select(function ($select) use ($where, $order, $limit)
         {
             $select->where($where);
-            $select->order($order);
+//            $select->order($order);
             //@todo set limit
         });
         return $resultSet;

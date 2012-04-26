@@ -81,7 +81,6 @@ class BlockController extends ActionController
         $blockId = $_REQUEST['block_id'];
         $blockModel = $this->getLocator()->get('Dots\Db\Model\Block');
         $block = $blockModel->getById($blockId);
-//        $fromSection = $_REQUEST['from'];
         $fromSection = $block->section;
         $toSection = $_REQUEST['to'];
         $alias = $_REQUEST['alias'];
@@ -92,16 +91,65 @@ class BlockController extends ActionController
         $block->section = $toSection;
         $block->position = $position;
         if ($fromSection==$toSection){
+            $prevBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
+                'page_id = ?' => $pageId,
+                'section = ?' => $fromSection,
+                'position <= ?' => $oldPosition,
+                'id != ?' => $blockId
+            ));
+            $nextBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
+                'page_id = ?' => $pageId,
+                'section = ?' => $fromSection,
+                'position >= ?' => $oldPosition,
+                'id != ?' => $blockId
+            ));
 
+            $pos = 1;
+            if ($prevBlocks){
+                foreach ($prevBlocks as $blk){
+                    $blk->position = $pos++;
+                    $blockModel->persist($blk);
+                }
+            }
+            $blockModel->persist($block);
+            $pos = $block->position;
+            if ($nextBlocks) {
+                foreach ($nextBlocks as $blk) {
+                    $blk->position = $pos++;
+                    $blockModel->persist($blk);
+                }
+            }
         }else{
-
+            $fromBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
+                'page_id = ?' => $pageId,
+                'section = ?' => $fromSection,
+                'id != ?' => $blockId
+            ));
+            $pos = 1;
+            if ($fromBlocks) {
+                foreach ($fromBlocks as $blk) {
+                    $blk->position = $pos++;
+                    $blockModel->persist($blk);
+                }
+            }
+            $toBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
+                'page_id = ?' => $pageId,
+                'section = ?' => $toSection,
+                'id != ?' => $blockId
+            ));
+            $pos = 1;
+            if ($toBlocks) {
+                foreach ($toBlocks as $blk) {
+                    if ($block->position == $pos){
+                        $pos++;
+                    }
+                    $blk->position = $pos++;
+                    $blockModel->persist($blk);
+                }
+            }
+            $blockModel->persist($block);
         }
-        $prevBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
-            'page_id = ?' => $pageId,
-            'section = ?' => $fromSection,
-            'position >= ?' => $oldPosition,
-        ));
-        var_dump($prevBlocks);
+        $blockModel->flush();
 
         return $this->jsonResponse(array('success' => true));
     }

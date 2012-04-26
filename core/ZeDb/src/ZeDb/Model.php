@@ -124,9 +124,13 @@ class Model extends TableGateway implements ModelInterface
      * @return Model
      */
     public function flush(){
+        $unset = array();
         foreach($this->_localEntities as $key => $entity){
             $entity = $this->save($entity);
             $this->_entities[$entity[$this->primaryKey]] = $entity;
+            $unset[] = $key;
+        }
+        foreach($unset as $key){
             unset($this->_localEntities[$key]);
         }
         return $this;
@@ -139,7 +143,6 @@ class Model extends TableGateway implements ModelInterface
      */
     public function save(EntityInterface $entity){
         $data = $entity->toArray();
-
         if ($data[$this->primaryKey]){
             $this->update($data, array($this->primaryKey => $data[$this->primaryKey]));
         }else{

@@ -1,6 +1,7 @@
 <?php
 namespace DotsPages\Form;
-use Zend\Form\Form;
+use Zend\Form\Form,
+    DotsPages\Module;
 
 class Page extends Form
 {
@@ -17,15 +18,15 @@ class Page extends Form
             'label' => 'Alias / Uri',
             'required' => true
         ));
+
+        $locator = Module::locator();
+        $container = $locator->get('Dots\View\TemplateContainer');
         $this->addElement('select', 'template', array(
             'label' => 'Template',
-            'multiOptions'=>array(
-                'dots-pages/pages/page'=>'Default page',
-                'dots-pages/pages/two-columns'=>'Two Columns',
-                'dots-pages/pages/home'=>'Homepage',
-            ),
+            'multiOptions'=> $container->toArray(),
             'required' => true
         ));
+
         $this->addElement('select', 'language', array(
             'label' => 'Language',
             'multiOptions'=>array(

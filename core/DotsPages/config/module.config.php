@@ -26,6 +26,19 @@ return array(
                 ),
             ),
 
+            'Dots\View\TemplateContainer' => array(
+                'parameters' => array(
+                    'options' => array(
+                        'templates' => array(
+                            'default-page' => array(
+                                'name' => 'Default Template',
+                                'path' => 'dots-pages/pages/page'
+                            )
+                        )
+                    )
+                )
+            ),
+
             /**
              * Routes
              */

@@ -9,9 +9,10 @@ use Zend\EventManager\EventCollection,
     Dots\Db\Entity\HtmlBlock,
     Dots\Form\MultiForm,
     Dots\Form\Block\HtmlContentForm,
-    Dots\Block\ContentHandler;
+    Dots\Block\ContentHandler,
+    Dots\Block\HandlerAware;
 
-class HtmlContent implements ListenerAggregate
+class HtmlContent implements HandlerAware
 {
     const TYPE = 'html_content';
     protected $listeners = array();
@@ -22,13 +23,13 @@ class HtmlContent implements ListenerAggregate
      * @param \Zend\EventManager\EventCollection $events
      * @return void
      */
-    public function attach(EventCollection $events)
+    public function attach(EventCollection $events, $priority = null)
     {
-        $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'));
-        $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'));
-        $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'));
-        $this->listeners[] = $events->attach('saveBlock/' . static::TYPE, array($this, 'saveBlock'));
-        $this->listeners[] = $events->attach('removeBlock/' . static::TYPE, array($this, 'removeBlock'));
+        $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
+        $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
+        $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
+        $this->listeners[] = $events->attach('saveBlock/' . static::TYPE, array($this, 'saveBlock'), $priority);
+        $this->listeners[] = $events->attach('removeBlock/' . static::TYPE, array($this, 'removeBlock'), $priority);
     }
 
     /**

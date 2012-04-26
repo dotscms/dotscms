@@ -26,13 +26,15 @@ class Dots extends AbstractPlugin implements Helper
             return '';
         }
         // add the stylesheet and render the admin navigation bar
-        $this->view->plugin('headLink')->appendStylesheet('css/lib/dots/admin.css');
+        $this->view->plugin('headLink')->appendStylesheet('/css/lib/dots/admin.css');
+        $this->view->plugin('headLink')->appendStylesheet('/assets/img_crop/css/imgareaselect-default.css');
         // add the javascript
         $this->view->plugin('headScript')->appendFile('/js/jquery.form.js');
         $this->view->plugin('headScript')->appendFile('/js/jquery-ui.min.js');
         $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/tiny_mce.js');
         $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/jquery.tinymce.js');
         $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/default_settings.js');
+        $this->view->plugin('headScript')->appendFile('/assets/img_crop/scripts/jquery.imgareaselect.js');
         $this->view->plugin('headScript')->appendFile('/js/lib/dots/admin.js');
         $this->view->plugin('headScript')->appendFile('/js/lib/dots/admin.blocks.js');
         $this->view->plugin('headScript')->appendScript(<<<END

@@ -61,7 +61,6 @@ class Extension extends Twig_Extension
         if ($block instanceof Block){
             $blockManager = Module::blockManager();
             $type = $block->type;
-            $type = 'html_content';
             $results = $blockManager->events()->trigger('renderBlock/'.$type, $block, array('page'=>$page));
             return $results->last();
         }
@@ -73,7 +72,6 @@ class Extension extends Twig_Extension
         if ($block instanceof Block) {
             $blockManager = Module::blockManager();
             $type = $block->type;
-            $type = 'html_content';
             $results = $blockManager->events()->trigger('editBlock/' . $type, $block, array('page' => $page));
             return $results->last();
         }

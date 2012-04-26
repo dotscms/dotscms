@@ -1,7 +1,9 @@
 <?php
 // Define base path to project
+defined('PUBLIC_PATH')
+    || define('PUBLIC_PATH', __DIR__);
 defined('BASE_PATH')
-    || define('BASE_PATH', dirname(__DIR__) );
+    || define('BASE_PATH', dirname(PUBLIC_PATH) );
 
 chdir(dirname(__DIR__));
 date_default_timezone_set(date_default_timezone_get());

@@ -17,7 +17,17 @@ class BlockManager implements LocatorAware
 
     public function __construct()
     {
-        $this->contentHandlers[] = new HtmlContent();
+
+    }
+
+    public function addContentHandler(HandlerAware $contentHandler)
+    {
+        $this->contentHandlers[] = $contentHandler;
+    }
+
+    public function setContentHandlers($contentHandlers)
+    {
+        $this->contentHandlers = $contentHandlers;
     }
 
     public function getContentBlockHandlers()
@@ -73,8 +83,9 @@ class BlockManager implements LocatorAware
 
     public function attachDefaultEventHandlers(EventManager $events)
     {
+        $priority = 1;
         foreach($this->contentHandlers as $handler){
-            $handler->attach($events);
+            $handler->attach($events, $priority++);
         }
     }
 }

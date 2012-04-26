@@ -14,6 +14,7 @@ Dots.Admin.handleDialog = function(opts){
     var params = {};
     if (opts.params)
         params = opts.params;
+    opts.data = opts.params;
 
     $.get(opts.url, params, function (html) {
         $('#' + opts.id).remove();
@@ -104,6 +105,10 @@ Dots.Admin.Handler.save = function (event, opts){
                 Dots.Admin.runAction(response);
             }
         }
+//        ,
+//        uploadProgress: function (event, position, total, percentComplete){
+//            console.log(event, position, total, percentComplete);
+//        }
     });
     return false;
 };

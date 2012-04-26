@@ -1,5 +1,7 @@
 #dotsAdminBar{}
 body{top:30px;position: relative;}
+
+.hide {display:none;}
 .dots {}
 .dots .modal-body form fieldset legend{font-weight: bold; color:#777;}
 .dots .modal-body form fieldset p.hint{padding: 3px 0 0 0;}
@@ -32,3 +34,13 @@ body{top:30px;position: relative;}
     margin-top: -20px;
 }
 .ui-state-highlight {background: url('/images/ui-bg-highlight.png');height:100px;}
+
+/*
+ * Image content block
+ */
+.dots-block .dl-group{overflow: hidden;}
+.dots-block .dl-group dl{float:left;overflow: hidden;}
+.dots-block .dl-group dl dt{float: left;width:40px;padding:6px 6px 6px 0px;}
+.dots-block .dl-group dl dd{float: left;margin-left:0px;padding:0 12px 0 0;}
+
+.dots-block .dots-img-crop .dots-img-content{overflow: hidden;position: relative;}

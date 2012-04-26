@@ -76,8 +76,7 @@ class AdminController extends ActionController
         $pageModel = $this->getLocator()->get('DotsPages\Db\Model\Page');
         $metaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
         $page = $pageModel->getByAlias($alias);
-        $page_id = $page->id;
-        $meta = $metaModel->getByPageId($page_id);
+        $meta = $metaModel->getByPageId($page->id);
 
         //on post return the response as a json string
         if ($request->getMethod() == 'POST') {
@@ -100,6 +99,9 @@ class AdminController extends ActionController
                 'success' => true,
                 'action' => 'window.location = "/' . urlencode($page->alias) . '";'
             ));
+        }else{
+            $form->getSubForm('page')->populate($page->toArray());
+            $form->getSubForm('meta')->populate($meta->toArray());
         }
 
         return $this->getTeminalView(
