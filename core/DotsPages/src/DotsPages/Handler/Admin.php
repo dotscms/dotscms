@@ -14,9 +14,9 @@ class Admin
         $params = array();
         $params['editable'] = ($routeMatch == 'dots-page');
         //append css code
-        $view->plugin('headLink')->appendStylesheet('/css/lib/dots/pages/admin.css');
+        $view->plugin('headLink')->appendStylesheet('/assets/dots/css/admin.css');
         //append javascript code
-        $view->plugin('headScript')->appendFile('/js/lib/dots/pages/admin.js');
+        $view->plugin('headScript')->appendFile('/assets/dots/js/pages/admin.js');
         $view->plugin('headScript')->appendScript(<<<END
     $(function(){Dots.Pages.Admin.init();});
 END

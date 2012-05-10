@@ -4,7 +4,7 @@
  */
 namespace ZeAuth\Service;
 use Zend\Authentication\AuthenticationService,
-    Zend\EventManager\EventCollection,
+    Zend\EventManager\EventManagerInterface,
     Zend\EventManager\EventManager,
     Zend\Mvc\MvcEvent,
     
@@ -17,7 +17,7 @@ use Zend\Authentication\AuthenticationService,
 class Auth
 {
     /**
-     * @var \Zend\EventManager\EventCollection
+     * @var \Zend\EventManager\EventManagerInterface
      */
     private $events;
     /**
@@ -33,10 +33,10 @@ class Auth
     /**
      * Set the event manager instance used by this context
      * 
-     * @param  EventCollection $events 
+     * @param  EventManagerInterface $events
      * @return AppContext
      */
-    public function setEventManager(EventCollection $event_manager)
+    public function setEventManager(EventManagerInterface $event_manager)
     {
         $this->events = $event_manager;
         return $this;
@@ -45,11 +45,11 @@ class Auth
     /**
      * Retrieve the event manager
      * Lazy-loads an EventManager instance if none registered.
-     * @return EventCollection
+     * @return EventManagerInterface
      */
     public function events()
     {
-        if (!$this->events instanceof EventCollection) {
+        if (!$this->events instanceof EventManagerInterface) {
             $this->setEventManager(new EventManager(array(
                 __CLASS__, 
                 get_called_class(),

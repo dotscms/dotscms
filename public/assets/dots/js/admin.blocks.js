@@ -1,11 +1,11 @@
 /* Setup Namespaces */
-if (!window.Dots) window.Dots = {};
-if (!window.Dots.Blocks) window.Dots.Blocks = {};
+createNamespace("Dots.Blocks.Handlers");
+createNamespace("Dots.Blocks.Helpers");
 
 /**
  * Init block administration scripts
  */
-window.Dots.Blocks.init = function (){
+Dots.Blocks.init = function (){
     $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
     $('.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]').live('click', Dots.Blocks.Handlers.editBlock);
     $('.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]').live('click', Dots.Blocks.Handlers.removeBlock);
@@ -13,7 +13,7 @@ window.Dots.Blocks.init = function (){
     Dots.Blocks.Handlers.setupMoveHandler();
 };
 
-Dots.Blocks.Handlers = {};
+//Dots.Blocks.Handlers = {};
 /**
  * Handle adding a new block
  * @param event
@@ -174,7 +174,6 @@ Dots.Blocks.Handlers.setupSaveHandler = function ($block, opts){
     });
 };
 
-Dots.Blocks.Helpers = {};
 /**
  * Remove the edit form and show the rendered block or remove it if it's not saved
  * @param $block
@@ -206,9 +205,10 @@ Dots.Blocks.Helpers.updateSectionPositions = function (section){
  * Initialize editors
  * @param $block
  */
-Dots.Blocks._initEditors = function ($block) {
+Dots.Blocks._initEditors = function ($block){
     Dots.Blocks._enableTextEditors.call(this, $block);
     Dots.Blocks._enableImageCropEditors.call(this, $block);
+    Dots.Event.trigger('block.initEditors', $block, {});
 };
 /**
  * Remove editors
@@ -217,6 +217,7 @@ Dots.Blocks._initEditors = function ($block) {
 Dots.Blocks._removeEditors = function ($block) {
     Dots.Blocks._removeTextEditors.call(this, $block);
     Dots.Blocks._removeImageCropEditors.call(this, $block);
+    Dots.Event.trigger('block.removeEditors', $block, {});
 };
 
 /**
@@ -249,7 +250,8 @@ Dots.Blocks._enableTextEditors = function ($block) {
  * @param $block
  */
 Dots.Blocks._removeImageCropEditors = function ($block) {
-
+    var $img = $block.find('.dots-img-crop .dots-img-content img');
+    $img.imgAreaSelect({remove:true});
 };
 /**
  * Enable image crop editors for the block
@@ -275,23 +277,17 @@ Dots.Blocks._enableImageCropEditors = function ($block){
                 onSelectEnd:function (img, selection) {
                     var width = $(img).width();
                     var height = $(img).height();
-                    $x1.val(100 * selection.x1 / width);
-                    $y1.val(100 * selection.y1 / height);
-                    $x2.val(100 * selection.x2 / width);
-                    $y2.val(100 * selection.y2 / height);
+                    $x1.val(100 * selection.x1 / width); $y1.val(100 * selection.y1 / height);
+                    $x2.val(100 * selection.x2 / width); $y2.val(100 * selection.y2 / height);
                 },
                 cancel:function (){
-                    $x1.val('');
-                    $y1.val('');
-                    $x2.val('');
-                    $y2.val('');
+                    $x1.val('');   $y1.val('');
+                    $x2.val('');   $y2.val('');
                 }
             };
             if ($x1.val()!="" && $y1.val()!="" && $x2.val()!="" && $y2.val()!=""){
-                options['x1'] = $x1.val() * w / 100;
-                options['y1'] = $y1.val() * h / 100;
-                options['x2'] = $x2.val() * w / 100;
-                options['y2'] = $y2.val() * h / 100;
+                options['x1'] = $x1.val() * w / 100; options['y1'] = $y1.val() * h / 100;
+                options['x2'] = $x2.val() * w / 100; options['y2'] = $y2.val() * h / 100;
             }
             $block.find('.dots-img-crop .dots-img-content img').imgAreaSelect(options);
         }else{

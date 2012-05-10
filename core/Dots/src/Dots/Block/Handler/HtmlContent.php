@@ -1,6 +1,6 @@
 <?php
 namespace Dots\Block\Handler;
-use Zend\EventManager\EventCollection,
+use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
     Zend\EventManager\ListenerAggregate,
 
@@ -12,19 +12,34 @@ use Zend\EventManager\EventCollection,
     Dots\Block\ContentHandler,
     Dots\Block\HandlerAware;
 
+/**
+ * Html content block handler
+ */
 class HtmlContent implements HandlerAware
 {
+    /**
+     * Block type
+     */
     const TYPE = 'html_content';
+    /**
+     * Listeners
+     * @var array
+     */
     protected $listeners = array();
+    /**
+     * Handler
+     * @var ContentHandler
+     */
     protected $handler = null;
 
     /**
      * Attach events to the application and listen for the dispatch event
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function attach(EventCollection $events, $priority = null)
+    public function attach(EventManagerInterface $events, $priority = null)
     {
+        $this->listeners[] = $events->attach('initHeaders', array($this, 'initHeaders'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
@@ -34,10 +49,10 @@ class HtmlContent implements HandlerAware
 
     /**
      * Detach all the event listeners from the event collection
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function detach(EventCollection $events)
+    public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $key => $listener) {
             $events->detach($listener);
@@ -58,6 +73,23 @@ class HtmlContent implements HandlerAware
         return $this->handler;
     }
 
+    /**
+     * Add code in the header section of the page
+     * @param \Zend\EventManager\Event $event
+     */
+    public function initHeaders(Event $event)
+    {
+        $view = $event->getParam('view');
+        $view->plugin('headScript')->appendFile('/assets/tiny_mce/tiny_mce.js');
+        $view->plugin('headScript')->appendFile('/assets/tiny_mce/jquery.tinymce.js');
+        $view->plugin('headScript')->appendFile('/assets/tiny_mce/default_settings.js');
+    }
+
+    /**
+     * Render html block
+     * @param \Zend\EventManager\Event $event
+     * @return mixed
+     */
     public function renderBlock(Event $event)
     {
         $block = $event->getTarget();
@@ -68,6 +100,11 @@ class HtmlContent implements HandlerAware
         return $htmlBlock->content;
     }
 
+    /**
+     * Render edit html block
+     * @param \Zend\EventManager\Event $event
+     * @return mixed
+     */
     public function editBlock(Event $event)
     {
         $locator = Module::locator();
@@ -99,6 +136,11 @@ class HtmlContent implements HandlerAware
         ));
     }
 
+    /**
+     * Save html block
+     * @param \Zend\EventManager\Event $event
+     * @return array|\Dots\Db\Entity\Block|object|string
+     */
     public function saveBlock(Event $event)
     {
         $locator = Module::locator();
@@ -136,6 +178,11 @@ class HtmlContent implements HandlerAware
         return $errors;
     }
 
+    /**
+     * Remove html block
+     * @param \Zend\EventManager\Event $event
+     * @return bool
+     */
     public function removeBlock(Event $event)
     {
         $locator = Module::locator();

@@ -28,7 +28,7 @@ return array(
             /**
              * Default core routes
              */
-            'Zend\Mvc\Router\RouteStack' => array(
+            'Zend\Mvc\Router\RouteStackInterface' => array(
                 'parameters' => array(
                     'routes' => array(
                         'default' => array(

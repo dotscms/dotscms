@@ -3,15 +3,15 @@
  * @namespace
  */
 namespace Dots\Helper;
-use ZeAuth\Module,
+use Dots\Module,
     Zend\Mvc\Controller\Plugin\AbstractPlugin,
-    Zend\View\Helper,
-    Zend\View\Renderer;
+    Zend\View\Helper\HelperInterface,
+    Zend\View\Renderer\RendererInterface as Renderer;
 
 /**
  * @uses Dots\Module
  */
-class Dots extends AbstractPlugin implements Helper
+class Dots extends AbstractPlugin implements HelperInterface
 {
     protected $view = null;
 
@@ -26,17 +26,16 @@ class Dots extends AbstractPlugin implements Helper
             return '';
         }
         // add the stylesheet and render the admin navigation bar
-        $this->view->plugin('headLink')->appendStylesheet('/css/lib/dots/admin.css');
-        $this->view->plugin('headLink')->appendStylesheet('/assets/img_crop/css/imgareaselect-default.css');
-        // add the javascript
-        $this->view->plugin('headScript')->appendFile('/js/jquery.form.js');
-        $this->view->plugin('headScript')->appendFile('/js/jquery-ui.min.js');
-        $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/tiny_mce.js');
-        $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/jquery.tinymce.js');
-        $this->view->plugin('headScript')->appendFile('/assets/tiny_mce/default_settings.js');
-        $this->view->plugin('headScript')->appendFile('/assets/img_crop/scripts/jquery.imgareaselect.js');
-        $this->view->plugin('headScript')->appendFile('/js/lib/dots/admin.js');
-        $this->view->plugin('headScript')->appendFile('/js/lib/dots/admin.blocks.js');
+        $this->view->plugin('headScript')->appendFile('/assets/default/js/jquery.form.js');
+        $this->view->plugin('headScript')->appendFile('/assets/default/js/jquery-ui.min.js');
+        $this->view->plugin('headScript')->appendFile('/assets/default/js/jquery.json.js');
+        $this->view->plugin('headScript')->appendFile('/assets/dots/js/admin.js');
+        $this->view->plugin('headScript')->appendFile('/assets/dots/js/admin.blocks.js');
+        $blockManager = Module::blockManager();
+        $blockManager->events()->trigger('initHeaders', null,  array(
+            'view' => $this->view
+        ));
+
         $this->view->plugin('headScript')->appendScript(<<<END
     $(function(){Dots.Blocks.init();});
 END
@@ -46,8 +45,8 @@ END
 
     /**
      * Set the View object
-     * @param  \Zend\View\Renderer $view
-     * @return \Zend\View\Helper
+     * @param  \Zend\View\Renderer\RendererInterface $view
+     * @return \Zend\View\Helper\HelperInterface
      */
     public function setView(Renderer $view)
     {
@@ -56,7 +55,7 @@ END
 
     /**
      * Get the View object
-     * @return \Zend\View\Renderer
+     * @return \Zend\View\Renderer\RendererInterface
      */
     public function getView()
     {

@@ -10,7 +10,7 @@
 namespace ZeDb;
 
 use Zend\Db\Db,
-    Zend\Di\Locator,
+    Zend\Di\LocatorInterface,
     Zend\Loader\LocatorAware;
 
 /**
@@ -34,7 +34,7 @@ class Registry implements LocatorAware
     /**
      * @param \Zend\Di\Locator $locator
      */
-    public function setLocator(Locator $locator)
+    public function setLocator(LocatorInterface $locator)
     {
         $this->_locator = $locator;
     }

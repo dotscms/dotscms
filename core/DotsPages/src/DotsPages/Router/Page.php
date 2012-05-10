@@ -1,14 +1,14 @@
 <?php
 namespace DotsPages\Router;
 use DotsPages\Module,
-    Zend\Mvc\Router\Http\Route,
+    Zend\Mvc\Router\Http\RouteInterface,
     Zend\Http\PhpEnvironment\Request as PhpRequest,
-    Zend\Stdlib\RequestDescription as Request,
+    Zend\Stdlib\RequestInterface as Request,
     Zend\Mvc\Router\Http\RouteMatch,
     Zend\Loader\LocatorAware,
     Zend\Di\Locator;
 
-class Page implements Route
+class Page implements RouteInterface
 {
     protected $defaults = array();
 

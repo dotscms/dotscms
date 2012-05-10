@@ -60,7 +60,7 @@ class Model extends TableGateway implements ModelInterface
         $this->entityClass = $entityClass;
         $resultSet = new ResultSet(new $entityClass);
         //init the parent class
-        parent::__construct($tableName, $adapter, null, $resultSet);
+        parent::__construct($tableName, $adapter, $resultSet);
     }
 
     /**

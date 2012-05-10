@@ -1,6 +1,20 @@
+/**
+ * Create a new namespace
+ * @param namespace
+ */
+function createNamespace(namespace){
+    var names = namespace.split('.');
+    var obj = window;
+    for (var k in names){
+        if (!obj[names[k]])
+            obj[names[k]] = {};
+        obj = obj[names[k]];
+    }
+}
+
 /* Setup Namespaces */
-if (!window.Dots) window.Dots = {};
-if (!window.Dots.Admin) window.Dots.Admin = {};
+createNamespace("Dots.Admin.Handler");
+createNamespace("Dots.Event");
 
 /**
  * Handler dialog actions
@@ -73,9 +87,8 @@ Dots.Admin.runAction = function (response){
 };
 
 /**
- * Admin action handler
+ * Admin action handlers
  */
-Dots.Admin.Handler = {};
 
 /**
  * Dialog save form handler
@@ -111,4 +124,34 @@ Dots.Admin.Handler.save = function (event, opts){
 //        }
     });
     return false;
+};
+
+/**
+ * Dots Events
+ */
+Dots.Event._handlers = {};
+Dots.Event.attach = function (name, callback){
+    if (!Dots.Event._handlers[name]){
+        Dots.Event._handlers[name] = [];
+    }
+    Dots.Event._handlers[name][Dots.Event._handlers[name].length] = callback;
+};
+
+Dots.Event.detach = function (name, callback){
+    if (Dots.Event._handlers[name]){
+        for (var key in Dots.Event._handlers[name]){
+            if (Dots.Event._handlers[name][key]==callback){
+                delete Dots.Event._handlers[name][key];
+            }
+        }
+    }
+};
+
+Dots.Event.trigger = function (name, target, params){
+    if (Dots.Event._handlers[name]){
+        for (var key in Dots.Event._handlers[name]){
+            var callback = Dots.Event._handlers[name][key];
+            callback.apply(target, params);
+        }
+    }
 };

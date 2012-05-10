@@ -1,6 +1,6 @@
 <?php
 namespace Dots\Block\Handler;
-use Zend\EventManager\EventCollection,
+use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
     Zend\EventManager\ListenerAggregate,
 
@@ -13,19 +13,34 @@ use Zend\EventManager\EventCollection,
     Dots\Block\HandlerAware,
     Dots\Thumbs\PhpThumbFactory;
 
+/**
+ * Image content block handler
+ */
 class ImageContent implements HandlerAware
 {
+    /**
+     * Block Type
+     */
     const TYPE = 'image_content';
+    /**
+     * Listener containers
+     * @var array
+     */
     protected $listeners = array();
+    /**
+     * Handler
+     * @var ContentHandler
+     */
     protected $handler = null;
 
     /**
      * Attach events to the application and listen for the dispatch event
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function attach(EventCollection $events, $priority = null)
+    public function attach(EventManagerInterface $events, $priority = null)
     {
+        $this->listeners[] = $events->attach('initHeaders', array($this, 'initHeaders'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
@@ -35,10 +50,10 @@ class ImageContent implements HandlerAware
 
     /**
      * Detach all the event listeners from the event collection
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function detach(EventCollection $events)
+    public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $key => $listener) {
             $events->detach($listener);
@@ -59,6 +74,22 @@ class ImageContent implements HandlerAware
         return $this->handler;
     }
 
+    /**
+     * Initialize the headers for the handler
+     * @param \Zend\EventManager\Event $event
+     */
+    public function initHeaders(Event $event)
+    {
+        $view = $event->getParam('view');
+        $view->plugin('headLink')->appendStylesheet('/assets/img_crop/css/imgareaselect-default.css');
+        $view->plugin('headScript')->appendFile('/assets/img_crop/scripts/jquery.imgareaselect.js');
+    }
+
+    /**
+     * Render image block
+     * @param \Zend\EventManager\Event $event
+     * @return mixed
+     */
     public function renderBlock(Event $event)
     {
         $locator = Module::locator();
@@ -75,6 +106,11 @@ class ImageContent implements HandlerAware
         ));
     }
 
+    /**
+     * Render edit image block
+     * @param \Zend\EventManager\Event $event
+     * @return mixed
+     */
     public function editBlock(Event $event)
     {
         $locator = Module::locator();
@@ -108,6 +144,11 @@ class ImageContent implements HandlerAware
         ));
     }
 
+    /**
+     * Save the image block and create a cropped image if necessary
+     * @param \Zend\EventManager\Event $event
+     * @return array|\Dots\Db\Entity\Block|object|string
+     */
     public function saveBlock(Event $event)
     {
         $locator = Module::locator();
@@ -207,6 +248,11 @@ class ImageContent implements HandlerAware
         return $errors;
     }
 
+    /**
+     * Remove the image block
+     * @param \Zend\EventManager\Event $event
+     * @return bool
+     */
     public function removeBlock(Event $event)
     {
         $locator = Module::locator();

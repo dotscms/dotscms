@@ -15,6 +15,7 @@ return array(
                         'Dots\Db\Entity\Block' => 'Dots\Db\Model\Block',
                         'Dots\Db\Entity\HtmlBlock' => 'Dots\Db\Model\HtmlBlock',
                         'Dots\Db\Entity\ImageBlock' => 'Dots\Db\Model\ImageBlock',
+                        'Dots\Db\Entity\LinkBlock' => 'Dots\Db\Model\LinkBlock',
                     ),
                 ),
             ),
@@ -67,6 +68,14 @@ return array(
                     'options' => array(
                         'tableName' => 'block_image',
                         'entityClass' => 'Dots\Db\Entity\ImageBlock',
+                    ),
+                ),
+            ),
+            'Dots\Db\Model\LinkBlock' => array(
+                'parameters' => array(
+                    'options' => array(
+                        'tableName' => 'block_links',
+                        'entityClass' => 'Dots\Db\Entity\LinkBlock',
                     ),
                 ),
             ),

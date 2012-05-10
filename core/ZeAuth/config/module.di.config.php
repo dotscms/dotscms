@@ -52,7 +52,7 @@ return array(
                 'ZeAuth\\Service\\Auth' => array(
                     'setEventManager' => array(
                         'event_manager' => array(
-                            'type' => 'Zend\\EventManager\\EventCollection',
+                            'type' => 'Zend\\EventManager\\EventManagerInterface',
                             'required' => true,
                         ),
                     ),
@@ -60,13 +60,13 @@ return array(
                 'ZeAuth\\Controller\\AuthController' => array(
                     'setEventManager' => array(
                         'events' => array(
-                            'type' => 'Zend\\EventManager\\EventCollection',
+                            'type' => 'Zend\\EventManager\\EventManagerInterface',
                             'required' => true,
                         ),
                     ),
                     'setEvent' => array(
                         'e' => array(
-                            'type' => 'Zend\\EventManager\\EventDescription',
+                            'type' => 'Zend\\EventManager\\EventInterface',
                             'required' => true,
                         ),
                     ),

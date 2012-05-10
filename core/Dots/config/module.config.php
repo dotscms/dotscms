@@ -1,43 +1,6 @@
 <?php
 return array(
     'di' => array(
-        'definition' => array(
-            'class' => array(
-                'Dots\\Block\\BlockManager' => array(
-                    'addContentHandler' => array(
-                        'contentHandler' => array('type' => 'Dots\\Block\\HandlerAware', 'required' => true)
-                    )
-                ),
-                'Dots\\Block\\Handler\\HtmlContent' => array(
-                    'attach' => array(
-                        'events' => array(
-                            'required' => false,
-                            'type' => false,
-                        ),
-                    ),
-                    'detach' => array(
-                        'events' => array(
-                            'required' => false,
-                            'type' => false,
-                        ),
-                    )
-                ),
-                'Dots\\Block\\Handler\\ImageContent' => array(
-                    'attach' => array(
-                        'events' => array(
-                            'required' => false,
-                            'type' => false,
-                        ),
-                    ),
-                    'detach' => array(
-                        'events' => array(
-                            'required' => false,
-                            'type' => false,
-                        ),
-                    )
-                )
-            ),
-        ),
         'instance' => array(
             'alias' => array(
                 'dots-block' => 'Dots\Controller\BlockController',
@@ -85,7 +48,8 @@ return array(
             'Dots\Block\BlockManager' => array(
                 'injections' => array(
                     'Dots\Block\Handler\HtmlContent',
-                    'Dots\Block\Handler\ImageContent'
+                    'Dots\Block\Handler\ImageContent',
+                    'Dots\Block\Handler\LinksContentController'
                 ),
             ),
 
@@ -102,7 +66,7 @@ return array(
             /**
              * Routes
              */
-            'Zend\Mvc\Router\RouteStack' => array(
+            'Zend\Mvc\Router\RouteStackInterface' => array(
                 'parameters' => array(
                     'routes' => array(
                         'dots-block' => array(
@@ -114,6 +78,19 @@ return array(
                                 ),
                                 'defaults' => array(
                                     'controller' => 'dots-block',
+                                    'action' => 'index',
+                                ),
+                            ),
+                        ),
+                        'dots-block-link' => array(
+                            'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'options' => array(
+                                'route' => '/dots/link-block[/:action][/]',
+                                'constraints' => array(
+                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                ),
+                                'defaults' => array(
+                                    'controller' => 'Dots\Block\Handler\LinksContentController',
                                     'action' => 'index',
                                 ),
                             ),

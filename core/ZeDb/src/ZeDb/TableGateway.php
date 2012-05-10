@@ -6,15 +6,15 @@ use Zend\Db\TableGateway\TableGateway as Gateway;
 class TableGateway extends Gateway
 {
     protected static $PATTERNS = array(
-        '/^getAll(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAll',
-        '/^getByColumns(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' =>'__getBy',
-        '/^getAllByColumns(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAll',
-        '/^getBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getBy',
-        '/^getAllBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAll',
-        '/^getLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getLike',
-        '/^getAllLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__getAllLike',
+        '/^getAll(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getAll',
+        '/^getByColumns(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' =>'__getBy',
+        '/^getAllByColumns(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getAll',
+        '/^getBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getBy',
+        '/^getAllBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getAll',
+        '/^getLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getLike',
+        '/^getAllLike(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__getAllLike',
 
-        '/^removeBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/' => '__removeBy',
+        '/^removeBy(?P<fields>[A-Z][a-zA-Z0-9]+)(?:OrderBy(?P<orderBy>[A-Z][a-zA-Z0-9]+))?(?:Limit(?P<limit>[0-9]+)(?:From(?P<offset>[0-9]+))?)?$/U' => '__removeBy',
     );
 
     public function __call($name, $args){
@@ -63,6 +63,16 @@ class TableGateway extends Gateway
         return $entities;
     }
 
+    private function __getAllLike($matches, $args)
+    {
+        $resultSet = $this->_getLikeResultSet($matches, $args);
+        $entities = array();
+        foreach ($resultSet as $entity) {
+            $entities[] = $entity;
+        }
+        return $entities;
+    }
+
     private function _getResultSet($matches, $args){
         $where = $this->_parseWhere($matches, $args);
         $order = $this->_parseOrder($matches);
@@ -77,6 +87,34 @@ class TableGateway extends Gateway
         return $resultSet;
     }
 
+    private function _getLikeResultSet($matches, $args)
+    {
+        $where = $this->_parseLikeWhere($matches, $args);
+        $order = $this->_parseOrder($matches);
+        $limit = $this->_parseLimit($matches);
+
+        $resultSet = $this->select(function ($select) use ($where, $order, $limit)
+        {
+            $select->where($where);
+            //            $select->order($order);
+            //@todo set limit
+        });
+        return $resultSet;
+    }
+
+    private function _parseLikeWhere($matches, $args)
+    {
+        $where = array();
+        if (array_key_exists('fields', $matches) && !empty($matches['fields'])) {
+            $fields = explode('And', $matches['fields']);
+            $fields = $this->__normalizeKeys($fields);
+            foreach($fields as $k=>$field){
+                $where[$field . " LIKE ?"] = $args[$k];
+            }
+        }
+        return $where;
+    }
+
     private function _parseWhere($matches, $args){
         $where = array();
         if (array_key_exists('fields', $matches) && !empty($matches['fields'])) {
@@ -84,8 +122,13 @@ class TableGateway extends Gateway
             $fields = $this->__normalizeKeys($fields);
             $where = array_combine($fields, $args);
         }else{
-            //handle by columns
-            $where = $args[0];
+            if (count($args)){
+                //handle by columns
+                $where = $args[0];
+            }else{
+                $where = array();
+            }
+
         }
         return $where;
     }

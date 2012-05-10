@@ -1,8 +1,8 @@
 <?php
 namespace Dots\Block;
-use Zend\EventManager\ListenerAggregate;
+use Zend\EventManager\ListenerAggregateInterface;
 
-interface HandlerAware extends ListenerAggregate
+interface HandlerAware extends ListenerAggregateInterface
 {
 
 }

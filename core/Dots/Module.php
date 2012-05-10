@@ -38,6 +38,16 @@ class Module implements AutoloaderProvider
         static::$locator = $app->getLocator();
         static::$blockManager = static::$locator->get('Dots\Block\BlockManager');
         $app->events()->attach('dispatch', array($this, 'setupContext'));
+        $app->events()->attach('render', array($this, 'registerJsonStrategy'), 100);
+    }
+
+    public function registerJsonStrategy(Event $event)
+    {
+        $app = $event->getTarget();
+        $locator = $app->getLocator();
+        $view = $locator->get('Zend\View\View');
+        $jsonStrategy = $locator->get('Zend\View\Strategy\JsonStrategy');
+        $view->events()->attach($jsonStrategy, 200);
     }
 
     public function setupContext(MvcEvent $event)
@@ -67,9 +77,9 @@ class Module implements AutoloaderProvider
      * @return array
      */
     public function getConfig(){
-//        $definitions = include __DIR__ . '/config/module.di.config.php';
+        $definitions = include __DIR__ . '/config/module.di.config.php';
         $config = include __DIR__ . '/config/module.config.php';
-//        $config = array_merge_recursive($definitions, $config);
+        $config = array_merge_recursive($definitions, $config);
         return $config;
     }
 

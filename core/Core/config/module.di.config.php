@@ -6,13 +6,13 @@ return array(
                 'Core\\Controller\\IndexController' => array(
                     'setEventManager' => array(
                         'events' => array(
-                            'type' => 'Zend\\EventManager\\EventCollection',
+                            'type' => 'Zend\\EventManager\\EventManagerInterface',
                             'required' => true,
                         ),
                     ),
                     'setEvent' => array(
                         'e' => array(
-                            'type' => 'Zend\\EventManager\\EventDescription',
+                            'type' => 'Zend\\EventManager\\EventInterface',
                             'required' => true,
                         ),
                     ),
@@ -30,7 +30,7 @@ return array(
                     ),
                 ),
 
-                'Zend\Mvc\Router\RouteStack' => array(
+                'Zend\Mvc\Router\RouteStackInterface' => array(
                     'instantiator' => array(
                         'Zend\Mvc\Router\Http\TreeRouteStack',
                         'factory'

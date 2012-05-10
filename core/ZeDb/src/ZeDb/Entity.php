@@ -146,6 +146,16 @@ class Entity /*extends ResultSet\Row*/ implements EntityInterface
     }
 
     /**
+     * @param array $rowData
+     * @return Row
+     */
+    public function populate(array $rowData)
+    {
+        $this->exchangeArray($rowData);
+        return $this;
+    }
+
+    /**
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.

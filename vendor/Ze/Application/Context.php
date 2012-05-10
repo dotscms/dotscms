@@ -1,7 +1,7 @@
 <?php
 namespace Ze\Application;
 
-use Zend\Mvc\AppContext;
+use Zend\Mvc\ApplicationInterface;
 /**
  * Application Context Instance
  * Contains most of the configured information used when running the application.
@@ -32,7 +32,7 @@ class Context
     /**
      * @param \Zend\Mvc\AppContext $application
      */
-    public function setApplication(AppContext $application)
+    public function setApplication(ApplicationInterface $application)
     {
         $this->application = $application;
     }

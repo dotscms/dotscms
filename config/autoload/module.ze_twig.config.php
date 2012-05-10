@@ -26,7 +26,7 @@ return array(
             // Injecting the router into the url helper
             'Zend\View\Helper\Url' => array(
                 'parameters' => array(
-                    'router' => 'Zend\Mvc\Router\RouteStack',
+                    'router' => 'Zend\Mvc\Router\RouteStackInterface',
                 ),
             ),
             // Configuration for the doctype helper

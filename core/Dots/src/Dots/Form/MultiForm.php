@@ -5,13 +5,29 @@ use Zend\Form\Form,
 
 class MultiForm extends Form
 {
+    protected $params = array();
+
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    public function getParam($name)
+    {
+        return $this->params[$name];
+    }
 
     public function __construct($forms, $options = null)
     {
         parent::__construct($options);
         $this->setIsArray(false);
 
-        foreach($forms as $key=>$form){
+        foreach($forms as $key => $form){
             $form->setIsArray(true);
             // Set decorators for the form
             $form->setDecorators(array(

@@ -1,11 +1,10 @@
 /* Setup Namespaces */
-if (!window.Dots) window.Dots = {};
-if (!window.Dots.Pages) window.Dots.Pages = {};
+createNamespace("Dots.Pages.Admin.Handlers");
 
 /**
  * Admin features
  */
-Dots.Pages.Admin = {};
+//Dots.Pages.Admin = {};
 Dots.Pages.Admin.init = function (){
     $('#dots_pages_admin_add').click(Dots.Pages.Admin.Handlers.btn_add);
     $('#dots_pages_admin_edit').click(Dots.Pages.Admin.Handlers.btn_edit);
@@ -19,7 +18,6 @@ Dots.Pages.Admin.getPageAlias = function(){
 /**
  * Admin event handlers
  */
-Dots.Pages.Admin.Handlers = {};
 
 //Add button handler
 Dots.Pages.Admin.Handlers.btn_add = function (event) {

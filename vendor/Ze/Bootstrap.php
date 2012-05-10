@@ -3,12 +3,12 @@ namespace Ze;
 
 use Zend\Mvc\Bootstrap as DefaultBootstrap,
     Zend\Mvc\Application,
-    Zend\Mvc\AppContext,
+    Zend\Mvc\ApplicationInterface,
     Ze\Application\Context;
 
 class Bootstrap extends DefaultBootstrap
 {
-    public function bootstrap(AppContext $application = null)
+    public function bootstrap(ApplicationInterface $application = null)
     {
         if (!$application){
             $application = new Application;
@@ -18,7 +18,7 @@ class Bootstrap extends DefaultBootstrap
         return $application;
     }
 
-    public function setupContext(AppContext $application)
+    public function setupContext(ApplicationInterface $application)
     {
         $context = Context::instance();
         $context->setApplication($application);

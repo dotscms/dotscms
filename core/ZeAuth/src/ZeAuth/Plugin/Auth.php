@@ -5,13 +5,13 @@
 namespace ZeAuth\Plugin;
 use ZeAuth\Module,
     Zend\Mvc\Controller\Plugin\AbstractPlugin,
-    Zend\View\Helper,
-    Zend\View\Renderer;
+    Zend\View\Helper\HelperInterface,
+    Zend\View\Renderer\RendererInterface;
 
 /**
  * @uses ZeAuth\Module
  */
-class Auth extends AbstractPlugin implements Helper
+class Auth extends AbstractPlugin implements HelperInterface
 {
     /**
      * @var \ZeAuth\Service\Auth
@@ -43,10 +43,10 @@ class Auth extends AbstractPlugin implements Helper
     /**
      * Set the View object
      *
-     * @param  \Zend\View\Renderer $view
-     * @return \Zend\View\Helper
+     * @param  \Zend\View\Renderer\RendererInterface $view
+     * @return \Zend\View\Helper\HelperInterface
      */
-    public function setView(Renderer $view)
+    public function setView(RendererInterface $view)
     {
         $this->view = $view;
     }
@@ -54,7 +54,7 @@ class Auth extends AbstractPlugin implements Helper
     /**
      * Get the View object
      *
-     * @return \Zend\View\Renderer
+     * @return \Zend\View\Renderer\RendererInterface
      */
     public function getView()
     {

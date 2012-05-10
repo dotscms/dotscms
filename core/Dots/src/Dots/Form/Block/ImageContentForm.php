@@ -36,7 +36,6 @@ class ImageContentForm extends Form
                 array('Extension', false, 'jpg,png,gif')
             )
         ));
-//        $this->getElement('original_src')->setValueDisabled(true);
         $this->addElement('hidden', 'src', array(
             'required' => false,
             'decorators' => array('ViewHelper')

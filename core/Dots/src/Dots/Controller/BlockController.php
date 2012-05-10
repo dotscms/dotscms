@@ -4,6 +4,7 @@ namespace Dots\Controller;
 use Zend\Mvc\Controller\ActionController,
     Zend\View\Model\ViewModel,
     Zend\Json\Encoder,
+    Zend\View\Model\JsonModel,
 
     Dots\Module,
     Dots\Db\Entity;
@@ -84,7 +85,6 @@ class BlockController extends ActionController
         $fromSection = $block->section;
         $toSection = $_REQUEST['to'];
         $alias = $_REQUEST['alias'];
-        $blockId = $_REQUEST['block_id'];
         $position = $_REQUEST['position'];
         $pageId = $block->page_id;
         $oldPosition = $block->position;
@@ -241,10 +241,7 @@ class BlockController extends ActionController
      */
     private function jsonResponse ($data)
     {
-        $response = $this->getResponse();
-        $json = Encoder::encode($data);
-        $response->setContent($json);
-        return $response;
+        return new JsonModel($data);
     }
 
     /**

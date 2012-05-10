@@ -1,0 +1,68 @@
+/* Dots: General Style */
+#dotsAdminBar{}
+body{top:30px;position: relative;}
+.hide {display:none;}
+.ui-state-highlight {background: url('../images/ui-bg-highlight.png');height:100px;}
+.dots-form-buttons {padding: 2px 0 0 0;}
+
+/* Dots: Modal dialogs */
+.dots {}
+.dots .modal-body form fieldset legend{font-weight: bold; color:#777;}
+.dots .modal-body form fieldset p.hint{padding: 3px 0 0 0;}
+.dots .modal-body form fieldset textarea{width:300px;}
+.dots .modal-body form dt{width:120px;float:left;clear:left;padding:5px 3px 3px 3px; text-align: right;}
+.dots .modal-body form dd{margin-left: 120px;position: relative;}
+.dots .modal-body form dd ul.errors{color:red;}
+
+/* Dots: Blocks */
+.dots-blocks {border: dashed 1px #DDD;min-height: 16px;margin-top: 22px;padding:2px;}
+.dots-blocks .dots-block-header {width: 48px;position: absolute;margin-top: -22px;}
+.dots-blocks .dots-block {border: dashed 1px #AAA;min-height: 16px;margin-top: 22px;}
+.dots-blocks .dots-block .dots-block-header {width: 48px;position: absolute;margin-top: -20px;}
+
+.dots-blocks .dots-block form fieldset legend{font-weight: bold; color:#777;}
+.dots-blocks .dots-block form fieldset p.hint{padding: 3px 0 0 0;}
+.dots-blocks .dots-block form fieldset textarea{width:300px;}
+/*.dots-blocks .dots-block form dd ul.errors{color:#ad070e;background: #ffe4e1;padding:4px 5px;margin:0 0 0 5px;border:solid 1px #ad070e;*/
+    /*border-radius: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;display:inline;}*/
+.dots-blocks .dots-block form dd ul.errors {color: #ad070e;}
+/*.dots-blocks .dots-block form dd ul.errors li{display:inline;}*/
+
+/* Dots: Image Block */
+.dots-block .dl-group{overflow: hidden;}
+.dots-block .dl-group dl{float:left;overflow: hidden;}
+.dots-block .dl-group dl dt{float: left;width:40px;padding:6px 6px 6px 0px;}
+.dots-block .dl-group dl dd{float: left;margin-left:0px;padding:0 12px 0 0;}
+.dots-block .dots-img-crop .dots-img-content{overflow: hidden;position: relative;}
+
+/* Dots: Links*/
+.dots-block .dots-links-block {}
+
+.dots-block .dots-links-block li a:hover{background: #F6F6F6;}
+.dots-block .dots-links-block li .link-edit{
+    opacity: 0.0;
+    filter: alpha(opacity = 0); /* For IE8 and earlier */
+    position: absolute;padding: 3px 3px;
+    margin: -1px 0 0 -76px;background: #F6F6F6;border: dashed 1px #AAA;border-right: 0px;}
+.dots-block .dots-links-block li .link-edit:hover + a{background: #F6F6F6;}
+.dots-block .dots-links-block li .link-edit:hover{
+    opacity: 1;
+    filter: alpha(opacity = 100); /* For IE8 and earlier */
+    background: #F6F6F6;}
+.dots-block .dots-links-block li:hover .link-edit{visibility: visible;
+    opacity: 1;filter: alpha(opacity = 100); /* For IE8 and earlier */}
+
+.dots-block .dots-links-block li.dots-move-link-helper{}
+.dots-block .dots-links-block li.dots-move-link-helper .link-edit {
+    opacity: 1;
+    filter: alpha(opacity = 100); /* For IE8 and earlier */
+    position: absolute;
+    padding: 3px 3px;
+    margin: -1px 0 0 -76px;
+    background: #F6F6F6;
+    border: dashed 1px #AAA;
+    border-right: 0px;
+}
+.dots-block .dots-links-block li.dots-move-link-helper .link-edit + a {
+    background: #F6F6F6;
+}

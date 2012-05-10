@@ -2,7 +2,6 @@
 namespace Dots\Block;
 
 use Zend\EventManager\EventManager,
-    Zend\EventManager\EventCollection,
     Zend\EventManager\Event,
     Twig_Extension,
     Twig_Filter_Method,

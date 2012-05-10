@@ -3,12 +3,12 @@ namespace ZeAuth\Event;
 
 //GLOBAL REQUIREMENTS
 use ArrayAccess,
-    Zend\EventManager\EventCollection,
-    Zend\EventManager\ListenerAggregate,
+    Zend\EventManager\EventManagerInterface,
+    Zend\EventManager\ListenerAggregateInterface,
 //CLOSED REQUIREMENTS
     ZeAuth\Module;
 
-class Listener implements ListenerAggregate
+class Listener implements ListenerAggregateInterface
 {
     const PRIORITY_RESTRICT_ACCESS = 10000;
     protected $events = array();
@@ -17,20 +17,20 @@ class Listener implements ListenerAggregate
 
     /**
      * Attach events to the application and listen for the dispatch event
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function attach(EventCollection $events)
+    public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach('dispatch', array($this, 'restrictAccess'), self::PRIORITY_RESTRICT_ACCESS);
     }
 
     /**
      * Detach all the event listeners from the event collection
-     * @param \Zend\EventManager\EventCollection $events
+     * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function detach(EventCollection $events)
+    public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $key => $listener) {
             $events->detach($listener);
@@ -44,6 +44,5 @@ class Listener implements ListenerAggregate
         $service = Module::locator()->get('ze-auth-service_auth');
         $service->restrictAccess($e);
     }
-    
-    
+
 }
