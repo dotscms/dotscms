@@ -100,10 +100,7 @@ END
         $model   = $locator->get('Dots\Db\Model\LinkBlock');
         $block   = $event->getTarget();
         $page    = $event->getParam('page');
-//        $links   = $model->getAllByBlockIdOrderByPosition($block->id);
-        $links = $model->getAllByColumns(array(
-            'block_id = ? ORDER BY position' => $block->id,
-        ));
+        $links   = $model->getAllByBlockIdOrderByPosition($block->id);
         return $view->render('dots/blocks/links/render', array(
             'page' => $page,
             'block' => $block,
@@ -259,19 +256,20 @@ END
         $link->position = $position;
         $links = $linkBlockModel->getAllByColumnsOrderByPosition(array(
             'block_id = ?' => $blockId,
-            'id != ? ORDER BY position' => $linkId
+            'id != ?' => $linkId
         ));
 
         $pos = 1;
         if ($links){
             foreach ($links as $lnk){
                 if ($pos==$position){
-                    $linkBlockModel->persist($link); $pos++;
+                    $pos++;
                 }
                 $lnk->position = $pos++;
                 $linkBlockModel->persist($lnk);
             }
         }
+        $linkBlockModel->persist($link);
         $linkBlockModel->flush();
 
         return $this->jsonResponse(array('success' => true));
@@ -291,10 +289,7 @@ END
         $section = $event->getParam('section');
         if ($block) {
             $model = $locator->get('Dots\Db\Model\LinkBlock');
-            $linkBlocks = $model->getAllByColumns(array(
-                'block_id = ? ORDER BY position' => $block->id,
-            ));
-//            $linkBlocks = $model->getAllByBlockId($block->id);
+            $linkBlocks = $model->getAllByBlockIdOrderByPosition( $block->id);
         } else {
             $block = new Block();
             $block->type = static::TYPE;

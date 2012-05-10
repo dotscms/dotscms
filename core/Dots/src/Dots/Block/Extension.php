@@ -83,7 +83,7 @@ class Extension extends Twig_Extension
         $edit = $view->plugin("auth")->isLoggedIn();
 
         $model = Module::locator()->get('Dots\Db\Model\Block');
-        $blocks = $model->getAllByPageIdAndSection($page->id, $name);
+        $blocks = $model->getAllByPageIdAndSectionOrderByPosition($page->id, $name);
         if (!$blocks) {
             $blocks = array();
         }

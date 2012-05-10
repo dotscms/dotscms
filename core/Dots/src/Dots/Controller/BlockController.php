@@ -91,34 +91,23 @@ class BlockController extends ActionController
         $block->section = $toSection;
         $block->position = $position;
         if ($fromSection==$toSection){
-            $prevBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
+            $blocks = $blockModel->getAllByColumnsOrderByPosition(array(
                 'page_id = ?' => $pageId,
                 'section = ?' => $fromSection,
-                'position <= ?' => $oldPosition,
                 'id != ?' => $blockId
             ));
-            $nextBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
-                'page_id = ?' => $pageId,
-                'section = ?' => $fromSection,
-                'position >= ?' => $oldPosition,
-                'id != ?' => $blockId
-            ));
-
             $pos = 1;
-            if ($prevBlocks){
-                foreach ($prevBlocks as $blk){
+            if ($blocks){
+                foreach ($blocks as $blk){
+                    if ($pos == $position) {
+                        $pos++;
+                    }
                     $blk->position = $pos++;
                     $blockModel->persist($blk);
                 }
             }
             $blockModel->persist($block);
-            $pos = $block->position;
-            if ($nextBlocks) {
-                foreach ($nextBlocks as $blk) {
-                    $blk->position = $pos++;
-                    $blockModel->persist($blk);
-                }
-            }
+
         }else{
             $fromBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
                 'page_id = ?' => $pageId,
