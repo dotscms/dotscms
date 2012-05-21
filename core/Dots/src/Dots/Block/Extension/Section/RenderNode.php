@@ -1,5 +1,5 @@
 <?php
-namespace Dots\Block\Extension\ContentBlock;
+namespace Dots\Block\Extension\Section;
 
 use Twig_Node,
     Twig_Node_Expression as Expression,
@@ -22,7 +22,7 @@ class RenderNode extends Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('DotsBlocks')->renderContentBlock(")
+            ->write("echo \$this->env->getExtension('DotsBlocks')->renderSection(")
             ->subcompile($this->getNode('name'))
             ->raw(', ')
             ->subcompile($this->getNode('target'))

@@ -2,7 +2,8 @@
 namespace DotsPages\Handler;
 
 use DotsPages\Module,
-    Zend\EventManager\Event;
+    Zend\EventManager\Event,
+    DotsPages\Db\Entity\Page;
 
 class Admin
 {
@@ -10,9 +11,10 @@ class Admin
     {
         $view = Module::locator()->get('view');
         $context = Module::context();
-        $routeMatch = $context->getRouteMatch()->getMatchedRouteName();
+        $routeMatch = $context->getRouteMatch();
+        $routeMatchName = $context->getRouteMatch()->getMatchedRouteName();
         $params = array();
-        $params['editable'] = ($routeMatch == 'dots-page');
+        $params['editable'] = ($routeMatchName == 'dots-page' || ($routeMatchName == 'home' && $routeMatch->getParam('page') instanceof Page));
         //append css code
         $view->plugin('headLink')->appendStylesheet('/assets/dots/css/admin.css');
         //append javascript code

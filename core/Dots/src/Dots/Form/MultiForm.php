@@ -1,7 +1,5 @@
 <?php
 namespace Dots\Form;
-use Zend\Form\Form,
-    Dots\Module;
 
 class MultiForm extends Form
 {

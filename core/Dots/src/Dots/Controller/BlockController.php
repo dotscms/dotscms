@@ -36,7 +36,7 @@ class BlockController extends ActionController
         }
 
         $results = $blockManager->events()->trigger('editBlock/' . $type, null, array('page' => $page, 'section' => $section));
-        return $this->getTeminalView(array('html'=>$results->last()));
+        return $this->getTerminalView(array('html'=>$results->last()));
     }
 
     /**
@@ -67,9 +67,45 @@ class BlockController extends ActionController
         }
 
         $results = $blockManager->events()->trigger('editBlock/' . $block->type, $block, array('page' => $page, 'section' => $section));
-        return $this->getTeminalView(array(
+        return $this->getTerminalView(array(
             'block'=>$block,
             'html'=>$results->last()
+        ));
+    }
+
+    public function editSettingsAction()
+    {
+        //get instances of the block manager and model classes
+        $request = $this->getRequest();
+        $blockManager = Module::blockManager();
+        $blockModel = $this->getLocator()->get('Dots\Db\Model\Block');
+        //get the current block based on the provided id
+        $id = $_REQUEST['id'];
+        $block = $blockModel->get($id);
+
+        //create the complete multiform that should be displayed and populate it with any needed data
+        $form = new \Dots\Form\MultiForm(array(
+            'default' => new \Dots\Form\Setting\DefaultBlockSettingsForm()
+        ));
+        $form->getSubForm('default')->populate($block->toArray());
+        $blockManager->events()->trigger('editSettings/' . $block->type, $block, array('form'=>$form));
+
+        //on post check if the form is valid and save the data
+        if ($request->isPost()){
+            if ($form->isValid($request->post()->toArray())){
+                $default = $form->getSubForm('default')->getValues(true);
+                $block->class = $default['class'];
+                $blockModel->persist($block);
+                $blockManager->events()->trigger('saveSettings/' . $block->type, $block, array('form' => $form));
+                $blockModel->flush();
+                return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
+            }else{
+                return $this->jsonResponse(array('success' => false, 'errors' => $form->getMessages()));
+            }
+        }
+
+        return $this->getTerminalView(array(
+            'form' => $form
         ));
     }
 
@@ -173,12 +209,12 @@ class BlockController extends ActionController
         $block = $blockModel->getById($blockId);
         $page = $pageModel->getById($block->page_id);
         if ($view->plugin('auth')->isLoggedIn()){
-            return $this->getTeminalView( array(
+            return $this->getTerminalView( array(
                 'block' => $block,
                 'page'=>$page
             ), array('template'=>'dots/blocks/edit-block') );
         }
-        return $this->getTeminalView(array(
+        return $this->getTerminalView(array(
             'block' => $block,
             'page' => $page
         ) );
@@ -190,7 +226,7 @@ class BlockController extends ActionController
      * @param array $options
      * @return \Zend\View\Model\ViewModel
      */
-    private function getTeminalView($vars = array(), $options = array())
+    private function getTerminalView($vars = array(), $options = array())
     {
         $template = null;
         if (array_key_exists('template', $options)){

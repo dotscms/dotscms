@@ -21,6 +21,11 @@ input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webki
 input[type=submit], input[type=button], button{background-color: rgba(82, 168, 236, 0.8);border-color:rgba(82, 168, 236, 0.8);color:#FFF;font-weight: bold;padding: 3px 6px;}
 label, input, select, textarea{font-family: Tahoma;}
 label{float:none;width:auto;padding: 0px;}
+
+/* Fix navigation container problem */
+.navbar .container:after{clear:left;}
+
+/* Login Box */
 .login dl{overflow: hidden;}
 .login dl dt{padding: 4px 5px 0 0;font-size:13px;line-height:18px;float:left;width:100px;text-align:right;color:#404040;clear:left;}
 .login dl dd{padding: 0 0 6px 0;float:left;margin-left: 4px;}
@@ -30,6 +35,5 @@ label{float:none;width:auto;padding: 0px;}
 .login dl dd label{display:inline;}
 .login ul, ol{margin: 0 0 0px 0px;}
 
-/* Login Box */
 .login{width:370px;border: solid 1px #c6edf9;padding: 0 0 0px 0;margin: 70px auto 100px auto;}
 .login h3{width:366px;background: #049cdb;position:relative; color:#FFFFFF;line-height: 24px;padding:0 0 0 6px;margin: 0px 0 20px -1px;font-size: 13px;}

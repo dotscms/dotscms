@@ -1,5 +1,5 @@
 <?php
-namespace Dots\Block\Extension\ContentBlock;
+namespace Dots\Block\Extension\Section;
 use Twig_TokenParser,
     Twig_Token,
     Twig_Node_Expression_Array,
@@ -44,7 +44,7 @@ class TokenParser extends Twig_TokenParser
      */
     function getTag()
     {
-        return 'contentBlock';
+        return 'section';
     }
 
 }

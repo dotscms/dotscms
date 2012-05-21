@@ -67,6 +67,15 @@ return array(
                                 ),
                             )
                         ),
+                        'home' => array(
+                            'type' => 'DotsPages\Router\Page',
+                            'options' => array(
+                                'defaults' => array(
+                                    'controller' => 'dots-pages-page',
+                                    'action' => 'view',
+                                ),
+                            )
+                        ),
                     ),
                 ),
             ),

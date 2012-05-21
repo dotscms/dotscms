@@ -12,5 +12,6 @@ class Block extends Entity
         'type'              => null,
         'position'          => 1,
         'entry_date'        => null,
+        'class'             => ''
     );
 }

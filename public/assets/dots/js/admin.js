@@ -26,15 +26,20 @@ createNamespace("Dots.Event");
  */
 Dots.Admin.handleDialog = function(opts){
     var params = {};
-    if (opts.params)
-        params = opts.params;
+    if (opts.params) params = opts.params;
     opts.data = opts.params;
 
     $.get(opts.url, params, function (html) {
         $('#' + opts.id).remove();
         $('body').append(html);
         $('#' + opts.id).modal();
+        if (opts.onLoad){
+            opts.onLoad.call($('#' + opts.id));
+        }
         $('#' + opts.id + ' [data-action="save"]').click(function(event){
+            if (opts.onSave){
+                return opts.onSave.call(this, event, opts);
+            }
             return Dots.Admin.Handler.save.call(this, event, opts);
         });
     });

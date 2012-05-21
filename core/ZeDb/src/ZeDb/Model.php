@@ -148,9 +148,9 @@ class Model extends TableGateway implements ModelInterface
         }else{
             unset($data[$this->primaryKey]);
             $this->insert($data);
-            $id = $this->lastInsertId;
+            $id = $this->getLastInsertValue();
             $data[$this->primaryKey] = $id;
-            $entity->exchangeArray($data);
+            $entity->populate($data);
         }
         return $entity;
     }
@@ -164,7 +164,7 @@ class Model extends TableGateway implements ModelInterface
         $entityClass = $this->entityClass;
         $entity = new $entityClass();
         if ($data) {
-            $entity->exchangeArray($data);
+            $entity->populate($data);
         }
         return $entity;
     }

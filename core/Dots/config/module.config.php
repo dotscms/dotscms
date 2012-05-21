@@ -20,7 +20,7 @@ return array(
             'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
                     'paths'  => array(
-                        'core' => __DIR__ . '/../views',
+                        'dots' => __DIR__ . '/../views',
                     ),
                 ),
             ),
@@ -47,9 +47,10 @@ return array(
 
             'Dots\Block\BlockManager' => array(
                 'injections' => array(
-                    'Dots\Block\Handler\HtmlContent',
-                    'Dots\Block\Handler\ImageContent',
-                    'Dots\Block\Handler\LinksContentController'
+                    'Dots\Block\Handler\HtmlHandler',
+                    'Dots\Block\Handler\ImageHandler',
+                    'Dots\Block\Handler\LinksHandler',
+                    'Dots\Block\Handler\NavigationHandler'
                 ),
             ),
 
@@ -90,7 +91,20 @@ return array(
                                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 ),
                                 'defaults' => array(
-                                    'controller' => 'Dots\Block\Handler\LinksContentController',
+                                    'controller' => 'Dots\Block\Handler\LinksHandler',
+                                    'action' => 'index',
+                                ),
+                            ),
+                        ),
+                        'dots-block-navigation' => array(
+                            'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'options' => array(
+                                'route' => '/dots/nav-block[/:action][/]',
+                                'constraints' => array(
+                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                ),
+                                'defaults' => array(
+                                    'controller' => 'Dots\Block\Handler\NavigationHandler',
                                     'action' => 'index',
                                 ),
                             ),

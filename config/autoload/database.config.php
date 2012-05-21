@@ -16,6 +16,7 @@ return array(
                         'Dots\Db\Entity\HtmlBlock' => 'Dots\Db\Model\HtmlBlock',
                         'Dots\Db\Entity\ImageBlock' => 'Dots\Db\Model\ImageBlock',
                         'Dots\Db\Entity\LinkBlock' => 'Dots\Db\Model\LinkBlock',
+                        'Dots\Db\Entity\NavigationBlock' => 'Dots\Db\Model\NavigationBlock',
                     ),
                 ),
             ),
@@ -76,6 +77,14 @@ return array(
                     'options' => array(
                         'tableName' => 'block_links',
                         'entityClass' => 'Dots\Db\Entity\LinkBlock',
+                    ),
+                ),
+            ),
+            'Dots\Db\Model\NavigationBlock' => array(
+                'parameters' => array(
+                    'options' => array(
+                        'tableName' => 'block_navigation',
+                        'entityClass' => 'Dots\Db\Entity\NavigationBlock',
                     ),
                 ),
             ),

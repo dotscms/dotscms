@@ -8,6 +8,7 @@ createNamespace("Dots.Blocks.Helpers");
 Dots.Blocks.init = function (){
     $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
     $('.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]').live('click', Dots.Blocks.Handlers.editBlock);
+    $('.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]').live('click', Dots.Blocks.Handlers.changeSettings);
     $('.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]').live('click', Dots.Blocks.Handlers.removeBlock);
     $('.dots-blocks>.dots-block [data-action="cancel-block"]').live('click', Dots.Blocks.Handlers.cancelBlock);
     Dots.Blocks.Handlers.setupMoveHandler();
@@ -30,6 +31,7 @@ Dots.Blocks.Handlers.addBlock = function (event){
     };
     $.get('/dots/block/add/', data, function(html){
         var $currentBlock = $(html);
+        $currentBlock.addClass('edit-dots-block');
         $this.parents('.dots-blocks').append($currentBlock);
         Dots.Blocks._initEditors($currentBlock);
         Dots.Blocks.Handlers.setupSaveHandler($currentBlock, {
@@ -60,6 +62,7 @@ Dots.Blocks.Handlers.editBlock = function (event){
     $.get('/dots/block/edit/', data, function (html) {
         var $currentBlock = $(html);
         $block.replaceWith($currentBlock);
+        $currentBlock.addClass('edit-dots-block');
         Dots.Blocks._initEditors($currentBlock);
         Dots.Blocks.Handlers.setupSaveHandler($currentBlock, {
             url: '/dots/block/edit/',
@@ -99,7 +102,46 @@ Dots.Blocks.Handlers.removeBlock = function (event){
  */
 Dots.Blocks.Handlers.cancelBlock = function (event) {
     var $currentBlock = $(this).parents('.dots-block');
+    $currentBlock.removeClass('edit-dots-block');
     Dots.Blocks.Helpers.cancelEdit($currentBlock);
+    return false;
+};
+
+Dots.Blocks.Handlers.changeSettings = function (event){
+    var $currentBlock = $(this).parents('.dots-block');
+    var blockId = $currentBlock.attr('data-block');
+    var data = {
+        id: blockId
+    };
+    Dots.Admin.handleDialog({
+        url:'/dots/block/edit-settings/',
+        id:'dotsBlock_EditSettingsDialog',
+        params:data,
+        onSave:function (event, opts){
+            var $form = $('#'+opts.id+' form');
+            $form.ajaxSubmit({
+                dataType: 'json',
+                type: 'POST',
+                url: opts.url,
+                data: opts.params,
+                success: function (response, status, xhr, form){
+                    if (!response.success){
+                        Dots.Admin.renderErrors(form, response.errors, null);
+                    } else {
+                        $('#' + opts.id).modal('hide');
+                        $('#' + opts.id).remove();
+                        var data = {
+                            block_id: response.block_id
+                        };
+                        $.get('/dots/block/view/', data, function (html) {
+                            Dots.Blocks._removeEditors($currentBlock);
+                            $currentBlock.replaceWith(html);
+                        });
+                    }
+                }
+            });
+        }
+    });
     return false;
 };
 
@@ -166,6 +208,7 @@ Dots.Blocks.Handlers.setupSaveHandler = function ($block, opts){
                     Dots.Admin.renderErrors(form, response.errors, null);
                 } else {
                     $block.attr('data-block', response.block_id);
+                    $block.removeClass('edit-dots-block');
                     Dots.Blocks.Helpers.cancelEdit($block);
                 }
             }

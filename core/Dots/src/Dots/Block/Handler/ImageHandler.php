@@ -14,9 +14,9 @@ use Zend\EventManager\EventManagerInterface,
     Dots\Thumbs\PhpThumbFactory;
 
 /**
- * Image content block handler
+ * Image Handler block handler
  */
-class ImageContent implements HandlerAware
+class ImageHandler implements HandlerAware
 {
     /**
      * Block Type

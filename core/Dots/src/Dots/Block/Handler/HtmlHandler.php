@@ -13,9 +13,9 @@ use Zend\EventManager\EventManagerInterface,
     Dots\Block\HandlerAware;
 
 /**
- * Html content block handler
+ * Html Handler block handler
  */
-class HtmlContent implements HandlerAware
+class HtmlHandler implements HandlerAware
 {
     /**
      * Block type

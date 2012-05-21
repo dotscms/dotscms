@@ -11,13 +11,17 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 require_once (getenv('ZF2_PATH') ?: dirname(BASE_PATH).'/vendor/ZendFramework2/library') . '/Zend/Loader/AutoloaderFactory.php';
+//Default Zend Autoloader
 Zend\Loader\AutoloaderFactory::factory(array(
     'Zend\Loader\StandardAutoloader' => array(
         'namespaces' => array(
-            'Ze' => BASE_PATH.'/vendor/Ze/',
+            'Ze' => BASE_PATH.'/core/Ze/',
         ),
     ),
 ));
+//Composer Autoloader
+require_once BASE_PATH . '/vendor/autoload.php';
+
 $appConfig = include 'config/application.config.php';
 
 $listenerOptions  = new Zend\Module\Listener\ListenerOptions($appConfig['module_listener_options']);

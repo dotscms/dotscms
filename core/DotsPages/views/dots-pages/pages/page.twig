@@ -1,10 +1,14 @@
 {% extends 'layouts/main'%}
 
 {% block content %}
+    <div>
+        {% section "navigation" on page with {is_static:true} %}
+        {% section "header" on page %}
+    </div>
     <div style="width:260px;float:right;">
-        {% contentBlock "right" on page %}
+        {% section "right" on page %}
     </div>
     <div style="width:670px;">
-        {% contentBlock "content" on page %}
+        {% section "content" on page %}
     </div>
 {% endblock %}

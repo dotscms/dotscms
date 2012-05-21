@@ -8,21 +8,21 @@ use Zend\EventManager\EventManagerInterface,
 
     Dots\Module,
     Dots\Db\Entity\Block,
-    Dots\Db\Entity\LinkBlock,
+    Dots\Db\Entity\NavigationBlock,
     Dots\Form\MultiForm,
-    Dots\Form\Block\LinkContentForm,
+    Dots\Form\Block\NavigationContentForm,
     Dots\Block\ContentHandler,
     Dots\Block\HandlerAware;
 
 /**
- * Links content block handler and Controller
+ * Navigation content block handler and Controller
  */
-class LinksContentController extends ActionController implements HandlerAware
+class NavigationHandler extends ActionController implements HandlerAware
 {
     /**
      * Block type
      */
-    const TYPE = 'links_content';
+    const TYPE = 'navigation';
     /**
      * Listeners
      * @var array
@@ -69,7 +69,7 @@ class LinksContentController extends ActionController implements HandlerAware
     public function getHandler()
     {
         if (!$this->handler){
-            $this->handler = new ContentHandler(static::TYPE, 'File & Links Content');
+            $this->handler = new ContentHandler(static::TYPE, 'Navigation');
         }
         return $this->handler;
     }
@@ -81,15 +81,15 @@ class LinksContentController extends ActionController implements HandlerAware
     public function initHeaders(Event $event)
     {
         $view = $event->getParam('view');
-        $view->plugin('headScript')->appendFile('/assets/dots/js/blocks/links.js');
+        $view->plugin('headScript')->appendFile('/assets/dots/js/blocks/nav.js');
         $view->plugin('headScript')->appendScript(<<<END
-    Dots.Blocks.Links.init();
+    Dots.Blocks.Nav.init();
 END
 );
     }
 
     /**
-     * Render html block
+     * Render navigation block
      * @param \Zend\EventManager\Event $event
      * @return mixed
      */
@@ -97,26 +97,16 @@ END
     {
         $locator = Module::locator();
         $view    = $locator->get('view');
-        $model   = $locator->get('Dots\Db\Model\LinkBlock');
+        $model   = $locator->get('Dots\Db\Model\NavigationBlock');
         $block   = $event->getTarget();
         $page    = $event->getParam('page');
-        $links   = $model->getAllByBlockIdOrderByPosition($block->id);
-        return $view->render('dots/blocks/links/render', array(
+        $items   = $model->getAllByBlockIdOrderByPosition($block->id);
+        return $view->render('dots/blocks/navigation/render', array(
             'page' => $page,
             'block' => $block,
-            'links' => $links,
+            'items' => $items,
+            'handler' => $this,
         ));
-    }
-
-    public function addAction()
-    {
-        $form = new LinkContentForm();
-        $form->setElementsBelongTo('link_content[1]');
-        $form->addButtons();
-        $viewModel = new ViewModel(array('form'=>$form));
-        $viewModel->setTemplate('dots/blocks/links/form');
-        $viewModel->setTerminal(true);
-        return $viewModel;
     }
 
     public function getPagesAction()
@@ -139,12 +129,21 @@ END
     public function removeAction()
     {
         $locator = Module::locator();
-        $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
+        $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
         $QUERY = $this->getRequest()->query()->toArray();
-        $link_id = $QUERY['id'];
-        $link = $modelLinkBlock->getById($link_id);
-        $link->delete();
-        return $this->jsonResponse(array('success' => true, 'id' => $link_id));
+        $nav_id = $QUERY['id'];
+        $nav = $modelNavBlock->getById($nav_id);
+        $nav->delete();
+        return $this->jsonResponse(array('success' => true, 'id' => $nav_id));
+    }
+
+    public function addAction()
+    {
+        $form = $this->getEditForm();
+        $viewModel = new ViewModel(array('form' => $form));
+        $viewModel->setTemplate('dots/blocks/navigation/item-add');
+        $viewModel->setTerminal(true);
+        return $viewModel;
     }
 
     public function editAction()
@@ -152,10 +151,10 @@ END
         $locator = Module::locator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
-        $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
+        $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
         $QUERY = $this->getRequest()->query()->toArray();
-        $link = $modelLinkBlock->getById($QUERY['id']);
-        $data = $link->toArray();
+        $nav = $modelNavBlock->getById($QUERY['id']);
+        $data = $nav->toArray();
         switch($data['type']){
             case 'link':
                 $data['link'] = $data['href'];
@@ -168,13 +167,11 @@ END
                 break;
         }
 
-        $form = new LinkContentForm();
-        $form->setElementsBelongTo('link_content[1]');
-        $form->addButtons();
+        $form = $this->getEditForm();
         $form->populate($data);
 
         $viewModel = new ViewModel(array('form' => $form));
-        $viewModel->setTemplate('dots/blocks/links/form');
+        $viewModel->setTemplate('dots/blocks/navigation/item-edit');
         $viewModel->setTerminal(true);
         return $viewModel;
     }
@@ -184,16 +181,15 @@ END
         $locator = Module::locator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
-        $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
+        $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
 
         $POST = $this->getRequest()->post()->toArray();
-        $form = new LinkContentForm();
-        $form->setElementsBelongTo('link_content[1]');
-        if ($form->isValid($POST['link_content'][1])){
-            $data = $form->getValues(true);
+        $form = $this->getEditForm();
+        if ($form->isValid($POST['navigation'])){
+            $data = $form->getSubForm('navigation')->getValues(true);
 
             $page = $modelPage->getByAlias($POST['alias']);
-            if ($POST['block_id']) {
+            if (array_key_exists('block_id', $POST) && $POST['block_id']) {
                 $block = $modelBlock->getById($POST['block_id']);
             } else {
                 $block = new Block();
@@ -203,42 +199,34 @@ END
                 $block->position = $POST['position'];
                 $block->save();
             }
-            if ($data['id']){
-                $linkBlock = $modelLinkBlock->getById($data['id']);
+            if (array_key_exists('id', $data) && $data['id']){
+                $navBlock = $modelNavBlock->getById($data['id']);
             }else{
-                $linkBlock = new LinkBlock();
-                $linkBlock->block_id = $block->id;
+                $navBlock = new NavigationBlock();
+                $navBlock->block_id = $block->id;
             }
-            if ($linkBlock->type == 'file' && $data['type']!='file' && $linkBlock->href){
-                unset($linkBlock->href);
+            if ($navBlock->type == 'file' && $data['type']!='file' && $navBlock->href){
+                unset($navBlock->href);
             }
-            $linkBlock->type = $data['type'];
-            $linkBlock->title = $data['title'];
-            $linkBlock->position = $data['position'];
-            switch ($linkBlock->type){
+            $navBlock->type = $data['type'];
+            $navBlock->title = $data['title'];
+            $navBlock->position = $data['position'];
+            switch ($navBlock->type){
                 case 'link':
-                    $linkBlock->href = $data['link'];
-                    break;
-                case 'file':
-                    if ($data['file']) {
-                        if ($linkBlock->href)
-                            unset($linkBlock->href);
-                        $linkBlock->href = $data['file'];
-                    }
-
+                    $navBlock->href = $data['link'];
                     break;
                 case 'page':
                     $selectedPage = $modelPage->getById($data['entity_id']);
-                    $linkBlock->entity_id = $data['entity_id'];
-                    $linkBlock->href = $selectedPage->alias;
+                    $navBlock->entity_id = $data['entity_id'];
+                    $navBlock->href = $selectedPage->alias;
                     break;
             }
             if (!is_numeric($data['position'])){
-                $linkBlock->position = 1;
+                $navBlock->position = 1;
             }
-            $linkBlock->save();
+            $navBlock->save();
 
-            return $this->jsonResponse(array('success' => true, 'data'=>$linkBlock->toArray()));
+            return $this->jsonResponse(array('success' => true, 'data'=> $navBlock->toArray()));
         }
         return $this->jsonResponse(array(
             'success' => false,
@@ -248,29 +236,29 @@ END
 
     public function moveAction(){
         $blockId = $_REQUEST['block_id'];
-        $linkId = $_REQUEST['id'];
-        $linkBlockModel = $this->getLocator()->get('Dots\Db\Model\LinkBlock');
-        $link = $linkBlockModel->getById($linkId);
+        $navId = $_REQUEST['id'];
+        $navBlockModel = $this->getLocator()->get('Dots\Db\Model\NavigationBlock');
+        $nav = $navBlockModel->getById($navId);
         $position = $_REQUEST['position'];
-        $oldPosition = $link->position;
-        $link->position = $position;
-        $links = $linkBlockModel->getAllByColumnsOrderByPosition(array(
+        $oldPosition = $nav->position;
+        $nav->position = $position;
+        $items = $navBlockModel->getAllByColumnsOrderByPosition(array(
             'block_id = ?' => $blockId,
-            'id != ?' => $linkId
+            'id != ?' => $navId
         ));
 
         $pos = 1;
-        if ($links){
-            foreach ($links as $lnk){
+        if ($items){
+            foreach ($items as $itm){
                 if ($pos==$position){
                     $pos++;
                 }
-                $lnk->position = $pos++;
-                $linkBlockModel->persist($lnk);
+                $itm->position = $pos++;
+                $navBlockModel->persist($itm);
             }
         }
-        $linkBlockModel->persist($link);
-        $linkBlockModel->flush();
+        $navBlockModel->persist($nav);
+        $navBlockModel->flush();
 
         return $this->jsonResponse(array('success' => true));
     }
@@ -288,16 +276,16 @@ END
         $page = $event->getParam('page');
         $section = $event->getParam('section');
         if ($block) {
-            $model = $locator->get('Dots\Db\Model\LinkBlock');
-            $linkBlocks = $model->getAllByBlockIdOrderByPosition( $block->id);
+            $model = $locator->get('Dots\Db\Model\NavigationBlock');
+            $navigationBlocks = $model->getAllByBlockIdOrderByPosition( $block->id);
         } else {
             $block = new Block();
             $block->type = static::TYPE;
             $block->section = $section;
-            $linkBlocks = array();
+            $navigationBlocks = array();
         }
-        $form = $this->getForm($linkBlocks);
-        return $view->render('dots/blocks/links/edit', array(
+        $form = $this->getForm($navigationBlocks);
+        return $view->render('dots/blocks/navigation/edit', array(
             'page'  => $page,
             'block' => $block,
             'form'  => $form,
@@ -305,33 +293,18 @@ END
     }
 
     /**
-     * Remove links block
+     * Remove navigation block
      * @param \Zend\EventManager\Event $event
      * @return bool
      */
     public function removeBlock(Event $event)
     {
         $locator = Module::locator();
-        $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
+        $modelNavigationBlock = $locator->get('Dots\Db\Model\NavigationBlock');
         $block = $event->getTarget();
-        $linkBlock = $modelLinkBlock->getByBlockId($block->id);
-        $linkBlock->delete();
+        $navBlock = $modelNavigationBlock->removeByBlockId($block->id);
         $block->delete();
         return true;
-    }
-
-    /**
-     * Update object with received data
-     * @param $obj
-     * @param $data
-     * @return mixed
-     */
-    private function updateObject($obj, $data)
-    {
-        foreach ($data as $key => $value) {
-            $obj->$key = $value;
-        }
-        return $obj;
     }
 
     /**
@@ -345,22 +318,34 @@ END
     }
 
     /**
-     * Get the form used for editing links
-     * @param null $linkBlocks
+     * Get the form used for editing navigation links
+     * @param null $navigationBlocks
      * @return \Dots\Form\MultiForm
      */
-    public function getForm($linkBlocks = null)
+    public function getForm($navigationBlocks = null)
     {
         $locator = Module::locator();
         $view = $locator->get('view');
         $form = new MultiForm(array());
         $form->setParams(array(
-            'links' => $linkBlocks
+            'items' => $navigationBlocks
         ));
         $form->setView($view);
         $form->setDecorators(array(
-            array('ViewScript', array('viewScript'=>'dots/blocks/links/edit-form'))
+            array('ViewScript', array('viewScript'=>'dots/blocks/navigation/edit-form'))
         ));
+        return $form;
+    }
+
+    public function getEditForm($data = null)
+    {
+        $locator = Module::locator();
+        $view = $locator->get('view');
+        $navForm = new NavigationContentForm();
+        $form = new MultiForm(array('navigation'=>$navForm));
+        $form->setView($view);
+        if ($data!==null)
+            $form->populate($data);
         return $form;
     }
 

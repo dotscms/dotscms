@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php": ">=5.3.3",
+        "ZendExperts/ZeTwig": "v1.0.1"
+    }
+}

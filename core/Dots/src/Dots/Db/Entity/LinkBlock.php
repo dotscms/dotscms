@@ -9,9 +9,9 @@ class LinkBlock extends Entity
         'id'                => null, // id of the image content
         'block_id'          => null, // id of the block
         'parent_id'         => null, // id of the parent link
-        'type'              => null, // type of the link
-        'entity_id'         => null, // type of the link
         'title'             => null, // displayed text for the link
+        'type'              => null, // type of the link
+        'entity_id'         => null, // entity id of the page
         'href'              => null, // location of the link
         'position'          => null, // the position within the
     );

@@ -11,14 +11,19 @@ body{top:30px;position: relative;}
 .dots .modal-body form fieldset p.hint{padding: 3px 0 0 0;}
 .dots .modal-body form fieldset textarea{width:300px;}
 .dots .modal-body form dt{width:120px;float:left;clear:left;padding:5px 3px 3px 3px; text-align: right;}
-.dots .modal-body form dd{margin-left: 120px;position: relative;}
+.dots .modal-body form dd{margin-left: 126px;position: relative;}
 .dots .modal-body form dd ul.errors{color:red;}
+.dots .modal-body form dt.checkbox {width: 126px;float: left;clear: left;padding: 0;}
+.dots .modal-body form dd.checkbox {margin-left: 126px;position: relative;padding: 0;}
 
 /* Dots: Blocks */
 .dots-blocks {border: dashed 1px #DDD;min-height: 16px;margin-top: 22px;padding:2px;}
-.dots-blocks .dots-block-header {width: 48px;position: absolute;margin-top: -22px;}
-.dots-blocks .dots-block {border: dashed 1px #AAA;min-height: 16px;margin-top: 22px;}
-.dots-blocks .dots-block .dots-block-header {width: 48px;position: absolute;margin-top: -20px;}
+.dots-blocks> .dots-block-header {width: 48px;position: absolute;margin-top: -22px;}
+.dots-blocks .dots-block {border: dashed 1px #AAA;min-height: 16px;}
+.dots-blocks .dots-block .dots-block-header {display:none;width: 48px;position: absolute;padding:0 3px;
+    margin:-1px 0 0 -55px;border: dashed 1px #AAA;border-right:0;background: #FFF;}
+.dots-blocks .dots-block:hover .dots-block-header {display:block;}
+.dots-blocks .dots-block.edit-dots-block .dots-block-header{display:none;}
 
 .dots-blocks .dots-block form fieldset legend{font-weight: bold; color:#777;}
 .dots-blocks .dots-block form fieldset p.hint{padding: 3px 0 0 0;}
@@ -63,6 +68,21 @@ body{top:30px;position: relative;}
     border: dashed 1px #AAA;
     border-right: 0px;
 }
-.dots-block .dots-links-block li.dots-move-link-helper .link-edit + a {
-    background: #F6F6F6;
+.dots-block .dots-links-block li.dots-move-link-helper .link-edit + a {background: #F6F6F6;}
+
+/* Dots: Nav */
+.dots-block .dots-nav-block li>.nav-edit{display:none; position:absolute;margin:0 0 0 -39px;padding:2px 4px;border:dashed 1px #111;border-right:0;background: #222;}
+.dots-block .dots-nav-block li:hover>a{border:dashed 1px #111;border-top: 0;border-bottom: 0;background: #222;}
+.dots-block .dots-nav-block li:hover>.nav-edit{display:block;}
+
+.dots-block .dots-nav-block li.nav-header{margin:0;padding:0;}
+.dots-block .dots-nav-block li.nav-header span{display:block;padding: 12px 15px 3px 15px;}
+.dots-block .dots-nav-block li.nav-header:hover span{border: dashed 1px #111;border-top: 0;border-bottom: 0;background: #222;}
+
+.dots-block .dots-block-header .btn-group.open .dropdown-toggle{
+    box-shadow:none;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
 }
+
+.dots-block .dots-block-header .btn-group > .dropdown-toggle{padding:0;}

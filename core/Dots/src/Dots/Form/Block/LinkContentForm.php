@@ -1,6 +1,6 @@
 <?php
 namespace Dots\Form\Block;
-use Zend\Form\Form,
+use Dots\Form\Form,
     Dots\Form\Validate\Url as UrlValidator;
 
 class LinkContentForm extends Form

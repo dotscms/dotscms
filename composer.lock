@@ -1,0 +1,28 @@
+{
+    "hash": "72799d72fe4b51b5357ef447a00f631d",
+    "packages": [
+        {
+            "package": "ZendExperts/ZeTwig",
+            "version": "v1.0.1"
+        },
+        {
+            "package": "ZendExperts/ZeTwig",
+            "version": "dev-master",
+            "source-reference": "460300b7c14b0f173f48d6347b282a194988251f",
+            "alias-pretty-version": "1.0.x-dev",
+            "alias-version": "1.0.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/twig",
+            "version": "v1.8.1"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}

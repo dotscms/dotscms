@@ -10,7 +10,7 @@ use Zend\EventManager\EventManager,
     Dots\Module,
     Dots\Db\Entity\Block,
     Dots\Db\Model\Block as BlockModel,
-    Dots\Block\Extension\ContentBlock\TokenParser as ContentBlockTokenParser;
+    Dots\Block\Extension\Section\TokenParser as SectionTokenParser;
 
 /**
  * Twig Extension for ZeTwig
@@ -38,7 +38,7 @@ class Extension extends Twig_Extension
     public function getTokenParsers()
     {
         return array(
-            new ContentBlockTokenParser(),
+            new SectionTokenParser(),
         );
     }
 
@@ -77,13 +77,19 @@ class Extension extends Twig_Extension
         return $block;
     }
 
-    public function renderContentBlock($name, $page, $params)
+    public function renderSection($name, $page, $params)
     {
         $view = Module::locator()->get('view');
         $edit = $view->plugin("auth")->isLoggedIn();
 
         $model = Module::locator()->get('Dots\Db\Model\Block');
-        $blocks = $model->getAllByPageIdAndSectionOrderByPosition($page->id, $name);
+        $is_static = (isset($params['is_static']) && $params['is_static']);
+        if ($is_static){
+            $blocks = $model->getAllBySectionOrderByPosition($name);
+        }else{
+            $blocks = $model->getAllByPageIdAndSectionOrderByPosition($page->id, $name);
+        }
+
         if (!$blocks) {
             $blocks = array();
         }
@@ -96,6 +102,7 @@ class Extension extends Twig_Extension
                 'handlers' => $block_handlers,
                 'page' => $page,
                 'section' => $name,
+                'is_static'=> $is_static
             ));
         }else{
             return $view->render('dots/blocks/render', array(

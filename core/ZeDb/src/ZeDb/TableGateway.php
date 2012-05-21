@@ -69,11 +69,11 @@ class TableGateway extends Gateway
         $result = $this->delete(function ($select) use ($where, $order, $limit, $offset)
         {
             $select->where($where);
-            if ($order) {
-                $select->order($order);
-            }
-            $select->limit(($limit === null ? null : 1 * $limit));
-            $select->offset(($offset === null ? null : 1 * $offset));
+//            if ($order) {
+//                $select->order($order);
+//            }
+//            $select->limit(($limit === null ? null : 1 * $limit));
+//            $select->offset(($offset === null ? null : 1 * $offset));
         });
         //return the result
         return $result;
@@ -213,6 +213,9 @@ class TableGateway extends Gateway
         if (array_key_exists('fields', $matches) && !empty($matches['fields'])) {
             $fields = explode('And', $matches['fields']);
             $fields = $this->__normalizeKeys($fields);
+            foreach($fields as &$field){
+                $field = "$field = ?";
+            }
             $where = array_combine($fields, $args);
         }else{
             if (count($args)){
@@ -221,7 +224,6 @@ class TableGateway extends Gateway
             }else{
                 $where = array();
             }
-
         }
         return $where;
     }

@@ -1,7 +1,7 @@
 <?php
 return array(
     'modules' => array(
-		'ZeTwig',       //Template engine module: defines how the template files should be processed
+        'ZeTwig',       //Template engine module: defines how the template files should be processed
         'ZeDb',         //Database abstraction layer: defines how the application exchanges data with the database server
         'ZeAuth',       //Allows user accounts to log into the application
         'Core',         //Contains core functionality like homepages and default routes
