@@ -1,9 +1,17 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ZeAuth\Db\Model;
 
 use ZeDb\Model,
-    ZeAuth\Db\Model as ModelInterface,
-    ZeAuth\Db\Mapper,
+    ZeAuth\Db\ModelInterface as ModelInterface,
+    ZeAuth\Db\MapperInterface,
     Zend\Db\Adapter\Adapter;
 
 class User implements ModelInterface
@@ -22,7 +30,7 @@ class User implements ModelInterface
     /**
      * Get the user mapper by username
      * @param string $identity
-     * @return \ZeAuth\Db\Mapper
+     * @return \ZeAuth\Db\MapperInterface
      */
     public function getByUsername($identity)
     {
@@ -32,7 +40,7 @@ class User implements ModelInterface
     /**
      * Get the user mapper by email address
      * @param string $identity
-     * @return \ZeAuth\Db\Mapper
+     * @return \ZeAuth\Db\MapperInterface
      */
     public function getByEmailAddress($identity)
     {
@@ -42,12 +50,12 @@ class User implements ModelInterface
     /**
      * Save the user mapper into the database
      * @abstract
-     * @param \ZeAuth\Db\Mapper $mapper
+     * @param \ZeAuth\Db\MapperInterface $mapper
      * @return void
      */
-    public function save(Mapper $mapper)
+    public function save(MapperInterface $mapper)
     {
-        return $this->_model->save($mapper);
+        $this->_model->save($mapper);
     }
 
     public function __call($name, $args){

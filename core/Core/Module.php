@@ -1,22 +1,9 @@
 <?php
-
 namespace Core;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 
-use Zend\Module\Manager,
-    Zend\EventManager\Event,
-    Zend\EventManager\StaticEventManager,
-    Zend\Module\Consumer\AutoloaderProvider;
-
-class Module implements AutoloaderProvider
+class Module implements AutoloaderProviderInterface
 {
-
-    /**
-     * Start point for any module
-     * @param \Zend\Module\Manager $moduleManager
-     */
-    public function init(Manager $moduleManager){
-
-    }
 
     /**
      * Get module autoloader configuration

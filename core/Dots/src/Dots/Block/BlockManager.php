@@ -1,17 +1,15 @@
 <?php
 namespace Dots\Block;
-use Zend\Mvc\LocatorAwareInterface,
-    Zend\Di\LocatorInterface,
+use Zend\ServiceManager\ServiceLocatorAwareInterface,
+    Zend\ServiceManager\ServiceLocatorInterface,
     Zend\EventManager\EventManager,
     Zend\EventManager\EventManagerInterface,
-    Zend\EventManager\Event,
-
-    Dots\Block\Handler\HtmlContent;
+    Zend\EventManager\Event;
 
 /**
  *
  */
-class BlockManager implements LocatorAwareInterface
+class BlockManager implements ServiceLocatorAwareInterface
 {
     /**
      * @var null
@@ -68,22 +66,16 @@ class BlockManager implements LocatorAwareInterface
         return $this->blockHandlers;
     }
 
-
-    /**
-     * @param \Zend\Di\LocatorInterface $locator
-     */
-    public function setLocator(LocatorInterface $locator)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->locator = $locator;
+        $this->locator = $serviceLocator;
     }
 
-    /**
-     * @return null
-     */
-    public function getLocator()
+    public function getServiceLocator()
     {
         return $this->locator;
     }
+
 
     /**
      * Set the event manager instance used by this context

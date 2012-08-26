@@ -1,78 +1,131 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ZeAuth\Form;
 
-use Zend\Form as ZForm,
-    ZeAuth\Module;
+use Zend\Form\Form;
+use Zend\InputFilter\Factory as InputFilterFactory;
+use Zend\Validator\EmailAddress;
 
-class Login extends ZForm\Form
+class Login extends Form
 {
+    protected $loginOptions = array();
+
+    public function __construct($config)
+    {
+        parent::__construct('login');
+        $this->loginOptions = array(
+            'identity_type' => $config['identity_type'],
+            'remember_me'   => $config['remember_me'],
+        );
+        $this->setAttribute('method', 'post');
+    }
+
     /**
      * Initialize the user login form
      * @return void
      */
-    public function init()
+    public function prepare()
     {
-        // Get options from the module configuration
-        $identity_type = Module::getOption('identity_type');
-        $remember_me = Module::getOption('remember_me');
-        $_username = new ZForm\Element(array(
-                'name'=>'identity',
-                'type'=>'text',
-                'required'=>true,
-                'label'=>'Username'
-            ));
-        $_emailAddress = new ZForm\Element(array(
-                'name'=>'identity',
-                'type'=>'text',
-                'required'=>true,
-                'label'=>'Email Address'
-            ));
-        $_usernameOrEmailAddress = new ZForm\Element(array(
-                'name'=>'identity',
-                'type'=>'text',
-                'required'=>true,
-                'label'=>'Username / Email'
-            ));
-        // Identity element (can me either a username or an email address or both)
+        $identity_type = $this->loginOptions['identity_type'];
+        $remember_me = $this->loginOptions['remember_me'];
+        // add identity element
+        $element_type = 'text';
         switch ($identity_type){
             case 'username':
-                $this->identity = $_username;
+                $label = 'Username';
                 break;
             case 'email_address':
-                $this->identity = $_emailAddress;
+                $label = 'Email Address';
+                $element_type = 'email';
                 break;
-            case 'both':
-                $this->identity = $_usernameOrEmailAddress;
-                break;
+            default:
+                $label = 'Username / Email';
         }
-        // Credential element (the password)
-        $this->credential = new ZForm\Element(array(
-                'name'=>'credential',
-                'type'=>'password',
-                'required'=>true,
-                'label'=>'Password'
-            ));
-        // Add remember me element if not disabled
-        if ($remember_me){
-            $this->remember_me = new ZForm\Element\Checkbox('remember_me',array(
-                'type'=>'checkbox',
-                'label'=>'Keep me logged in',
-                'value'=>'1',
-                'decorators' => array(
-                    array('ViewHelper'),
-                    array('Label', array('placement' => 'APPEND')),
-                    array(array('data' => 'HtmlTag'), array('tag' => 'dd')),
-                    array('HtmlTag', array('tag' => 'dt')),
-                )
+        $this->add(array(
+            'name' => 'identity',
+            'options' => array(
+                'label' => $label,
+            ),
+            'attributes' => array(
+                'type' => $element_type,
+            ),
+        ));
+
+        // add credential element
+        $this->add(array(
+            'name' => 'credential',
+            'options' => array(
+                'label' => 'Password',
+            ),
+            'attributes' => array(
+                'type' => 'password',
+            ),
+        ));
+
+        // add remember me element
+        if ($remember_me) {
+            $this->add(array(
+                'type'=>'Zend\Form\Element\Checkbox',
+                'name' => 'remember_me',
+                'options' => array(
+                    'label' => 'Keep me logged in',
+                ),
+                'attributes' => array(
+                    'value' => 1,
+                ),
             ));
         }
-        // Submit button
-        $this->submit = new ZForm\Element(array(
-                'type'=>'submit',
-                'name'=>'submit',
-                'ignore'=>true,
-                'label'=>'&nbsp;',
-                'value'=>'Login'
-            ));
+
+        // add submit button
+        $this->add(array(
+            'name' => 'submit',
+            'attributes' => array(
+                'type' => 'submit',
+                'value' => 'Login',
+            ),
+        ));
     }
+
+    public function getInputFilter()
+    {
+        if (!$this->filter){
+            $factory = new InputFilterFactory();
+            $identity_type = $this->loginOptions['identity_type'];
+            $inputFilterSpec = array();
+            if ($identity_type != 'email_address'){
+                $inputFilterSpec['identity'] = array(
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                );
+            }else {
+                $inputFilterSpec['identity'] = array(
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        new EmailAddress(),
+                    ),
+                );
+            }
+            $inputFilterSpec['credential'] = array(
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Zend\Filter\StringTrim'),
+                ),
+            );
+            $this->filter = $factory->createInputFilter($inputFilterSpec);
+        }
+        return $this->filter;
+    }
+
 }

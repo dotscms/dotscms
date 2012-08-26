@@ -2,7 +2,7 @@
 namespace Dots\Block\Handler;
 use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
-    Zend\EventManager\ListenerAggregate,
+    Zend\View\Model\ViewModel,
 
     Dots\Module,
     Dots\Db\Entity\Block,
@@ -92,14 +92,12 @@ class ImageHandler implements HandlerAware
      */
     public function renderBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $block = $event->getTarget();
         $page = $event->getParam('page');
-        $locator = Module::locator();
         $model = $locator->get('Dots\Db\Model\ImageBlock');
         $imageBlock = $model->getByBlockId($block->id);
-        return $view->render('dots/blocks/image/render', array(
+        return $this->renderViewModel('dots/blocks/image/render', array(
             'page' => $page,
             'block' => $block,
             'imageBlock' => $imageBlock,
@@ -113,7 +111,7 @@ class ImageHandler implements HandlerAware
      */
     public function editBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $view = $locator->get('view');
         $block = $event->getTarget();
         $page = $event->getParam('page');
@@ -136,7 +134,7 @@ class ImageHandler implements HandlerAware
         ));
         $form->addButtons();
         $form->populate(array('image_content'=>$imageBlock->toArray()));
-        return $view->render('dots/blocks/image/edit', array(
+        return $this->renderViewModel('dots/blocks/image/edit', array(
             'page' => $page,
             'block' => $block,
             'imageBlock' => $imageBlock,
@@ -151,10 +149,9 @@ class ImageHandler implements HandlerAware
      */
     public function saveBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelImageBlock = $locator->get('Dots\Db\Model\ImageBlock');
-        $view = $locator->get('view');
         $block = $event->getTarget();
         $page = $event->getParam('page');
         $section = $event->getParam('section');
@@ -282,6 +279,15 @@ class ImageHandler implements HandlerAware
             $obj->$key = $value;
         }
         return $obj;
+    }
+
+    private function renderViewModel($template=null, $vars=array())
+    {
+        $view = Module::getServiceLocator()->get('view');
+        $viewModel = new ViewModel($vars, array('has_parent' => true));
+        $viewModel->setTemplate($template)
+                  ->setTerminal(true);
+        return $view->render($viewModel);
     }
 
 }

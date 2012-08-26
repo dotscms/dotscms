@@ -1,7 +1,17 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace ZeAuth;
+
 return array(
     'ze-auth' => array(
-        'user_model_class'          => 'ZeAuth\Db\Model\User',
+        'user_model_class'          => __NAMESPACE__ . '\Db\Model\User',
         'identity_type'             => 'username', //username, email_address, both
         'remember_me'               => 60*60*24*2,
         'enable_display_name'       => false,
@@ -15,49 +25,36 @@ return array(
             'ze-auth' => array('ze-auth-auth')
         )
     ),
+
+    // View Manager Service
+    'view_manager' => array(
+        'template_path_stack' => array(
+            'ze-auth'       => __DIR__ . '/../views',
+        ),
+        'helper_map'=>array(
+            'auth'=> __NAMESPACE__ . '\Plugin\Auth',
+        )
+    ),
+
+    // Controller Service
+    'controllers' => array(
+        'invokables' => array(
+            __NAMESPACE__ . '\Controller\Auth' => __NAMESPACE__ . '\Controller\AuthController',
+        ),
+    ),
+
+    'controller_plugins'=>array(
+        'factories'=>array(
+            'auth' => __NAMESPACE__ . '\Plugin\AuthFactory',
+        )
+    ),
+
     'di' => array(
         'instance' => array(
             'alias' => array(
-                'ze-auth-auth'          => 'ZeAuth\Controller\AuthController',
-                'ze-auth-form_login'    => 'ZeAuth\Form\Login',
-                'ze-auth-service_auth'  => 'ZeAuth\Service\Auth',
-                'ze-auth-mapper_user'   => 'ZeAuth\Db\Mapper\User',
-                'ze-auth-model_user'    => 'ZeAuth\Db\Model\User',
-                'ze-auth-crypt'         => 'ZeAuth\Crypt',
-                'ze-auth-db'            => 'Zend\Db\Adapter\PdoMysql',
+                'ZeAuthMapperUser'   => __NAMESPACE__ . '\Db\Mapper\User',
+                'ZeAuthModelUser'    => __NAMESPACE__ . '\Db\Model\User',
             ),
-
-            'Zend\View\Resolver\TemplateMapResolver' => array(
-                'parameters' => array(
-                    'map'  => array(
-
-                    ),
-                ),
-            ),
-            'Zend\View\Resolver\TemplatePathStack' => array(
-                'parameters' => array(
-                    'paths'  => array(
-                        'ze-auth' => __DIR__ . '/../views',
-                    ),
-                ),
-            ),
-
-            'Zend\Mvc\Controller\PluginLoader' => array(
-                'parameters' => array(
-                    'map' => array(
-                        'auth'        => 'ZeAuth\Plugin\Auth',
-                    ),
-                ),
-            ),
-
-            'Zend\View\HelperLoader' => array(
-                'parameters' => array(
-                    'map' => array(
-                        'auth' => 'ZeAuth\Plugin\Auth',
-                    ),
-                ),
-            ),
-
         ),
     ),
 );

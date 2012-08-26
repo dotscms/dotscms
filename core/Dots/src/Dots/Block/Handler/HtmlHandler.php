@@ -2,7 +2,6 @@
 namespace Dots\Block\Handler;
 use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
-    Zend\EventManager\ListenerAggregate,
 
     Dots\Module,
     Dots\Db\Entity\Block,
@@ -94,7 +93,7 @@ class HtmlHandler implements HandlerAware
     {
         $block = $event->getTarget();
         $page = $event->getParam('page');
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $model = $locator->get('Dots\Db\Model\HtmlBlock');
         $htmlBlock = $model->getByBlockId($block->id);
         return $htmlBlock->content;
@@ -107,8 +106,7 @@ class HtmlHandler implements HandlerAware
      */
     public function editBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $block = $event->getTarget();
         $page = $event->getParam('page');
         $section = $event->getParam('section');
@@ -128,7 +126,7 @@ class HtmlHandler implements HandlerAware
         $form->populate(array(
             'content' => $htmlBlock->content,
         ));
-        return $view->render('dots/blocks/html/edit', array(
+        return $this->renderViewModel('dots/blocks/html/edit', array(
             'page' => $page,
             'block' => $block,
             'htmlBlock' => $htmlBlock,
@@ -143,10 +141,9 @@ class HtmlHandler implements HandlerAware
      */
     public function saveBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelHtmlBlock = $locator->get('Dots\Db\Model\HtmlBlock');
-        $view = $locator->get('view');
         $block = $event->getTarget();
         $page = $event->getParam('page');
         $section = $event->getParam('section');
@@ -185,7 +182,7 @@ class HtmlHandler implements HandlerAware
      */
     public function removeBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelHtmlBlock = $locator->get('Dots\Db\Model\HtmlBlock');
         $block = $event->getTarget();
         $htmlBlock = $modelHtmlBlock->getByBlockId($block->id);
@@ -206,6 +203,15 @@ class HtmlHandler implements HandlerAware
             $obj->$key = $value;
         }
         return $obj;
+    }
+
+    private function renderViewModel($template = null, $vars = array())
+    {
+        $view = Module::getServiceLocator()->get('view');
+        $viewModel = new ViewModel($vars, array('has_parent'=>true));
+        $viewModel->setTemplate($template)
+            ->setTerminal(true);
+        return $view->render($viewModel);
     }
 
 }

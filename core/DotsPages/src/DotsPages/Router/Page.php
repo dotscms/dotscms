@@ -5,8 +5,8 @@ use DotsPages\Module,
     Zend\Http\PhpEnvironment\Request as PhpRequest,
     Zend\Stdlib\RequestInterface as Request,
     Zend\Mvc\Router\Http\RouteMatch,
-    Zend\Loader\LocatorAware,
-    Zend\Di\Locator;
+    Zend\Mvc\Router\Exception\InvalidArgumentException,
+    Zend\Stdlib\ArrayUtils;
 
 class Page implements RouteInterface
 {
@@ -26,15 +26,15 @@ class Page implements RouteInterface
     /**
      * Create a new route with given options.
      *
-     * @param  array|Traversable $options
+     * @param  array|\Traversable $options
      * @return Page
      */
     public static function factory($options = array())
     {
-        if ($options instanceof Traversable) {
+        if ($options instanceof \Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         } elseif (!is_array($options)) {
-            throw new Exception\InvalidArgumentException(__METHOD__ . ' expects an array or Traversable set of options');
+            throw new InvalidArgumentException(__METHOD__ . ' expects an array or Traversable set of options');
         }
 
         if (!isset($options['defaults'])) {
@@ -55,7 +55,7 @@ class Page implements RouteInterface
         if (!($request instanceof PhpRequest)){
             return null;
         }
-        $path = $request->uri()->getPath();
+        $path = $request->getUri()->getPath();
         $alias = trim($path, '/');
 
         $model = Module::locator()->get('DotsPages\Db\Model\Page');

@@ -1,28 +1,49 @@
 {
-    "hash": "72799d72fe4b51b5357ef447a00f631d",
+    "hash": "b7c5a67c1270cab0c30679c22760eaf5",
     "packages": [
         {
-            "package": "ZendExperts/ZeTwig",
-            "version": "v1.0.1"
-        },
-        {
-            "package": "ZendExperts/ZeTwig",
-            "version": "dev-master",
-            "source-reference": "460300b7c14b0f173f48d6347b282a194988251f",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
-        },
-        {
             "package": "twig/twig",
-            "version": "v1.8.1"
+            "version": "v1.9.2"
+        },
+        {
+            "package": "zendexperts/ze-db",
+            "version": "dev-master",
+            "source-reference": "0ffd99e641c5056ed81b65930a74af4d52d0229d",
+            "commit-date": "1345455970"
+        },
+        {
+            "package": "zendexperts/ze-theme",
+            "version": "dev-master",
+            "source-reference": "8331fec4bbe845ec2c57ad87f81aa2ff567fb4ba",
+            "commit-date": "1345744797"
+        },
+        {
+            "package": "zendframework/zendframework",
+            "version": "dev-master",
+            "alias-pretty-version": "2.0.x-dev",
+            "alias-version": "2.0.9999999.9999999-dev"
+        },
+        {
+            "package": "zendframework/zendframework",
+            "version": "dev-master",
+            "source-reference": "57c7d09278d0f2db3a1c1a63eac4277f9ab7cf72",
+            "commit-date": "1345841008"
+        },
+        {
+            "package": "zf-commons/zfc-twig",
+            "version": "dev-master",
+            "source-reference": "ef044219a762af08cf372ff6cbf55c84a182e727",
+            "commit-date": "1345927497"
         }
     ],
     "packages-dev": null,
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
-    "stability-flags": [
-
-    ]
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "zf-commons/zfc-twig": 20,
+        "zendexperts/ze-db": 20,
+        "zendexperts/ze-theme": 20
+    }
 }

@@ -26,7 +26,7 @@ label{float:none;width:auto;padding: 0px;}
 .navbar .container:after{clear:left;}
 
 /* Login Box */
-.login dl{overflow: hidden;}
+.login dl{overflow: hidden;padding: 3px 0 3px 0;}
 .login dl dt{padding: 4px 5px 0 0;font-size:13px;line-height:18px;float:left;width:100px;text-align:right;color:#404040;clear:left;}
 .login dl dd{padding: 0 0 6px 0;float:left;margin-left: 4px;}
 .login dl dd ul.errors li{color:#b94a48;list-style: none;}

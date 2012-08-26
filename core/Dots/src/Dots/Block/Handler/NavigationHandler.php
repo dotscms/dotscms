@@ -2,7 +2,7 @@
 namespace Dots\Block\Handler;
 use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
-    Zend\Mvc\Controller\ActionController,
+    Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
     Zend\View\Model\JsonModel,
 
@@ -17,7 +17,7 @@ use Zend\EventManager\EventManagerInterface,
 /**
  * Navigation content block handler and Controller
  */
-class NavigationHandler extends ActionController implements HandlerAware
+class NavigationHandler extends AbstractActionController implements HandlerAware
 {
     /**
      * Block type
@@ -95,13 +95,12 @@ END
      */
     public function renderBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view    = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $model   = $locator->get('Dots\Db\Model\NavigationBlock');
         $block   = $event->getTarget();
         $page    = $event->getParam('page');
         $items   = $model->getAllByBlockIdOrderByPosition($block->id);
-        return $view->render('dots/blocks/navigation/render', array(
+        return $this->renderViewModel('dots/blocks/navigation/render', array(
             'page' => $page,
             'block' => $block,
             'items' => $items,
@@ -111,7 +110,7 @@ END
 
     public function getPagesAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $QUERY = $this->getRequest()->query()->toArray();
         $pages = $modelPage->getAllLikeTitle('%' . $QUERY['term'] . '%');
@@ -128,7 +127,7 @@ END
 
     public function removeAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
         $QUERY = $this->getRequest()->query()->toArray();
         $nav_id = $QUERY['id'];
@@ -140,15 +139,12 @@ END
     public function addAction()
     {
         $form = $this->getEditForm();
-        $viewModel = new ViewModel(array('form' => $form));
-        $viewModel->setTemplate('dots/blocks/navigation/item-add');
-        $viewModel->setTerminal(true);
-        return $viewModel;
+        return $this->renderViewModel('dots/blocks/navigation/item-add', array('form' => $form) );
     }
 
     public function editAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
@@ -169,16 +165,12 @@ END
 
         $form = $this->getEditForm();
         $form->populate($data);
-
-        $viewModel = new ViewModel(array('form' => $form));
-        $viewModel->setTemplate('dots/blocks/navigation/item-edit');
-        $viewModel->setTerminal(true);
-        return $viewModel;
+        return $this->renderViewModel('dots/blocks/navigation/item-edit', array('form' => $form));
     }
 
     public function saveAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelNavBlock = $locator->get('Dots\Db\Model\NavigationBlock');
@@ -237,7 +229,7 @@ END
     public function moveAction(){
         $blockId = $_REQUEST['block_id'];
         $navId = $_REQUEST['id'];
-        $navBlockModel = $this->getLocator()->get('Dots\Db\Model\NavigationBlock');
+        $navBlockModel = $this->getServiceLocator()->get('Dots\Db\Model\NavigationBlock');
         $nav = $navBlockModel->getById($navId);
         $position = $_REQUEST['position'];
         $oldPosition = $nav->position;
@@ -270,8 +262,7 @@ END
      */
     public function editBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $block = $event->getTarget();
         $page = $event->getParam('page');
         $section = $event->getParam('section');
@@ -285,7 +276,7 @@ END
             $navigationBlocks = array();
         }
         $form = $this->getForm($navigationBlocks);
-        return $view->render('dots/blocks/navigation/edit', array(
+        return $this->renderViewModel('dots/blocks/navigation/edit', array(
             'page'  => $page,
             'block' => $block,
             'form'  => $form,
@@ -299,7 +290,7 @@ END
      */
     public function removeBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelNavigationBlock = $locator->get('Dots\Db\Model\NavigationBlock');
         $block = $event->getTarget();
         $navBlock = $modelNavigationBlock->removeByBlockId($block->id);
@@ -315,6 +306,15 @@ END
     private function jsonResponse($data)
     {
         return new JsonModel($data);
+    }
+
+    private function renderViewModel($template = null, $vars = array())
+    {
+        $view = Module::getServiceLocator()->get('view');
+        $viewModel = new ViewModel($vars, array('has_parent' => true));
+        $viewModel->setTemplate($template)
+            ->setTerminal(true);
+        return $view->render($viewModel);
     }
 
     /**

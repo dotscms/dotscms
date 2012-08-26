@@ -1,7 +1,7 @@
 <?php
 namespace DotsPages\Controller;
 
-use Zend\Mvc\Controller\ActionController,
+use Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
     Zend\Json\Encoder,
 
@@ -11,7 +11,7 @@ use Zend\Mvc\Controller\ActionController,
     DotsPages\Form\Page,
     DotsPages\Form\PageMeta;
 
-class AdminController extends ActionController
+class AdminController extends AbstractActionController
 {
     /**
      * Show add view or add a new page

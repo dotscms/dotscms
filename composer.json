@@ -1,6 +1,17 @@
 {
     "require": {
         "php": ">=5.3.3",
-        "ZendExperts/ZeTwig": "v1.0.1"
+        "zendframework/zendframework":"2.0.*",
+        "zf-commons/zfc-twig": "dev-master",
+        "zendexperts/ze-db":"dev-master",
+        "zendexperts/ze-theme":"dev-master"
+    },
+    "autoload":{
+        "psr-0":{
+            "Core":     "core/Core/src",
+            "ZeAuth":   "core/ZeAuth/src",
+            "Dots":     "core/Dots/src",
+            "DotsPages":"core/DotsPages/src"
+        }
     }
 }

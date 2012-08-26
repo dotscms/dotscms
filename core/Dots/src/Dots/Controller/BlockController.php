@@ -1,7 +1,7 @@
 <?php
 namespace Dots\Controller;
 
-use Zend\Mvc\Controller\ActionController,
+use Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
     Zend\Json\Encoder,
     Zend\View\Model\JsonModel,
@@ -9,7 +9,7 @@ use Zend\Mvc\Controller\ActionController,
     Dots\Module,
     Dots\Db\Entity;
 
-class BlockController extends ActionController
+class BlockController extends AbstractActionController
 {
     /**
      * Add a new block

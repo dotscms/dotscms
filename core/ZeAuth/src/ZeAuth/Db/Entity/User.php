@@ -1,10 +1,18 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ZeAuth\Db\Entity;
 
 use ZeDb\Entity,
-    ZeAuth\Db\Mapper as AuthMapper;
+    ZeAuth\Db\MapperInterface;
 
-class User extends Entity implements AuthMapper
+class User extends Entity implements MapperInterface
 {
     protected $_data = array(
         'id'            => null,
@@ -37,7 +45,7 @@ class User extends Entity implements AuthMapper
     /**
      * Set the last login field to a specific date or to now
      * @param string|null $date
-     * @return ZeAuth\Db\Mapper
+     * @return ZeAuth\Db\MapperInterface
      */
     public function setLastLogin($date = null)
     {

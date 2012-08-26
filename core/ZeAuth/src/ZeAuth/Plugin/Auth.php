@@ -1,32 +1,54 @@
 <?php
 /**
- * @namespace
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace ZeAuth\Plugin;
-use ZeAuth\Module,
-    Zend\Mvc\Controller\Plugin\AbstractPlugin,
-    Zend\View\Helper\HelperInterface,
-    Zend\View\Renderer\RendererInterface;
+
+use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Zend\View\Helper\HelperInterface;
+use Zend\View\Renderer\RendererInterface;
+use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * @uses ZeAuth\Module
  */
-class Auth extends AbstractPlugin implements HelperInterface
+class Auth extends AbstractPlugin implements HelperInterface, ServiceManagerAwareInterface
 {
     /**
      * @var \ZeAuth\Service\Auth
      */
     protected $service = null;
+    /**
+     * @var \Zend\View\Renderer\RendererInterface
+     */
     protected $view = null;
 
     /**
-     * Plugin constructor
+     * Set the ZeAuth Service for the plugin/helper class.
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @return \ZeAuth\Service\Auth
      */
-    public function __construct(){
-        $this->service = Module::locator()->get('ze-auth-service_auth');
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        if (!$this->service){
+            if ($serviceManager instanceof \Zend\View\HelperPluginManager){
+                $this->service = $serviceManager->getServiceLocator()->get('ZeAuth');
+            }else{
+                $this->service = $serviceManager->get('ZeAuth');
+            }
+        }
+        return $this->service;
     }
 
+
     /**
+     * Test if the user is logged in
      * @return bool
      */
     public function isLoggedIn(){
@@ -34,7 +56,8 @@ class Auth extends AbstractPlugin implements HelperInterface
     }
 
     /**
-     * @return mixed
+     * Return the logged user or null if not logged in
+     * @return \ZeAuth\Db\MapperInterface
      */
     public function user(){
         return $this->service->getLoggedUser();

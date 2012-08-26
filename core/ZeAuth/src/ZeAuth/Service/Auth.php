@@ -1,15 +1,21 @@
 <?php
 /**
- * @namespace
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace ZeAuth\Service;
-use Zend\Authentication\AuthenticationService,
-    Zend\EventManager\EventManagerInterface,
-    Zend\EventManager\EventManager,
-    Zend\Mvc\MvcEvent,
+use Zend\Authentication\AuthenticationService;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\EventManager;
+use Zend\Mvc\MvcEvent;
     
-    ZeAuth\Exception,
-    ZeAuth\Module;
+use ZeAuth\Exception;
+use ZeAuth\Form\Login as LoginForm;
+use ZeAuth\Crypt;
 
 /**
  * ZeAuth Service class
@@ -19,22 +25,41 @@ class Auth
     /**
      * @var \Zend\EventManager\EventManagerInterface
      */
-    private $events;
+    protected $events = null;
     /**
      * @var \Zend\Authentication\AuthenticationService
      */
-    private $auth;
+    protected $auth = null;
+    protected $serviceManager = null;
+    protected $config = array();
+    protected $loginForm = null;
+    protected $registerForm = null;
 
     public function __construct()
     {
         $this->auth = new AuthenticationService();
     }
 
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    public function setServiceManager($serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    public function getHomeRoute()
+    {
+        return $this->config['home_route'];
+    }
+
     /**
      * Set the event manager instance used by this context
      * 
      * @param  EventManagerInterface $events
-     * @return AppContext
+     * @return Auth
      */
     public function setEventManager(EventManagerInterface $event_manager)
     {
@@ -88,16 +113,16 @@ class Auth
         
         if ($matchedRoute){
             $routeName = $matchedRoute->getMatchedRouteName();
-            $restrictedRoutes = Module::getOption('restricted_routes');
-            $unrestrictedRoutes = Module::getOption('unrestricted_routes');
+            $restrictedRoutes = $this->config['restricted_routes'];
+            $unrestrictedRoutes = $this->config['unrestricted_routes'];
             // Flatten the list of restricted routes
             $_restricted = array();
-            foreach($restrictedRoutes->toArray() as $routes){
+            foreach($restrictedRoutes as $routes){
                 $_restricted = array_merge($_restricted, $routes);
             }
             // Flatten the list of unrestricted routes
             $_unrestricted = array();
-            foreach($unrestrictedRoutes->toArray() as $routes){
+            foreach($unrestrictedRoutes as $routes){
                 $_unrestricted = array_merge($_unrestricted, $routes);
             }
             // Skip unrestricted routes
@@ -111,12 +136,19 @@ class Auth
             }
 
             //@todo: Find a way to redirect based on the route name
-            $matchedRoute->setParam('controller','ze-auth-auth');
+            $matchedRoute->setParam('controller','ZeAuth\Controller\AuthController');
             $matchedRoute->setParam('action','index');
             $e->setRouteMatch($matchedRoute);
             return true;
         }
 
+    }
+
+    public function getLoginForm(){
+        if (!$this->loginForm){
+            $this->loginForm = new LoginForm($this->config);
+        }
+        return $this->loginForm;
     }
     
     /**
@@ -163,7 +195,7 @@ class Auth
 
     /**
      * Get the logged user
-     * @return mixed
+     * @return \ZeAuth\Db\MapperInterface
      */
     public function getLoggedUser()
     {
@@ -174,12 +206,12 @@ class Auth
     /**
      * Get a user by the configured identity type
      * @param $identity
-     * @return mixed
+     * @return \ZeAuth\Db\MapperInterface
      */
     protected function getUserByIdentity($identity)
     {
-        $model = Module::locator()->get('ze-auth-model_user');
-        $identity_type = Module::getOption('identity_type');
+        $model = $this->serviceManager->get('ZeAuthModelUser');
+        $identity_type = $this->config['identity_type'];
         switch ($identity_type) {
             case 'username':
                 $mapper = $model->getByUsername($identity);
@@ -234,8 +266,8 @@ class Auth
      */
     protected function _isValidCredential($password, $salt, $credential)
     {
-        $crypt = Module::locator()->get('ze-auth-crypt');
-        $alg = Module::getOption('password_hash_algorithm');
+        $crypt = new Crypt();
+        $alg = $this->config['password_hash_algorithm'];
         if ($password == $crypt->encode($alg, $credential, $salt)){
             return true;
         }

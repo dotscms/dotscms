@@ -14,7 +14,7 @@ return array(
                         'contentHandler' => array('type' => 'Dots\\Block\\HandlerAware', 'required' => true)
                     )
                 ),
-                'Dots\\Block\\Handler\\HtmlContent' => array(
+                'Dots\\Block\\Handler\\HtmlHandler' => array(
                     'attach' => array(
                         'events' => array(
                             'required' => false,
@@ -28,7 +28,7 @@ return array(
                         ),
                     )
                 ),
-                'Dots\\Block\\Handler\\ImageContent' => array(
+                'Dots\\Block\\Handler\\ImageHandler' => array(
                     'attach' => array(
                         'events' => array(
                             'required' => false,
@@ -42,7 +42,21 @@ return array(
                         ),
                     )
                 ),
-                'Dots\\Block\\Handler\\LinksContentController' => array(
+                'Dots\\Block\\Handler\\LinksHandler' => array(
+                    'attach' => array(
+                        'events' => array(
+                            'required' => false,
+                            'type' => false,
+                        ),
+                    ),
+                    'detach' => array(
+                        'events' => array(
+                            'required' => false,
+                            'type' => false,
+                        ),
+                    )
+                ),
+                'Dots\\Block\\Handler\\NavigationHandler' => array(
                     'attach' => array(
                         'events' => array(
                             'required' => false,

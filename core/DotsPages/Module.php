@@ -1,7 +1,7 @@
 <?php
 namespace DotsPages;
-use Ze\Module as ZeModule,
-    Zend\Module\Manager,
+use Dots\AbstractModule,
+    Zend\ModuleManager\ModuleManager,
     Zend\EventManager\StaticEventManager,
     Zend\EventManager\Event,
     Zend\Mvc\MvcEvent;
@@ -9,13 +9,13 @@ use Ze\Module as ZeModule,
 /**
  * Dots pages module
  */
-class Module extends ZeModule
+class Module extends AbstractModule
 {
     private static $dispatcher = null;
     private static $application = null;
     private static $context = null;
 
-    public function init(Manager $moduleManager)
+    public function init(ModuleManager $moduleManager)
     {
         parent::init($moduleManager);
         $events = StaticEventManager::getInstance();
@@ -72,7 +72,7 @@ class Module extends ZeModule
     }
 
     /**
-     * @return \Zend\Mvc\AppContext
+     * @return \Zend\Mvc\ApplicationInterface
      */
     public function application()
     {

@@ -1,57 +1,88 @@
 <?php
 return array(
+    // View Manager Service
+    'view_manager' => array(
+        'template_path_stack' => array(
+            'dots' => __DIR__ . '/../views',
+        ),
+        'helper_map' => array(
+            'dots' => 'Dots\Helper\Dots',
+        )
+    ),
+
+    'zfctwig' => array(
+        'extensions' => array(
+            'DotsBlock' => 'Dots\Block\Extension'
+        ),
+    ),
+    'dots'=>array(
+        'blocks'=>array(
+            'Dots\Block\Handler\HtmlHandler',
+            'Dots\Block\Handler\ImageHandler',
+            'Dots\Block\Handler\LinksHandler',
+            'Dots\Block\Handler\NavigationHandler'
+        ),
+    ),
+
+    // Controller Service
+    'controllers' => array(
+        'invokables' => array(
+            'Dots\Controller\Block' => 'Dots\Controller\BlockController',
+            'Dots\Block\Handler\LinksHandler' => 'Dots\Block\Handler\LinksHandler',
+            'Dots\Block\Handler\NavigationHandler' => 'Dots\Block\Handler\NavigationHandler',
+        ),
+    ),
+
+    //Router Service
+    'router' => array(
+        'routes' => array(
+            'dots-block' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/dots/block[/:action][/]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Dots\Controller\Block',
+                        'action' => 'index',
+                    ),
+                ),
+            ),
+            'dots-block-link' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/dots/link-block[/:action][/]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Dots\Block\Handler\LinksHandler',
+                        'action' => 'index',
+                    ),
+                ),
+            ),
+            'dots-block-navigation' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/dots/nav-block[/:action][/]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Dots\Block\Handler\NavigationHandler',
+                        'action' => 'index',
+                    ),
+                ),
+            ),
+        ),
+    ),
+
+
     'di' => array(
         'instance' => array(
             'alias' => array(
-                'dots-block' => 'Dots\Controller\BlockController',
                 'dots-templates' => 'Dots\View\TemplateContainer'
-            ),
-
-            /**
-             * Template files and path to default template folder
-             */
-            'Zend\View\Resolver\TemplateMapResolver' => array(
-                'parameters' => array(
-                    'map'  => array(
-//                        'layouts/layout' => __DIR__ . '/../views/layouts/layout.twig',
-                    ),
-                ),
-            ),
-            'Zend\View\Resolver\TemplatePathStack' => array(
-                'parameters' => array(
-                    'paths'  => array(
-                        'dots' => __DIR__ . '/../views',
-                    ),
-                ),
-            ),
-
-            /**
-             * Helper classes
-             */
-            'Zend\View\HelperLoader' => array(
-                'parameters' => array(
-                    'map' => array(
-                        'dots' => 'Dots\Helper\Dots',
-                    ),
-                ),
-            ),
-
-            /**
-             * Dots Blocks
-             */
-            'ZeTwig\View\Environment' => array(
-                'injections' => array(
-                    'Dots\Block\Extension'
-                ),
-            ),
-
-            'Dots\Block\BlockManager' => array(
-                'injections' => array(
-                    'Dots\Block\Handler\HtmlHandler',
-                    'Dots\Block\Handler\ImageHandler',
-                    'Dots\Block\Handler\LinksHandler',
-                    'Dots\Block\Handler\NavigationHandler'
-                ),
             ),
 
             'Dots\View\TemplateContainer' => array(
@@ -62,55 +93,6 @@ return array(
                         )
                     )
                 )
-            ),
-
-            /**
-             * Routes
-             */
-            'Zend\Mvc\Router\RouteStackInterface' => array(
-                'parameters' => array(
-                    'routes' => array(
-                        'dots-block' => array(
-                            'type' => 'Zend\Mvc\Router\Http\Segment',
-                            'options' => array(
-                                'route' => '/dots/block[/:action][/]',
-                                'constraints' => array(
-                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                ),
-                                'defaults' => array(
-                                    'controller' => 'dots-block',
-                                    'action' => 'index',
-                                ),
-                            ),
-                        ),
-                        'dots-block-link' => array(
-                            'type' => 'Zend\Mvc\Router\Http\Segment',
-                            'options' => array(
-                                'route' => '/dots/link-block[/:action][/]',
-                                'constraints' => array(
-                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                ),
-                                'defaults' => array(
-                                    'controller' => 'Dots\Block\Handler\LinksHandler',
-                                    'action' => 'index',
-                                ),
-                            ),
-                        ),
-                        'dots-block-navigation' => array(
-                            'type' => 'Zend\Mvc\Router\Http\Segment',
-                            'options' => array(
-                                'route' => '/dots/nav-block[/:action][/]',
-                                'constraints' => array(
-                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                ),
-                                'defaults' => array(
-                                    'controller' => 'Dots\Block\Handler\NavigationHandler',
-                                    'action' => 'index',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
             ),
 
         ),

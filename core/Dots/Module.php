@@ -2,29 +2,37 @@
 
 namespace Dots;
 
-use Zend\Module\Manager,
+use Zend\ModuleManager\ModuleManager,
     Zend\EventManager\Event,
     Zend\EventManager\StaticEventManager,
-    Zend\Module\Consumer\AutoloaderProvider,
+    Zend\ModuleManager\Feature\AutoloaderProviderInterface,
     Zend\Mvc\MvcEvent;
 
 /**
  * Dots module
  */
-class Module implements AutoloaderProvider
+class Module implements AutoloaderProviderInterface
 {
-    private static $locator;
+    private static $serviceLocator;
     private static $context = null;
     private static $blockManager = null;
 
     /**
      * Start point for any module
-     * @param \Zend\Module\Manager $moduleManager
+     * @param \Zend\ModuleManager\ModuleManager $moduleManager
      */
-    public function init(Manager $moduleManager)
+    public function init(ModuleManager $moduleManager)
     {
-        $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'setupLocator'), 1000);
+        $moduleManager->getEventManager()->getSharedManager()->attach('Zend\Mvc\Application', 'bootstrap', array($this, 'setupLocator'), 1000);
+    }
+
+    public function onBootstrap(MvcEvent $event)
+    {
+        static::$serviceLocator = $locator = $event->getApplication()->getServiceManager();
+        $config = $locator->get('Configuration');
+        foreach($config['view_manager']['helper_map'] as $alias=>$class){
+            $locator->get('ViewHelperManager')->setInvokableClass($alias, $class);
+        }
     }
 
     /**
@@ -35,24 +43,18 @@ class Module implements AutoloaderProvider
     public function setupLocator(Event $event)
     {
         $app = $event->getParam('application');
-        static::$locator = $app->getLocator();
-        static::$blockManager = static::$locator->get('Dots\Block\BlockManager');
-        $app->events()->attach('dispatch', array($this, 'setupContext'));
-        $app->events()->attach('render', array($this, 'registerJsonStrategy'), 100);
+        static::$blockManager = $app->getServiceManager()->get('Dots\Block\BlockManager');
+//        $app->events()->attach('dispatch', array($this, 'setupContext'));
+        $app->getEventManager()->attach('render', array($this, 'registerJsonStrategy'), 100);
     }
 
     public function registerJsonStrategy(Event $event)
     {
         $app = $event->getTarget();
-        $locator = $app->getLocator();
+        $locator = $app->getServiceManager();
         $view = $locator->get('Zend\View\View');
         $jsonStrategy = $locator->get('Zend\View\Strategy\JsonStrategy');
-        $view->events()->attach($jsonStrategy, 200);
-    }
-
-    public function setupContext(MvcEvent $event)
-    {
-        static::$context = clone $event;
+        $view->getEventManager()->attach($jsonStrategy, 200);
     }
 
     /**
@@ -76,11 +78,17 @@ class Module implements AutoloaderProvider
      * Get core configuration array
      * @return array
      */
-    public function getConfig(){
+    public function getConfig()
+    {
         $definitions = include __DIR__ . '/config/module.di.config.php';
         $config = include __DIR__ . '/config/module.config.php';
         $config = array_merge_recursive($definitions, $config);
         return $config;
+    }
+
+    public function getServiceConfig()
+    {
+        return include __DIR__ . '/config/service.config.php';
     }
 
     /**
@@ -88,17 +96,9 @@ class Module implements AutoloaderProvider
      * @static
      * @return
      */
-    public static function locator()
+    public static function getServiceLocator()
     {
-        return static::$locator;
-    }
-
-    /**
-     * @return \Zend\Mvc\MvcEvent
-     */
-    public static function context()
-    {
-        return static::$context;
+        return static::$serviceLocator;
     }
 
     /**

@@ -79,10 +79,10 @@ class Extension extends Twig_Extension
 
     public function renderSection($name, $page, $params)
     {
-        $view = Module::locator()->get('view');
+        $view = Module::getServiceLocator()->get('TwigViewRenderer');
         $edit = $view->plugin("auth")->isLoggedIn();
 
-        $model = Module::locator()->get('Dots\Db\Model\Block');
+        $model = Module::getServiceLocator()->get('Dots\Db\Model\Block');
         $is_static = (isset($params['is_static']) && $params['is_static']);
         if ($is_static){
             $blocks = $model->getAllBySectionOrderByPosition($name);

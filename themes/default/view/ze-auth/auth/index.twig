@@ -1,0 +1,34 @@
+{% extends 'layout/main'%}
+
+{% block content%}
+    <div class="login">
+        <h3>Login</h3>
+        {% do form.prepare() %}
+        {% do form.setAttribute('action', url('ze-auth')) %}
+        {{ form().openTag(form) | raw }}
+        <dl>
+            {% for elem in form.getElements() %}
+            {% if (elem.getAttribute('type')=='checkbox') %}
+                <dt>&nbsp;</dt>
+                <dd>{{ formInput(elem) }}
+                    {{ formLabel(elem) }}
+                    {{ formElementErrors (elem, {class: 'errors'}) }}
+                </dd>
+            {% else %}
+                <dt>
+                    {% if (elem.getLabel()) %}
+                    {{ formLabel(elem) }}
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </dt>
+                <dd>
+                    {{ formInput(elem) }}
+                    {{ formElementErrors (elem, {class: 'errors'}) }}
+                </dd>
+            {% endif %}
+            {% endfor %}
+        </dl>
+        {{ form().closeTag(form) | raw }}
+    </div>
+{% endblock %}

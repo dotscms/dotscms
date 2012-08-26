@@ -1,12 +1,17 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ZeAuth\Controller;
 
-// GLOBAL REQUIREMENTS
-use Zend\Mvc\Controller\ActionController,
-// CLOSED REQUIREMENTS
-    ZeAuth\Module;
+use Zend\Mvc\Controller\AbstractActionController;
 
-class AuthController extends ActionController
+class AuthController extends AbstractActionController
 {
     /**
      * Login action. Returns an array that contains the login form.
@@ -15,14 +20,15 @@ class AuthController extends ActionController
     public function indexAction()
     {
         // Get the login form and authentication service
-        $homeRoute = Module::getOption('home_route');
-        $form = $this->getLocator()->get('ze-auth-form_login');
-        $service = $this->getLocator()->get('ze-auth-service_auth');
+        $service = $this->getServiceLocator()->get('ZeAuth');
+        $homeRoute = $service->getHomeRoute();
+        $form = $service->getLoginForm();
         // If the form is valid
         if ($this->request->isPost()){
-            if ($form->isValid($this->request->post()->toArray())){
+            $data = $this->request->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()){
                 // Login the user and redirect to the home route
-                $data = $this->request->post()->toArray();
                 $result = $service->login($data);
                 // on successfull login redirect to homepage.
                 if ( $result === true ){
@@ -46,7 +52,7 @@ class AuthController extends ActionController
      */
     public function logoutAction()
     {
-        $service = $this->getLocator()->get('ze-auth-service_auth');
+        $service = $this->getServiceLocator()->get('ZeAuth');
         $service->logout();
         return $this->redirect()->toRoute('ze-auth');
     }

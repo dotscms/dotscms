@@ -1,32 +1,36 @@
 <?php
-/*
- * @namespace
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace ZeAuth;
-use Zend\Module\Manager,
-    Zend\Module\ModuleEvent,
+use Zend\ModuleManager\ModuleManager,
+    Zend\ModuleManager\ModuleEvent,
     Zend\EventManager\StaticEventManager,
     Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider,
-
+    Zend\ModuleManager\Feature\AutoloaderProviderInterface,
+    Zend\Mvc\MvcEvent,
     ZeAuth\Event\Listener;
 
-class Module implements AutoloaderProvider
+class Module implements AutoloaderProviderInterface
 {
     const PRIORITY = 10000;
     protected static $options;
-    protected static $locator;
+    protected static $serviceManager;
 
     /**
      * Initialize the module by attaching different events
-     * @param \Zend\Module\Manager $moduleManager
+     * @param \Zend\ModuleManager\ModuleManager $moduleManager
      * @return void
      */
-    public function init(Manager $moduleManager)
+    public function init(ModuleManager $moduleManager)
     {
-        $moduleManager->events()->attach('loadModules.post', array($this, 'postInit'));
-        $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'initListener'), self::PRIORITY);
+        $moduleManager->getEventManager()->getSharedManager()
+            ->attach('application', 'bootstrap', array($this, 'initListener'), self::PRIORITY);
     }
     
     /**
@@ -36,9 +40,6 @@ class Module implements AutoloaderProvider
     public function getAutoloaderConfig()
     {
         return array(
-//            'Zend\Loader\ClassMapAutoloader' => array(
-//                __DIR__ . '/autoload/classmap.php',
-//            ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
@@ -49,12 +50,23 @@ class Module implements AutoloaderProvider
 
     /**
      * Return module configuration settings
-     * @param string $env
      * @return array
      */
-    public function getConfig($env = null)
+    public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    /**
+     * Get Service Manager configuration for ZeAuth module
+     * @return array
+     */
+    public function getServiceConfig(){
+        return array(
+            'factories'=>array(
+                'ZeAuth'=>'ZeAuth\\Service\\AuthFactory',
+            ),
+        );
     }
 
     /**
@@ -65,46 +77,9 @@ class Module implements AutoloaderProvider
     public function initListener(Event $e)
     {
         $app          = $e->getParam('application');
-        self::$locator = $app->getLocator();
         $eventListener = new Listener();
-        $app->events()->attachAggregate($eventListener);
+        $eventListener->setServiceManager($app->getServiceManager());
+        $app->getEventManager()->attachAggregate($eventListener);
     }
 
-    /**
-     * Load full configuration options
-     * @param \Zend\Module\ModuleEvent $e
-     * @return void
-     */
-    public function postInit(ModuleEvent $e)
-    {
-        $config = $e->getConfigListener()->getMergedConfig();
-        static::$options = $config['ze-auth'];
-    }
-
-    /******************
-     * STATIC METHODS *
-     ******************/
-
-    /**
-     * Return a particular configuration option
-     * @static
-     * @param $option
-     * @return null
-     */
-    public static function getOption($option)
-    {
-        if (!isset(static::$options[$option])) {
-            return null;
-        }
-        return static::$options[$option];
-    }
-
-    /**
-     * Return the Dependency Injector object loaded in the application
-     * @static
-     * @return
-     */
-    public static function locator(){
-        return self::$locator;
-    }
 }

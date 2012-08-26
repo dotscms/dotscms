@@ -2,7 +2,7 @@
 namespace Dots\Block\Handler;
 use Zend\EventManager\EventManagerInterface,
     Zend\EventManager\Event,
-    Zend\Mvc\Controller\ActionController,
+    Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel,
     Zend\View\Model\JsonModel,
 
@@ -17,7 +17,7 @@ use Zend\EventManager\EventManagerInterface,
 /**
  * Links content block handler and Controller
  */
-class LinksHandler extends ActionController implements HandlerAware
+class LinksHandler extends AbstractActionController implements HandlerAware
 {
     /**
      * Block type
@@ -95,13 +95,12 @@ END
      */
     public function renderBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view    = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $model   = $locator->get('Dots\Db\Model\LinkBlock');
         $block   = $event->getTarget();
         $page    = $event->getParam('page');
         $links   = $model->getAllByBlockIdOrderByPosition($block->id);
-        return $view->render('dots/blocks/links/render', array(
+        return $this->renderViewModel('dots/blocks/links/render', array(
             'page' => $page,
             'block' => $block,
             'links' => $links,
@@ -113,15 +112,12 @@ END
         $form = new LinkContentForm();
         $form->setElementsBelongTo('link_content[1]');
         $form->addButtons();
-        $viewModel = new ViewModel(array('form'=>$form));
-        $viewModel->setTemplate('dots/blocks/links/form');
-        $viewModel->setTerminal(true);
-        return $viewModel;
+        return $this->renderViewModel('dots/blocks/links/form', array('form' => $form));
     }
 
     public function getPagesAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $QUERY = $this->getRequest()->query()->toArray();
         $pages = $modelPage->getAllLikeTitle('%' . $QUERY['term'] . '%');
@@ -138,7 +134,7 @@ END
 
     public function removeAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
         $QUERY = $this->getRequest()->query()->toArray();
         $link_id = $QUERY['id'];
@@ -149,7 +145,7 @@ END
 
     public function editAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
@@ -173,15 +169,12 @@ END
         $form->addButtons();
         $form->populate($data);
 
-        $viewModel = new ViewModel(array('form' => $form));
-        $viewModel->setTemplate('dots/blocks/links/form');
-        $viewModel->setTerminal(true);
-        return $viewModel;
+        return $this->renderViewModel('dots/blocks/links/form', array('form' => $form));
     }
 
     public function saveAction()
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('Dots\Db\Model\Block');
         $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
@@ -249,7 +242,7 @@ END
     public function moveAction(){
         $blockId = $_REQUEST['block_id'];
         $linkId = $_REQUEST['id'];
-        $linkBlockModel = $this->getLocator()->get('Dots\Db\Model\LinkBlock');
+        $linkBlockModel = $this->getServiceLocator()->get('Dots\Db\Model\LinkBlock');
         $link = $linkBlockModel->getById($linkId);
         $position = $_REQUEST['position'];
         $oldPosition = $link->position;
@@ -282,8 +275,7 @@ END
      */
     public function editBlock(Event $event)
     {
-        $locator = Module::locator();
-        $view = $locator->get('view');
+        $locator = Module::getServiceLocator();
         $block = $event->getTarget();
         $page = $event->getParam('page');
         $section = $event->getParam('section');
@@ -297,7 +289,7 @@ END
             $linkBlocks = array();
         }
         $form = $this->getForm($linkBlocks);
-        return $view->render('dots/blocks/links/edit', array(
+        return $this->renderViewModel('dots/blocks/links/edit', array(
             'page'  => $page,
             'block' => $block,
             'form'  => $form,
@@ -311,7 +303,7 @@ END
      */
     public function removeBlock(Event $event)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $modelLinkBlock = $locator->get('Dots\Db\Model\LinkBlock');
         $block = $event->getTarget();
         $linkBlock = $modelLinkBlock->getByBlockId($block->id);
@@ -344,6 +336,15 @@ END
         return new JsonModel($data);
     }
 
+    private function renderViewModel($template = null, $vars = array())
+    {
+        $view = Module::getServiceLocator()->get('view');
+        $viewModel = new ViewModel($vars, array('has_parent' => true));
+        $viewModel->setTemplate($template)
+            ->setTerminal(true);
+        return $view->render($viewModel);
+    }
+
     /**
      * Get the form used for editing links
      * @param null $linkBlocks
@@ -351,7 +352,7 @@ END
      */
     public function getForm($linkBlocks = null)
     {
-        $locator = Module::locator();
+        $locator = Module::getServiceLocator();
         $view = $locator->get('view');
         $form = new MultiForm(array());
         $form->setParams(array(

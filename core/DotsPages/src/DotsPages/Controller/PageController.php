@@ -1,23 +1,23 @@
 <?php
 namespace DotsPages\Controller;
 
-use Zend\Mvc\Controller\ActionController,
+use Zend\Mvc\Controller\AbstractActionController,
     Zend\View\Model\ViewModel;
 
-class PageController extends ActionController
+class PageController extends AbstractActionController
 {
     public function viewAction()
     {
         $routeMatch = $this->getEvent()->getParam('route-match');
         $page = $routeMatch->getParam('page');
-        $metaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
+        $metaModel = $this->getServiceLocator()->get('ZeDbManager')->get('DotsPages\Db\Model\PageMeta');
         $pageMeta = $metaModel->getByPageId($page->id);
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate($page->template);
         $viewModel->setVariable('page', $page);
 
-        $view = $this->getLocator()->get('view');
+        $view = $this->getServiceLocator()->get('TwigViewRenderer');
 
         if ($pageMeta){
             $view->plugin('headTitle')->append($pageMeta->title);

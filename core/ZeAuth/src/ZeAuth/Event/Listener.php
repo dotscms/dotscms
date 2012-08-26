@@ -1,19 +1,23 @@
 <?php
+/**
+ * This file is part of ZeAuth
+ *
+ * (c) 2012 ZendExperts <team@zendexperts.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ZeAuth\Event;
 
-//GLOBAL REQUIREMENTS
-use ArrayAccess,
-    Zend\EventManager\EventManagerInterface,
-    Zend\EventManager\ListenerAggregateInterface,
-//CLOSED REQUIREMENTS
-    ZeAuth\Module;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 
 class Listener implements ListenerAggregateInterface
 {
     const PRIORITY_RESTRICT_ACCESS = 10000;
-    protected $events = array();
+
     protected $listeners = array();
-    protected $staticListeners = array();
+    protected $serviceManager = null;
 
     /**
      * Attach events to the application and listen for the dispatch event
@@ -38,10 +42,15 @@ class Listener implements ListenerAggregateInterface
             unset($listener);
         }
     }
+
+    public function setServiceManager($serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
     
     public function restrictAccess($e)
     {
-        $service = Module::locator()->get('ze-auth-service_auth');
+        $service = $this->serviceManager->get('ZeAuth');
         $service->restrictAccess($e);
     }
 
