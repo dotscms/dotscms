@@ -1,8 +1,8 @@
 <?php
 namespace Core\Controller;
-use Zend\Mvc\Controller\ActionController;
+use Zend\Mvc\Controller\AbstractActionController;
 
-class IndexController extends ActionController
+class IndexController extends AbstractActionController
 {
 
 }

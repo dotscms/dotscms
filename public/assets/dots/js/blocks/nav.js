@@ -3,9 +3,9 @@ createNamespace("Dots.Blocks.Nav.Handlers");
 createNamespace("Dots.Blocks.Nav.Helpers");
 
 Dots.Blocks.Nav.init = function(){
-    $('.dots-blocks>.dots-block .dots-nav-block [data-action="nav_add"]').live('click', Dots.Blocks.Nav.Handlers.add);
-    $('.dots-blocks>.dots-block .dots-nav-block [data-action="nav_remove"]').live('click', Dots.Blocks.Nav.Handlers.remove);
-    $('.dots-blocks>.dots-block .dots-nav-block [data-action="nav_edit"]').live('click', Dots.Blocks.Nav.Handlers.edit);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_add"]', Dots.Blocks.Nav.Handlers.add);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_remove"]', Dots.Blocks.Nav.Handlers.remove);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_edit"]', Dots.Blocks.Nav.Handlers.edit);
     Dots.Blocks.Nav.Helpers.setupFormActions();
 };
 
@@ -45,7 +45,7 @@ Dots.Blocks.Nav.Handlers.edit = function () {
                         Dots.Admin.renderErrors(form, response.errors, null);
                     } else {
                         var data = response.data;
-                        var $item = $('<li data-block-link-id="' + data.id + '"></li>');
+                        var $item = $('<li data-block-nav-id="' + data.id + '"></li>');
                         $block.attr('data-block', data.block_id);
                         $item.insertBefore($li);
                         var str = '<div class="nav-edit"> ' +
@@ -55,7 +55,7 @@ Dots.Blocks.Nav.Handlers.edit = function () {
                         switch (data.type){
                             case 'header':
                                 $item.addClass('nav-header');
-                                str += data.title;
+                                str += '<span>'+data.title+'</span>';
                                 break;
                             case '-':
                                 $item.addClass('divider-vertical');
@@ -105,7 +105,7 @@ Dots.Blocks.Nav.Handlers.add = function (){
                         Dots.Admin.renderErrors(form, response.errors, null);
                     } else {
                         var data = response.data;
-                        var $item = $('<li data-block-link-id="' + data.id + '"></li>');
+                        var $item = $('<li data-block-nav-id="' + data.id + '"></li>');
                         $block.attr('data-block', data.block_id);
                         $item.insertBefore($li);
                         var str = '<div class="nav-edit"> ' +
@@ -115,7 +115,7 @@ Dots.Blocks.Nav.Handlers.add = function (){
                         switch (data.type){
                             case 'header':
                                 $item.addClass('nav-header');
-                                str += data.title;
+                                str += '<span>'+data.title+'</span>';
                                 break;
                             case '-':
                                 $item.addClass('divider-vertical');
@@ -153,18 +153,20 @@ Dots.Blocks.Nav.Handlers.remove = function (){
 Dots.Blocks.Nav.Helpers.setupFormActions = function(){
     $('#dotsBlockNav_AddDialog [name$="[type]"], #dotsBlockNav_EditDialog [name$="[type]"]').live('change', function(event){
         var $dialog = $(this).parents('.modal.dots');
-        $dialog.find('[id$="title-label"]').hide().next().hide();
+        $dialog.find('[name$="[title]"]').parent('dd').hide().prev().hide();
         var value = $(this).val();
         $(this).children().each(function(){
             if ($(this).val()!=value){
-                $dialog.find('[id$="' + $(this).val() + '-label"]').hide().next().hide().find(':input').val('');
+                var el = $dialog.find('[name$="[' + $(this).val() + ']"]');
+                el.parent('dd').hide().prev().hide();
+                el.val('');
             }
         });
         if (value != '-' && value!='header'){
-            $dialog.find('[id$="'+value+'-label"]').show().next().show();
+            $dialog.find('[name$="['+value+']"]').parent('dd').show().prev().show();
         }
         if (value != '-'){
-            $dialog.find('[id$="title-label"]').show().next().show();
+            $dialog.find('[name$="[title]"]').parent('dd').show().prev().show();
         }
     });
     Dots.Event.attach('block.initEditors', Dots.Blocks.Nav.Helpers.setupMoveHandler);

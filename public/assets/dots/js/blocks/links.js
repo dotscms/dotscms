@@ -124,9 +124,13 @@ Dots.Blocks.Links.Helpers.setupFormActions = function(){
         var value = $(this).val();
         $(this).children().each(function(){
             if ($(this).val()!=value){
-                $('.dots-blocks>.dots-block .dots-links-block .link-form [id$="' + $(this).val() + '-label"]').hide().next().hide().find(':input').val('');
+                var input = $('.dots-blocks>.dots-block .dots-links-block .link-form [name$="[' + $(this).val() + ']"]');
+                input.val('');
+                input.parent('dd').hide().prev().hide();
             }
         });
+        var input = $('.dots-blocks>.dots-block .dots-links-block .link-form [name$="[' + value + ']"]');
+        input.parent('dd').show().prev().show();
         $('.dots-blocks>.dots-block .dots-links-block .link-form [id$="'+value+'-label"]').show().next().show();
     });
     Dots.Event.attach('block.initEditors', Dots.Blocks.Links.Helpers.setupMoveHandler);

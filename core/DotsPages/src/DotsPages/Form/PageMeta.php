@@ -1,71 +1,175 @@
 <?php
 namespace DotsPages\Form;
-use Zend\Form\Form;
+use Dots\Form\Form;
+use Zend\InputFilter\Factory as InputFilterFactory;
 
 class PageMeta extends Form
 {
 
-    public function init()
+    public function __construct()
     {
-        $this->addElement('hidden', 'id', array('decorators'=>array('ViewHelper')));
-        $this->addElement('hidden', 'page_id', array('decorators'=>array('ViewHelper')));
-        $this->addElement('text', 'title', array(
-            'label'=>'Title',
-            'required'=> true,
-        ));
-        $this->addElement('text', 'keywords', array(
-            'label' => 'Keywords',
-            'required' => false
-        ));
-        $this->addElement('textarea', 'description', array(
-            'label' => 'Description',
-            'required' => false,
-            'attribs'=>array(
-                'rows'=>6,
-                'cols'=>40,
-            )
-        ));
-        $this->addElement('text', 'author', array(
-            'label' => 'Author',
-            'required' => false
-        ));
-        $this->addElement('text', 'robots', array(
-            'label' => 'Robots',
-            'required' => false
-        ));
-        $this->addElement('text', 'copyright', array(
-            'label' => 'Copyright',
-            'required' => false
-        ));
-        $this->addElement('select', 'charset', array(
-            'label' => 'Charset',
-            'required' => false,
-            'multiOptions'=>array(
-                'UTF-8'=>'UTF-8',
-            )
-        ));
-        $this->addElement('text', 'expires_after', array(
-            'label' => 'Expires After',
-            'required' => false
-        ));
-
-        $this->addDisplayGroup(
-            array('id', 'page_id', 'title', 'keywords', 'description', 'author', 'robots', 'copyright', 'charset', 'expires_after'),
-            'meta',
-            array(
-                'legend'=>'Meta Settings',
-                'description'=>'Fill out the metadata information for the page.'
-            )
-        );
-
+        parent::__construct('meta');
+        $this->setAttribute('method', 'post');
+        $this->setLabel('Meta Settings');
+        $this->setDescription('Fill out the metadata information for the page.');
+        $this->init();
     }
 
-    public function getValues($suppressArrayNotation = false)
+    /**
+     * Initialize the page form
+     */
+    public function init()
     {
-        $data = parent::getValues($suppressArrayNotation);
-        if ($data['expires_after']=='')
-            $data['expires_after'] = null;
-        return $data;
+        $this->add(array(
+            'name' => 'id',
+            'attributes' => array(
+                'type' => 'hidden',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'page_id',
+            'attributes' => array(
+                'type' => 'hidden',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'title',
+            'options' => array(
+                'label' => 'Title',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'keywords',
+            'options' => array(
+                'label' => 'Keywords',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'description',
+            'options' => array(
+                'label' => 'Description',
+            ),
+            'attributes' => array(
+                'type' => 'textarea',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'author',
+            'options' => array(
+                'label' => 'Author',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'robots',
+            'options' => array(
+                'label' => 'Robots',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'copyright',
+            'options' => array(
+                'label' => 'Copyright',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'charset',
+            'type' => 'Zend\Form\Element\Select',
+            'options' => array(
+                'label' => 'Charset',
+            ),
+            'attributes' => array(
+                'options' => array(
+                    'UTF-8' => 'UTF-8',
+                )
+            ),
+        ));
+        $this->add(array(
+            'name' => 'expires_after',
+            'options' => array(
+                'label' => 'Expires After',
+            ),
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+    }
+
+    public function getInputFilter()
+    {
+        if (!$this->filter) {
+            $factory = new InputFilterFactory();
+            $inputFilterSpec = array(
+                'id' => array(
+                    'required' => false,
+                ),
+                'page_id' => array(
+                    'required' => false,
+                ),
+                'title' => array(
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'keywords' => array(
+                    'required' => false,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'description' => array(
+                    'required' => false,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'author' => array(
+                    'required' => false,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'robots' => array(
+                    'required' => false,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'copyright' => array(
+                    'required' => false,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                ),
+                'charset' => array(
+                    'required' => false,
+                ),
+                'expires_after' => array(
+                    'required' => false,
+                ),
+            );
+            $this->filter = $factory->createInputFilter($inputFilterSpec);
+        }
+        return $this->filter;
     }
 
 }

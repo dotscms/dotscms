@@ -1,0 +1,51 @@
+<form action="dots/nav-block/save" method="post" enctype="multipart/form-data">
+
+    <div class="navbar navbar-inverse dots-nav-block">
+        <div class="navbar-inner">
+            <div class="container">
+                <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <!-- Everything you want hidden at 940px or less, place within here -->
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        {% for item in form.getParam('items') %}
+                            {% if (item.type == 'header') %}
+                            <li data-block-nav-id="{{item.id}}" class="nav-header">
+                                <div class="nav-edit">
+                                    <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
+                                    <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>
+                                </div>
+                                <span>{{item.title}}</span>
+                            </li>
+                            {% elseif (item.type == '-')%}
+                            <li data-block-nav-id="{{item.id}}" class="divider-vertical">
+                                <div class="nav-edit">
+                                    <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
+                                    <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li data-block-nav-id="{{item.id}}">
+                                <div class="nav-edit">
+                                    <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
+                                    <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>
+                                </div>
+                                <a href="{{item.href}}">{{item.title}}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="static"><a href="#" data-action="nav_add"><i class="icon-plus icon-white"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button data-action="cancel-block" class="btn btn-primary">Done</button>
+    </div>
+</form>

@@ -1,0 +1,6 @@
+<fieldset class="{{fieldset.getAttribute('class')}}">
+{% if (fieldset.getLabel()) %}
+    <legend>{{fieldset.getLabel()}}</legend>
+{% endif %}
+    {% include 'dots/helpers/dots-form/form' with {'form':fieldset} %}
+</fieldset>

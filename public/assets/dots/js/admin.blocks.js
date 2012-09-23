@@ -294,7 +294,9 @@ Dots.Blocks._enableTextEditors = function ($block) {
  */
 Dots.Blocks._removeImageCropEditors = function ($block) {
     var $img = $block.find('.dots-img-crop .dots-img-content img');
-    $img.imgAreaSelect({remove:true});
+    if ($img.imgAreaSelect){
+        $img.imgAreaSelect({remove:true});
+    }
 };
 /**
  * Enable image crop editors for the block

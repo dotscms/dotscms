@@ -1,0 +1,14 @@
+{% if (form.getOption('description')) %}
+<p>{{form.getOption('description')}}</p>
+{% endif %}
+<dl>
+    {% for elem in form.getElements() %}
+    {% include 'dots/helpers/dots-form/element' with {'elem':elem} %}
+    {% endfor %}
+
+    {% for elem in form.getFieldsets() %}
+    <dd class="form-fieldset">
+        {% include 'dots/helpers/dots-form/fieldset' with {'fieldset':elem} %}
+    </dd>
+    {% endfor %}
+</dl>

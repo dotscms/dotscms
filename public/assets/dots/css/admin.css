@@ -1,9 +1,20 @@
+/* Modify bootstrap elements */
+.btn-group{
+    position: relative;
+    font-size: inherit;
+    white-space: inherit;
+    vertical-align: inherit;
+}
+
 /* Dots: General Style */
 #dotsAdminBar{}
 body{top:30px;position: relative;}
 .hide {display:none;}
 .ui-state-highlight {background: url('../images/ui-bg-highlight.png');height:100px;}
 .dots-form-buttons {padding: 2px 0 0 0;}
+.dots-form-buttons dl{overflow: hidden;padding:0; margin: 0;}
+.dots-form-buttons dt{display:none;}
+.dots-form-buttons dd{display:inline;float:left;padding: 0;margin: 0 5px 0 0;}
 
 /* Dots: Modal dialogs */
 .dots {}

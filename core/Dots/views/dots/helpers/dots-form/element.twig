@@ -1,0 +1,31 @@
+{% if (elem.getAttribute('type')=='hidden') %}
+    <dt style="display:none"></dt>
+    <dd style="display:none">{{ formInput(elem) }}</dd>
+{% elseif (elem.getAttribute('type')=='checkbox') %}
+    <dt>&nbsp;</dt>
+    <dd>{{ formInput(elem) }}
+        {{ formLabel(elem) }}
+        {{ formElementErrors (elem, {class: 'errors'}) }}
+    </dd>
+{% elseif (elem.getAttribute('type')=='button') %}
+    <dt>&nbsp;</dt>
+    <dd>{{ formButton(elem) }}</dd>
+{% else %}
+    <dt>
+        {% if (elem.getLabel()) %}
+        {{ formLabel(elem) }}
+        {% else %}
+        &nbsp;
+        {% endif %}
+    </dt>
+    <dd>
+        {% if (elem.getAttribute('type')=='select') %}
+        {{ formSelect(elem) }}
+        {% elseif (elem.getAttribute('type')=='textarea') %}
+        {{ formTextarea(elem) }}
+        {% else %}
+        {{ formInput(elem) }}
+        {% endif %}
+        {{ formElementErrors (elem, {class: 'errors'}) }}
+    </dd>
+{% endif %}

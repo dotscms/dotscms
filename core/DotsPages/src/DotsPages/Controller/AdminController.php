@@ -19,13 +19,13 @@ class AdminController extends AbstractActionController
      */
     public function addAction()
     {
+        $config = $this->getServiceLocator()->get('Configuration');
         //init used variables
         $form = new MultiForm( array(
-            'page' => new Page(),
+            'page' => new Page($config['dots-pages']['templates']),
             'meta' => new PageMeta(),
         ));
         $request = $this->getRequest();
-        $response = $this->getResponse();
 
         //on post return the response as a json string
         if ($request->getMethod()=='POST'){
@@ -34,15 +34,18 @@ class AdminController extends AbstractActionController
             if ($errorResponse) {
                 return $errorResponse;
             }
+
             //get the form values
-            $data = $form->getValues();
+            $data = $form->getInputFilter()->getValues();
+
             //save the page entity
             $page = new Entity\Page();
-            $this->updateObject($page, $data['page']);
+            $page->populate($data['page']);
             $page->save();
             //save the page meta
             $meta = new Entity\PageMeta();
-            $this->updateObject($meta, $data['meta']);
+            $meta->populate($data['meta']);
+            $meta->expires_after = (empty($meta->expires_after)?null:$meta->expires_after);
             $meta->page_id = $page->id;
             $meta->save();
 
@@ -52,7 +55,7 @@ class AdminController extends AbstractActionController
             ));
         }
 
-        return $this->getTeminalView(
+        return $this->getTerminalView(
             array(
                 'form' => $form
             )
@@ -65,16 +68,17 @@ class AdminController extends AbstractActionController
      */
     public function editAction()
     {
+        $config = $this->getServiceLocator()->get('Configuration');
         //init used variables
         $form = new MultiForm(array(
-            'page' => new Page(),
+            'page' => new Page($config['dots-pages']['templates']),
             'meta' => new PageMeta(),
         ));
         $request = $this->getRequest();
         $response = $this->getResponse();
         $alias = $_REQUEST['alias'];
-        $pageModel = $this->getLocator()->get('DotsPages\Db\Model\Page');
-        $metaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
+        $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
+        $metaModel = $this->getServiceLocator()->get('DotsPages\Db\Model\PageMeta');
         $page = $pageModel->getByAlias($alias);
         $meta = $metaModel->getByPageId($page->id);
 
@@ -86,12 +90,13 @@ class AdminController extends AbstractActionController
                 return $errorResponse;
             }
             //get the form values
-            $data = $form->getValues();
+            $data = $form->getInputFilter()->getValues();
             //save the page entity
-            $this->updateObject($page, $data['page']);
+            $page->populate($data['page']);
             $page->save();
             //save the page meta
-            $this->updateObject($meta, $data['meta']);
+            $meta->populate($data['meta']);
+            $meta->expires_after = (empty($meta->expires_after) ? null : $meta->expires_after);
             $meta->page_id = $page->id;
             $meta->save();
 
@@ -100,11 +105,13 @@ class AdminController extends AbstractActionController
                 'action' => 'window.location = "/' . urlencode($page->alias) . '";'
             ));
         }else{
-            $form->getSubForm('page')->populate($page->toArray());
-            $form->getSubForm('meta')->populate($meta->toArray());
+            $form->setData(array(
+                'page'=>$page->toArray(),
+                'meta'=>$meta->toArray()
+            ));
         }
 
-        return $this->getTeminalView(
+        return $this->getTerminalView(
             array(
                 'form' => $form
             )
@@ -118,8 +125,8 @@ class AdminController extends AbstractActionController
     public function removeAction()
     {
         $alias = $_REQUEST['alias'];
-        $pageModel = $this->getLocator()->get('DotsPages\Db\Model\Page');
-        $pageMetaModel = $this->getLocator()->get('DotsPages\Db\Model\PageMeta');
+        $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
+        $pageMetaModel = $this->getServiceLocator()->get('DotsPages\Db\Model\PageMeta');
         $page = $pageModel->getByAlias($alias);
         $page_id = $page->id;
         $pageMeta = $pageMetaModel->getByPageId($page_id);
@@ -139,7 +146,7 @@ class AdminController extends AbstractActionController
      * @param array $options
      * @return \Zend\View\Model\ViewModel
      */
-    private function getTeminalView($vars = array(), $options = array())
+    private function getTerminalView($vars = array(), $options = array())
     {
         $viewModel = new ViewModel($vars, $options);
         $viewModel->setTerminal(true);
@@ -148,14 +155,14 @@ class AdminController extends AbstractActionController
 
     /**
      * Check if the form is valid and return a response object if invalid
-     * @param $form
-     * @return bool|\Zend\Stdlib\ResponseDescription
+     * @param \Zend\Form\Form $form
+     * @return bool|\Zend\Stdlib\ResponseInterface
      */
-    private function handleErrors($form)
+    private function handleErrors(\Zend\Form\Form $form)
     {
-        $response = $this->getResponse();
         $request = $this->getRequest();
-        if (!$form->isValid($request->post()->toArray())) {
+        $form->setData($request->getPost()->toArray());
+        if (!$form->isValid()) {
             return $this->jsonResponse(array(
                 'success' => false,
                 'errors' => $form->getMessages()
@@ -167,7 +174,7 @@ class AdminController extends AbstractActionController
     /**
      * Create a json response based on the data
      * @param $data
-     * @return \Zend\Stdlib\ResponseDescription
+     * @return \Zend\Stdlib\ResponseInterface
      */
     private function jsonResponse ($data)
     {
@@ -175,19 +182,5 @@ class AdminController extends AbstractActionController
         $json = Encoder::encode($data);
         $response->setContent($json);
         return $response;
-    }
-
-    /**
-     * Update object with received data
-     * @param $obj
-     * @param $data
-     * @return mixed
-     */
-    private function updateObject($obj, $data)
-    {
-        foreach($data as $key=>$value){
-            $obj->$key = $value;
-        }
-        return $obj;
     }
 }

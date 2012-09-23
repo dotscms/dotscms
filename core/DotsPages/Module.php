@@ -1,30 +1,39 @@
 <?php
 namespace DotsPages;
-use Dots\AbstractModule,
-    Zend\ModuleManager\ModuleManager,
-    Zend\EventManager\StaticEventManager,
-    Zend\EventManager\Event,
-    Zend\Mvc\MvcEvent;
+
+use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\EventManager\Event;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Dots pages module
  */
-class Module extends AbstractModule
+class Module implements AutoloaderProviderInterface
 {
     private static $dispatcher = null;
     private static $application = null;
     private static $context = null;
+    private static $locator = null;
 
     public function init(ModuleManager $moduleManager)
     {
-        parent::init($moduleManager);
-        $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'initDispatcher'), 1000);
+        $moduleManager->getEventManager()->getSharedManager()->attach('Zend\\Mvc\\Application', 'bootstrap', array($this, 'initDispatcher'), 1000);
     }
 
     public function setupContext(MvcEvent $event)
     {
         static::$context = clone $event;
+    }
+
+    /**
+     * Initialize event listener
+     * @param \Zend\Mvc\MvcEvent $e
+     * @return void
+     */
+    public function onBootstrap(MvcEvent $event)
+    {
+        self::$locator = $event->getApplication()->getServiceManager();
     }
 
     /**
@@ -35,7 +44,7 @@ class Module extends AbstractModule
     public function initDispatcher(Event $e)
     {
         static::$application = $app = $e->getParam('application');
-        $app->events()->attach('dispatch', array($this, 'setupContext'));
+        $app->getEventManager()->attach('dispatch', array($this, 'setupContext'));
         static::$dispatcher = new Dispatcher();
     }
 
@@ -44,7 +53,13 @@ class Module extends AbstractModule
      * @return array
      */
     public function getAutoloaderConfig() {
-        return $this->getDefaultAutoloaderConfig(__NAMESPACE__, __DIR__);
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
     }
 
     /**
@@ -52,7 +67,7 @@ class Module extends AbstractModule
      * @return array
      */
     public function getConfig(){
-        return $this->getDefaultConfig(__DIR__);
+        return include __DIR__ . '/config/module.config.php';
     }
 
     /**
@@ -77,5 +92,15 @@ class Module extends AbstractModule
     public function application()
     {
         return static::$application;
+    }
+
+    /**
+     * Return the Dependency Injector object loaded in the application
+     * @static
+     * @return
+     */
+    public static function locator()
+    {
+        return self::$locator;
     }
 }

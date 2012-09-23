@@ -27,9 +27,7 @@ class Module implements AutoloaderProviderInterface
      * @return array
      */
     public function getConfig(){
-        $definitions = include __DIR__ . '/config/module.di.config.php';
         $config = include __DIR__ . '/config/module.config.php';
-        $config = array_merge_recursive($definitions, $config);
         return $config;
     }
 

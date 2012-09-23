@@ -33,64 +33,68 @@ class Login extends Form
      */
     public function prepare()
     {
-        $identity_type = $this->loginOptions['identity_type'];
-        $remember_me = $this->loginOptions['remember_me'];
-        // add identity element
-        $element_type = 'text';
-        switch ($identity_type){
-            case 'username':
-                $label = 'Username';
-                break;
-            case 'email_address':
-                $label = 'Email Address';
-                $element_type = 'email';
-                break;
-            default:
-                $label = 'Username / Email';
-        }
-        $this->add(array(
-            'name' => 'identity',
-            'options' => array(
-                'label' => $label,
-            ),
-            'attributes' => array(
-                'type' => $element_type,
-            ),
-        ));
-
-        // add credential element
-        $this->add(array(
-            'name' => 'credential',
-            'options' => array(
-                'label' => 'Password',
-            ),
-            'attributes' => array(
-                'type' => 'password',
-            ),
-        ));
-
-        // add remember me element
-        if ($remember_me) {
+        if (!$this->isPrepared) {
+            $identity_type = $this->loginOptions['identity_type'];
+            $remember_me = $this->loginOptions['remember_me'];
+            // add identity element
+            $element_type = 'text';
+            switch ($identity_type){
+                case 'username':
+                    $label = 'Username';
+                    break;
+                case 'email_address':
+                    $label = 'Email Address';
+                    $element_type = 'email';
+                    break;
+                default:
+                    $label = 'Username / Email';
+            }
             $this->add(array(
-                'type'=>'Zend\Form\Element\Checkbox',
-                'name' => 'remember_me',
+                'name' => 'identity',
                 'options' => array(
-                    'label' => 'Keep me logged in',
+                    'label' => $label,
                 ),
                 'attributes' => array(
-                    'value' => 1,
+                    'type' => $element_type,
                 ),
             ));
-        }
 
-        // add submit button
-        $this->add(array(
-            'name' => 'submit',
-            'attributes' => array(
-                'type' => 'submit',
-                'value' => 'Login',
-            ),
-        ));
+            // add credential element
+            $this->add(array(
+                'name' => 'credential',
+                'options' => array(
+                    'label' => 'Password',
+                ),
+                'attributes' => array(
+                    'type' => 'password',
+                ),
+            ));
+
+            // add remember me element
+            if ($remember_me) {
+                $this->add(array(
+                    'type'=>'Zend\Form\Element\Checkbox',
+                    'name' => 'remember_me',
+                    'options' => array(
+                        'label' => 'Keep me logged in',
+                    ),
+                    'attributes' => array(
+                        'value' => 1,
+                    ),
+                ));
+            }
+
+            // add submit button
+            $this->add(array(
+                'name' => 'submit',
+                'attributes' => array(
+                    'type' => 'submit',
+                    'value' => 'Login',
+                ),
+            ));
+
+            $this->isPrepared = true;
+        }
     }
 
     public function getInputFilter()

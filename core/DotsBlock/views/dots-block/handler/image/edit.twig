@@ -1,0 +1,47 @@
+<form enctype="multipart/form-data" action="" method="post">
+    <dl class="zend_form">
+        {% set imageForm = form.get('image_content') %}
+        {{ formInput(imageForm.get('id')) }}
+        {{ formInput(imageForm.get('block_id')) }}
+        {{ formInput(imageForm.get('original_src')) }}
+        {{ formInput(imageForm.get('src')) }}
+        {{ formInput(imageForm.get('alt')) }}
+        <div class="dl-group">
+            <dl>
+                {% set elem = imageForm.get('display_width') %}
+                <dt>{{ formLabel(elem) }}</dt>
+                <dd>
+                    {{ formInput(elem) }}
+                    {{ formElementErrors (elem, {class: 'errors'}) }}
+                </dd>
+            </dl>
+            <dl>
+                {% set elem = imageForm.get('display_height') %}
+                <dt>{{ formLabel(elem) }}</dt>
+                <dd>
+                    {{ formInput(elem) }}
+                    {{ formElementErrors (elem, {class: 'errors'}) }}
+                </dd>
+            </dl>
+        </div>
+        {% if (imageForm.getImageBlock().id) %}
+        <div class="dots-img-crop">
+            <div class="dots-img-header">
+                <a href="#crop-image" data-action="crop_image">Toogle image crop editor</a>
+            </div>
+            <div class="dots-img-content hide">
+                <img src="{{ imageForm.getImageBlock().original_src }}" width="100%"/>
+            </div>
+            {{ formInput(imageForm.get('crop_x1')) }}
+            {{ formInput(imageForm.get('crop_y1')) }}
+            {{ formInput(imageForm.get('crop_x2')) }}
+            {{ formInput(imageForm.get('crop_y2')) }}
+        </div>
+        {% endif %}
+        {% for elem in form.getElements() %}
+            {% if (elem.getAttribute('type')=='button') %}
+                {{ formButton(elem) }}
+            {% endif %}
+        {% endfor %}
+    </dl>
+</form>

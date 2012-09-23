@@ -1,13 +1,23 @@
 <?php
 return array(
+    // Dots Page templates
+    'dots-pages' => array(
+        'templates' => array(
+            'default-page' => array(
+                'name' => 'Default Template',
+                'path' => 'dots-pages/pages/page'
+            )
+        )
+    ),
+
     // View Manager Service
     'view_manager' => array(
         'template_path_stack' => array(
             'dots-pages'    => __DIR__ . '/../views',
         ),
         'template_map' => array(
-            'dots-pages/admin/add'  => __DIR__ . '/../views/dots-pages/add.twig',
-            'dots-pages/admin/edit' => __DIR__ . '/../views/dots-pages/edit.twig',
+            'dots-pages/admin/add'  => __DIR__ . '/../views/dots-pages/admin/add.twig',
+            'dots-pages/admin/edit' => __DIR__ . '/../views/dots-pages/admin/edit.twig',
         ),
     ),
 
@@ -18,12 +28,6 @@ return array(
             'DotsPages\Controller\Page' => 'DotsPages\Controller\PageController',
         ),
     ),
-//    'controller' => array(
-//        'classes' => array(
-//            'dots-pages-admin'  => 'DotsPages\Controller\AdminController',
-//            'dots-pages-page'   => 'DotsPages\Controller\PageController',
-//        ),
-//    ),
 
     //Router Service
     'router' => array(
@@ -50,34 +54,6 @@ return array(
                     ),
                 )
             ),
-//            'home' => array(
-//                'type' => 'DotsPages\Router\Page',
-//                'options' => array(
-//                    'defaults' => array(
-//                        'controller' => 'DotsPages\Controller\Page',
-//                        'action' => 'view',
-//                    ),
-//                )
-//            ),
-        ),
-    ),
-
-    'di' => array(
-        'instance' => array(
-
-            'Dots\View\TemplateContainer' => array(
-                'parameters' => array(
-                    'options' => array(
-                        'templates' => array(
-                            'default-page' => array(
-                                'name' => 'Default Template',
-                                'path' => 'dots-pages/pages/page'
-                            )
-                        )
-                    )
-                )
-            ),
-
         ),
     ),
 );

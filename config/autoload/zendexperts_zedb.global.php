@@ -14,25 +14,25 @@ return array(
                 'tableName' => 'page_metas',
                 'entityClass' => 'DotsPages\Db\Entity\PageMeta',
             ),
-            'Dots\Db\Model\Block' => array(
+            'DotsBlock\Db\Model\Block' => array(
                 'tableName' => 'blocks',
-                'entityClass' => 'Dots\Db\Entity\Block',
+                'entityClass' => 'DotsBlock\Db\Entity\Block',
             ),
-            'Dots\Db\Model\HtmlBlock' => array(
+            'DotsBlock\Db\Model\HtmlBlock' => array(
                 'tableName' => 'block_html',
-                'entityClass' => 'Dots\Db\Entity\HtmlBlock',
+                'entityClass' => 'DotsBlock\Db\Entity\HtmlBlock',
             ),
-            'Dots\Db\Model\ImageBlock' => array(
+            'DotsBlock\Db\Model\ImageBlock' => array(
                 'tableName' => 'block_image',
-                'entityClass' => 'Dots\Db\Entity\ImageBlock',
+                'entityClass' => 'DotsBlock\Db\Entity\ImageBlock',
             ),
-            'Dots\Db\Model\LinkBlock' => array(
+            'DotsBlock\Db\Model\LinkBlock' => array(
                 'tableName' => 'block_links',
-                'entityClass' => 'Dots\Db\Entity\LinkBlock',
+                'entityClass' => 'DotsBlock\Db\Entity\LinkBlock',
             ),
-            'Dots\Db\Model\NavigationBlock' => array(
+            'DotsBlock\Db\Model\NavigationBlock' => array(
                 'tableName' => 'block_navigation',
-                'entityClass' => 'Dots\Db\Entity\NavigationBlock',
+                'entityClass' => 'DotsBlock\Db\Entity\NavigationBlock',
             ),
         ),
     ),

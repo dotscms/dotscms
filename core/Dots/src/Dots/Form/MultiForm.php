@@ -1,6 +1,8 @@
 <?php
 namespace Dots\Form;
 
+use Dots\InputFilter\MultiFormFilter;
+
 class MultiForm extends Form
 {
     protected $params = array();
@@ -22,51 +24,46 @@ class MultiForm extends Form
 
     public function __construct($forms, $options = null)
     {
-        parent::__construct($options);
-        $this->setIsArray(false);
-
+        parent::__construct(null);
+        $this->setWrapElements(false);
         foreach($forms as $key => $form){
-            $form->setIsArray(true);
             // Set decorators for the form
-            $form->setDecorators(array(
-                'FormElements',
-                'FormDecorator',
-            ));
-
-            $form->setDisplayGroupDecorators(array(
-                'FormElements',
-                array('HtmlTag', array('tag' => 'dl')),
-                array('Description', array('placement' => 'prepend')),
-                'Fieldset',
-            ));
-            $this->addSubForm($form, $key);
+            $form->setName($key);
+            $this->add($form);
         }
-        $this->setSubFormDecorators(array(
-            'FormElements',
-        ));
+    }
 
+    public function getInputFilter()
+    {
+        if (!$this->filter){
+            $this->filter = new MultiFormFilter($this->getFieldsets());
+        }
+        return $this->filter;
     }
 
     public function addButtons()
     {
-        $this->addElement('button', 'cancel', array(
-            'label' => 'Cancel',
-            'decorators'=>array('ViewHelper'),
-            'attribs'=>array(
-                'class'=>'btn',
-                'data-action'=>'cancel-block',
-            )
+        $this->add(array(
+            'name' => 'cancel',
+            'options' => array(
+                'label' => 'Cancel',
+            ),
+            'attributes' => array(
+                'type' => 'button',
+                'class' => 'btn',
+                'data-action' => 'cancel-block',
+            ),
         ));
-        $this->addElement('button', 'save', array(
-            'label' => 'Save',
-            'decorators' => array('ViewHelper'),
-            'attribs' => array(
+        $this->add(array(
+            'name' => 'save',
+            'options' => array(
+                'label' => 'Save',
+            ),
+            'attributes' => array(
+                'type' => 'button',
                 'class' => 'btn btn-primary',
                 'data-action' => 'save-block',
-            )
-        ));
-        $this->addDisplayGroup(array('cancel', 'save'),'buttons', array(
-            'decorators' => array('FormElements', array('HtmlTag', array('tag'=>'div', 'class' => 'dots-form-buttons') )),
+            ),
         ));
     }
 

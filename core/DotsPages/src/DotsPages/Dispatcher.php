@@ -1,8 +1,6 @@
 <?php
 namespace DotsPages;
-use ArrayAccess,
-    Zend\EventManager\StaticEventManager,
-    Zend\EventManager\Event;
+use Zend\EventManager\StaticEventManager;
 
 class Dispatcher
 {
@@ -10,7 +8,7 @@ class Dispatcher
     protected $handlers = array(
         'DotsPages\Handler\Admin'=>array(
             array(
-                'event' => 'extend::dots/adminMenu',
+                'event' => 'dots:admin/menu',
                 'handler' => 'renderNav'
             )
         )
@@ -29,7 +27,7 @@ class Dispatcher
         $events = StaticEventManager::getInstance();
         foreach($this->handlers as $class => $handlers){
             foreach($handlers as $options){
-                $event = explode('::',$options['event']);
+                $event = explode(':',$options['event']);
                 if (array_key_exists('priority', $options)){
                     $events->attach($event[0], $event[1], array($class, $options['handler']), $options['priority']);
                 }else{
