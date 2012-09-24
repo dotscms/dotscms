@@ -3,11 +3,11 @@ createNamespace("Dots.Blocks.Links.Handlers");
 createNamespace("Dots.Blocks.Links.Helpers");
 
 Dots.Blocks.Links.init = function(){
-    $('.dots-blocks>.dots-block .dots-links-block [data-action="add_link"]').live('click', Dots.Blocks.Links.Handlers.add);
-    $('.dots-blocks>.dots-block .dots-links-block [data-action="edit_link"]').live('click', Dots.Blocks.Links.Handlers.edit);
-    $('.dots-blocks>.dots-block .dots-links-block [data-action="remove_link"]').live('click', Dots.Blocks.Links.Handlers.remove);
-    $('.dots-blocks>.dots-block .dots-links-block [data-action="cancel-link-block"]').live('click', Dots.Blocks.Links.Handlers.cancel);
-    $('.dots-blocks>.dots-block .dots-links-block [data-action="save-link-block"]').live('click', Dots.Blocks.Links.Handlers.save);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="add_link"]', Dots.Blocks.Links.Handlers.add);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="edit_link"]', Dots.Blocks.Links.Handlers.edit);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="remove_link"]', Dots.Blocks.Links.Handlers.remove);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="cancel-link-block"]', Dots.Blocks.Links.Handlers.cancel);
+    $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="save-link-block"]', Dots.Blocks.Links.Handlers.save);
     Dots.Blocks.Links.Helpers.setupFormActions();
 };
 
@@ -120,7 +120,7 @@ Dots.Blocks.Links.Handlers.cancel = function (){
  * Helpers
  */
 Dots.Blocks.Links.Helpers.setupFormActions = function(){
-    $('.dots-blocks>.dots-block .dots-links-block .link-form [name$="[type]"]').live('change', function(event){
+    $(document).on('change', '.dots-blocks>.dots-block .dots-links-block .link-form [name$="[type]"]', function(event){
         var value = $(this).val();
         $(this).children().each(function(){
             if ($(this).val()!=value){
