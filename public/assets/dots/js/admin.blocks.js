@@ -7,10 +7,10 @@ createNamespace("Dots.Blocks.Helpers");
  */
 Dots.Blocks.init = function (){
     $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
-    $('.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]').live('click', Dots.Blocks.Handlers.editBlock);
-    $('.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]').live('click', Dots.Blocks.Handlers.changeSettings);
-    $('.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]').live('click', Dots.Blocks.Handlers.removeBlock);
-    $('.dots-blocks>.dots-block [data-action="cancel-block"]').live('click', Dots.Blocks.Handlers.cancelBlock);
+    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]', Dots.Blocks.Handlers.editBlock);
+    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]', Dots.Blocks.Handlers.changeSettings);
+    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]', Dots.Blocks.Handlers.removeBlock);
+    $(document).on('click', '.dots-blocks>.dots-block [data-action="cancel-block"]', Dots.Blocks.Handlers.cancelBlock);
     Dots.Blocks.Handlers.setupMoveHandler();
 };
 

@@ -151,7 +151,7 @@ Dots.Blocks.Nav.Handlers.remove = function (){
  * Helpers
  */
 Dots.Blocks.Nav.Helpers.setupFormActions = function(){
-    $('#dotsBlockNav_AddDialog [name$="[type]"], #dotsBlockNav_EditDialog [name$="[type]"]').live('change', function(event){
+    $(document).on('change', '#dotsBlockNav_AddDialog [name$="[type]"], #dotsBlockNav_EditDialog [name$="[type]"]', function(event){
         var $dialog = $(this).parents('.modal.dots');
         $dialog.find('[name$="[title]"]').parent('dd').hide().prev().hide();
         var value = $(this).val();
