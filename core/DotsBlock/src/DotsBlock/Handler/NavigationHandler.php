@@ -43,7 +43,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
      */
     public function attach(EventManagerInterface $events, $priority = null)
     {
-        GlobalEventManager::attach('head.pre', array($this, 'initHeaders'), $priority);
+        GlobalEventManager::attach('admin.head.pre', array($this, 'initHeaders'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
@@ -82,7 +82,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
      */
     public function initHeaders(Event $event)
     {
-        $view = $event->getParam('view');
+        $view = $event->getTarget();
         $view->plugin('headScript')->appendFile('/assets/dots/js/blocks/nav.js');
         $view->plugin('headScript')->appendScript(<<<END
     Dots.Blocks.Nav.init();

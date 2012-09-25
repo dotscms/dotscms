@@ -14,7 +14,17 @@ function createNamespace(namespace){
 
 /* Setup Namespaces */
 createNamespace("Dots.Admin.Handler");
-createNamespace("Dots.Event");
+createNamespace("Dots.Events");
+
+/**
+ * Dots Events
+ */
+_.extend(Dots.Events, Backbone.Events);
+Dots.Events.on('init', function(){
+    Dots.Events.trigger('bootstrap');
+    Dots.Events.trigger('route');
+    Dots.Events.trigger('dispatch');
+});
 
 /**
  * Handler dialog actions
@@ -129,34 +139,4 @@ Dots.Admin.Handler.save = function (event, opts){
 //        }
     });
     return false;
-};
-
-/**
- * Dots Events
- */
-Dots.Event._handlers = {};
-Dots.Event.attach = function (name, callback){
-    if (!Dots.Event._handlers[name]){
-        Dots.Event._handlers[name] = [];
-    }
-    Dots.Event._handlers[name][Dots.Event._handlers[name].length] = callback;
-};
-
-Dots.Event.detach = function (name, callback){
-    if (Dots.Event._handlers[name]){
-        for (var key in Dots.Event._handlers[name]){
-            if (Dots.Event._handlers[name][key]==callback){
-                delete Dots.Event._handlers[name][key];
-            }
-        }
-    }
-};
-
-Dots.Event.trigger = function (name, target, params){
-    if (Dots.Event._handlers[name]){
-        for (var key in Dots.Event._handlers[name]){
-            var callback = Dots.Event._handlers[name][key];
-            callback.apply(target, params);
-        }
-    }
 };

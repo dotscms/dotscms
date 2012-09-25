@@ -169,11 +169,10 @@ Dots.Blocks.Nav.Helpers.setupFormActions = function(){
             $dialog.find('[name$="[title]"]').parent('dd').show().prev().show();
         }
     });
-    Dots.Event.attach('block.initEditors', Dots.Blocks.Nav.Helpers.setupMoveHandler);
+    Dots.Events.on('block.initEditors', Dots.Blocks.Nav.Helpers.setupMoveHandler);
 };
 
-Dots.Blocks.Nav.Helpers.setupMoveHandler = function(){
-    var $block = this;
+Dots.Blocks.Nav.Helpers.setupMoveHandler = function($block){
     $block.find(".dots-nav-block .nav").sortable({
         stop:function (event, ui) {
             var $target = $(event.target);

@@ -251,7 +251,7 @@ Dots.Blocks.Helpers.updateSectionPositions = function (section){
 Dots.Blocks._initEditors = function ($block){
     Dots.Blocks._enableTextEditors.call(this, $block);
     Dots.Blocks._enableImageCropEditors.call(this, $block);
-    Dots.Event.trigger('block.initEditors', $block, {});
+    Dots.Events.trigger('block.initEditors', $block, {});
 };
 /**
  * Remove editors
@@ -260,7 +260,7 @@ Dots.Blocks._initEditors = function ($block){
 Dots.Blocks._removeEditors = function ($block) {
     Dots.Blocks._removeTextEditors.call(this, $block);
     Dots.Blocks._removeImageCropEditors.call(this, $block);
-    Dots.Event.trigger('block.removeEditors', $block, {});
+    Dots.Events.trigger('block.removeEditors', $block, {});
 };
 
 /**

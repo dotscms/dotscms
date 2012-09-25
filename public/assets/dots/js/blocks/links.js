@@ -133,11 +133,10 @@ Dots.Blocks.Links.Helpers.setupFormActions = function(){
         input.parent('dd').show().prev().show();
         $('.dots-blocks>.dots-block .dots-links-block .link-form [id$="'+value+'-label"]').show().next().show();
     });
-    Dots.Event.attach('block.initEditors', Dots.Blocks.Links.Helpers.setupMoveHandler);
+    Dots.Events.on('block.initEditors', Dots.Blocks.Links.Helpers.setupMoveHandler);
 };
 
-Dots.Blocks.Links.Helpers.setupMoveHandler = function(){
-    var $block = this;
+Dots.Blocks.Links.Helpers.setupMoveHandler = function($block){
     $block.find(".dots-links-block").sortable({
         handle:'[data-action="move_link"]',
         helper:function (event, item) {

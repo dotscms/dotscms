@@ -3,6 +3,7 @@ namespace DotsBlock;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\EventManager\Event;
 use Dots\Registry;
 use Dots\EventManager\GlobalEventManager;
 
@@ -18,12 +19,12 @@ class Module implements AutoloaderProviderInterface
         $serviceManager = $app->getServiceManager();
         $blockManager = $serviceManager->get('DotsBlockManager');
         Registry::set('block_manager', $blockManager);
-        GlobalEventManager::attach('head.pre',function ($event){
-            $view = $event->getParam('view');
+        GlobalEventManager::attach('admin.head.pre',function (Event $event){
+            $view = $event->getTarget();
             $view->plugin('headScript')->appendFile('/assets/dots/js/admin.blocks.js');
         });
-        GlobalEventManager::attach('head.post', function($event){
-            $view = $event->getParam('view');
+        GlobalEventManager::attach('admin.head.post', function(Event $event){
+            $view = $event->getTarget();
             $view->plugin('headScript')->appendScript('$(function(){ Dots.Blocks.init(); });');
         });
     }
@@ -32,7 +33,8 @@ class Module implements AutoloaderProviderInterface
      * Get module autoloader configuration
      * @return array
      */
-    public function getAutoloaderConfig() {
+    public function getAutoloaderConfig()
+    {
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(

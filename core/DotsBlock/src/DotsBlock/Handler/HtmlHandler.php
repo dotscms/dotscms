@@ -41,7 +41,7 @@ class HtmlHandler implements HandlerAware
      */
     public function attach(EventManagerInterface $events, $priority = null)
     {
-        GlobalEventManager::attach('head.pre', array($this, 'initHeaders'), $priority);
+        GlobalEventManager::attach('admin.head.pre', array($this, 'initHeaders'), $priority);
 //        $this->listeners[] = $events->attach('initHeaders', array($this, 'initHeaders'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
@@ -82,7 +82,7 @@ class HtmlHandler implements HandlerAware
      */
     public function initHeaders(Event $event)
     {
-        $view = $event->getParam('view');
+        $view = $event->getTarget();
         $view->plugin('headScript')->appendFile('/assets/tiny_mce/tiny_mce.js');
         $view->plugin('headScript')->appendFile('/assets/tiny_mce/jquery.tinymce.js');
         $view->plugin('headScript')->appendFile('/assets/tiny_mce/default_settings.js');
