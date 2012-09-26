@@ -19,6 +19,7 @@ class DotsNav extends AbstractHelper
                 ->appendFile('/assets/default/js/jquery-ui.min.js')
                 ->appendFile('/assets/bootstrap/js/bootstrap.min.js')
                 ->appendFile('/assets/default/js/underscore.min.js')
+                ->appendFile('/assets/default/js/json2.js')
                 ->appendFile('/assets/default/js/backbone.min.js');
         }, 1000);
         // trigger the head.pre event
