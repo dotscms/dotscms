@@ -73,9 +73,9 @@ Dots.Pages.View.Page = Backbone.View.extend({
 
 //Add button handler
 Dots.Pages.Admin.Handlers.btn_add = function (event) {
-    Dots.Admin.handleDialog({
-       url:'/dots-pages/add/',
-       id: 'dotsPagesAdmin_AddDialog'
+    Dots.View.Dialog.render({
+        url:'/dots-pages/add/',
+        id:'dotsPagesAdmin_AddDialog'
     });
     $($(this).parents('.dropdown')[0]).removeClass('open');
     return false;
@@ -84,10 +84,10 @@ Dots.Pages.Admin.Handlers.btn_add = function (event) {
 //Edit button handler
 Dots.Pages.Admin.Handlers.btn_edit = function (event) {
     var alias = Dots.Pages.Model.Page.getPageAlias();
-    Dots.Admin.handleDialog({
+    Dots.View.Dialog.render({
         url:'/dots-pages/edit/',
         id:'dotsPagesAdmin_EditDialog',
-        params: {
+        params:{
             'alias':alias
         }
     });
@@ -104,7 +104,7 @@ Dots.Pages.Admin.Handlers.btn_remove = function (event) {
     var url = '/dots-pages/remove/';
     $.getJSON(url, params, function (resp) {
         if (resp.success){
-            Dots.Admin.runAction(resp);
+            Dots.View.Dialog.runAction(resp);
         }
     });
     $($(this).parents('.dropdown')[0]).removeClass('open');

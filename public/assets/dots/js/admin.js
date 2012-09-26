@@ -15,15 +15,113 @@ function createNamespace(namespace){
 /* Setup Namespaces */
 createNamespace("Dots.Admin.Handler");
 createNamespace("Dots.Events");
+createNamespace("Dots.View");
 
 /**
  * Dots Events
  */
 _.extend(Dots.Events, Backbone.Events);
 Dots.Events.on('init', function(){
-    Dots.Events.trigger('bootstrap');
-    Dots.Events.trigger('route');
-    Dots.Events.trigger('dispatch');
+    this.trigger('bootstrap');
+    this.trigger('route');
+    this.trigger('dispatch');
+});
+
+Dots.View.Dialog = Backbone.View.extend({
+    events:{
+        'click [data-action="save"]':'saveDialog'
+    },
+    saveDialog: function (){
+        if (this.options.onSave) {
+            return this.options.onSave.call(this, event, this.options);
+        }
+        return this.save();
+    },
+    save:function (){
+        var form = null;
+        var opts = this.options;
+        if (opts.form) {
+            form = opts.form;
+        } else {
+            form = this.$el.find('form');//$('#' + opts.id + " form");
+        }
+        form.ajaxSubmit({
+            dataType: 'json',
+            data: opts.params,
+            type: 'POST',
+            url: opts.url,
+            success:function (response, status, xhr, form) {
+                if (!response.success) {
+                    Dots.View.Dialog.renderErrors(form, response.errors, null);
+                } else {
+                    Dots.View.Dialog.runAction(response);
+                }
+            }
+        });
+        return this;
+    },
+    initialize:function (){
+        if (!this.options.params){
+            this.options.params = {};
+        }
+    },
+    render: function(){
+        var opts = this.options;
+        var _this = this;
+        $.get(opts.url, opts.params, function (html) {
+            $('#' + opts.id).remove();
+            $('body').append(html);
+            var $el = $('#' + opts.id);
+            $el.modal();
+            _this.setElement($el[0]);
+            if (opts.onLoad) {
+                opts.onLoad.call(_this.$el);
+            }
+        });
+        return this;
+    }
+}, {
+    render:function (opts){
+        var dialog = new Dots.View.Dialog(opts);
+        dialog.render();
+    },
+    runAction: function (response) {
+        if (response.action) {
+            return eval(response.action);
+        }
+    },
+    renderErrors: function (form, errors, context) {
+        var postContext = "", preContext = "";
+        if (!context) {
+            $(form).find('.errors').remove();
+        } else {
+            preContext = context + "[";
+            postContext = "]";
+        }
+
+        for (var name in errors) {
+            var errList = errors[name];
+
+            var errKey = _.first(_.keys(errList));
+
+            if (typeof(errList[errKey]) == "string" || errList[errKey] instanceof String) {
+                // handle errors
+                for (errKey in errList) {
+                    var $input = $('[name="' + preContext + name + postContext + '"]');
+                    var $errors = $('<ul class="errors"></ul>');
+                    $errors.append('<li>' + errList[errKey] + '</li>');
+                    $errors.insertAfter($input);
+                }
+            } else {
+                // handle subform errors
+                if (!context) {
+                    Dots.View.Dialog.renderErrors(form, errList, name);
+                } else {
+                    Dots.View.Dialog.renderErrors(form, errList, context + '[' + name + ']');
+                }
+            }
+        }
+    }
 });
 
 /**
