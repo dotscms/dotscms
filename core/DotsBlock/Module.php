@@ -23,10 +23,6 @@ class Module implements AutoloaderProviderInterface
             $view = $event->getTarget();
             $view->plugin('headScript')->appendFile('/assets/dots/js/admin.blocks.js');
         });
-        GlobalEventManager::attach('admin.head.post', function(Event $event){
-            $view = $event->getTarget();
-            $view->plugin('headScript')->appendScript('$(function(){ Dots.Blocks.init(); });');
-        });
     }
 
     /**

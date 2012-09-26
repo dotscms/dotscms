@@ -1,6 +1,6 @@
 <?php
 namespace DotsPages\Router;
-use DotsPages\Module,
+use Dots\Registry,
     Zend\Mvc\Router\Http\RouteInterface,
     Zend\Http\PhpEnvironment\Request as PhpRequest,
     Zend\Stdlib\RequestInterface as Request,
@@ -58,7 +58,7 @@ class Page implements RouteInterface
         $path = $request->getUri()->getPath();
         $alias = trim($path, '/');
 
-        $model = Module::locator()->get('DotsPages\Db\Model\Page');
+        $model = Registry::get('service_locator')->get('DotsPages\Db\Model\Page');
         $page = $model->getByAlias($alias);
 
         if ($page) {

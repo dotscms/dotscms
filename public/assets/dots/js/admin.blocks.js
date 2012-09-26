@@ -2,17 +2,27 @@
 createNamespace("Dots.Blocks.Handlers");
 createNamespace("Dots.Blocks.Helpers");
 
-/**
- * Init block administration scripts
- */
-Dots.Blocks.init = function (){
+
+Dots.Events.on('bootstrap', function (){
     $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]', Dots.Blocks.Handlers.editBlock);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]', Dots.Blocks.Handlers.changeSettings);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]', Dots.Blocks.Handlers.removeBlock);
     $(document).on('click', '.dots-blocks>.dots-block [data-action="cancel-block"]', Dots.Blocks.Handlers.cancelBlock);
     Dots.Blocks.Handlers.setupMoveHandler();
-};
+});
+
+///**
+// * Init block administration scripts
+// */
+//Dots.Blocks.init = function (){
+//    $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
+//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]', Dots.Blocks.Handlers.editBlock);
+//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]', Dots.Blocks.Handlers.changeSettings);
+//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]', Dots.Blocks.Handlers.removeBlock);
+//    $(document).on('click', '.dots-blocks>.dots-block [data-action="cancel-block"]', Dots.Blocks.Handlers.cancelBlock);
+//    Dots.Blocks.Handlers.setupMoveHandler();
+//};
 
 //Dots.Blocks.Handlers = {};
 /**

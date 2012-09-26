@@ -1,7 +1,7 @@
 <?php
 namespace DotsPages\Handler;
 
-use DotsPages\Module;
+use Dots\Registry;
 use Zend\EventManager\Event;
 use Zend\View\Model\ViewModel;
 use DotsPages\Db\Entity\Page;
@@ -10,8 +10,9 @@ class Admin
 {
     public static function renderNav(Event $event)
     {
-        $view = Module::locator()->get('TwigViewRenderer');
-        $context = Module::context();
+        $serviceLocator = Registry::get('service_locator');
+        $view = $serviceLocator->get('TwigViewRenderer');
+        $context = $serviceLocator->get('Application')->getMvcEvent();
         $routeMatch = $context->getRouteMatch();
         $routeMatchName = $context->getRouteMatch()->getMatchedRouteName();
         $params = array();
@@ -20,10 +21,7 @@ class Admin
         $view->plugin('headLink')->appendStylesheet('/assets/dots/css/admin.css');
         //append javascript code
         $view->plugin('headScript')->appendFile('/assets/dots/js/pages/admin.js');
-        $view->plugin('headScript')->appendScript(<<<END
-    $(function(){Dots.Pages.Admin.init();});
-END
-);
+
         //render admin navigation
         $viewModel = new ViewModel($params);
         $viewModel->setTemplate('dots-pages/admin/nav');
