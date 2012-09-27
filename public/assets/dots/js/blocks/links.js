@@ -1,6 +1,6 @@
 /* Setup Namespaces */
-createNamespace("Dots.Blocks.Links.Handlers");
-createNamespace("Dots.Blocks.Links.Helpers");
+Dots.namespace("Dots.Blocks.Links.Handlers");
+Dots.namespace("Dots.Blocks.Links.Helpers");
 
 Dots.Blocks.Links.init = function(){
     $(document).on('click', '.dots-blocks>.dots-block .dots-links-block [data-action="add_link"]', Dots.Blocks.Links.Handlers.add);

@@ -1,6 +1,6 @@
 /* Setup Namespaces */
-createNamespace("Dots.Blocks.Nav.Handlers");
-createNamespace("Dots.Blocks.Nav.Helpers");
+Dots.namespace("Dots.Blocks.Nav.Handlers");
+Dots.namespace("Dots.Blocks.Nav.Helpers");
 
 Dots.Blocks.Nav.init = function(){
     $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_add"]', Dots.Blocks.Nav.Handlers.add);

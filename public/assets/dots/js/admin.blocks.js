@@ -1,6 +1,6 @@
 /* Setup Namespaces */
-createNamespace("Dots.Blocks.Handlers");
-createNamespace("Dots.Blocks.Helpers");
+Dots.namespace("Dots.Blocks.Handlers");
+Dots.namespace("Dots.Blocks.Helpers");
 
 
 Dots.Events.on('bootstrap', function (){
@@ -11,18 +11,6 @@ Dots.Events.on('bootstrap', function (){
     $(document).on('click', '.dots-blocks>.dots-block [data-action="cancel-block"]', Dots.Blocks.Handlers.cancelBlock);
     Dots.Blocks.Handlers.setupMoveHandler();
 });
-
-///**
-// * Init block administration scripts
-// */
-//Dots.Blocks.init = function (){
-//    $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
-//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]', Dots.Blocks.Handlers.editBlock);
-//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]', Dots.Blocks.Handlers.changeSettings);
-//    $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]', Dots.Blocks.Handlers.removeBlock);
-//    $(document).on('click', '.dots-blocks>.dots-block [data-action="cancel-block"]', Dots.Blocks.Handlers.cancelBlock);
-//    Dots.Blocks.Handlers.setupMoveHandler();
-//};
 
 //Dots.Blocks.Handlers = {};
 /**
@@ -36,7 +24,7 @@ Dots.Blocks.Handlers.addBlock = function (event){
     var section = $(this).parents('.dots-blocks').attr('data-section');
     var data = {
         type: type,
-        alias: Dots.Pages.Admin.getPageAlias(),
+        alias: Dots.Pages.Model.Page.getPageAlias(),
         section: section
     };
     $.get('/dots/block/add/', data, function(html){
@@ -65,7 +53,7 @@ Dots.Blocks.Handlers.editBlock = function (event){
     var blockId = $block.attr('data-block');
     var data = {
         type: type,
-        alias: Dots.Pages.Admin.getPageAlias(),
+        alias: DDots.Pages.Model.Page.getPageAlias(),
         section: section,
         block_id: blockId
     };
@@ -181,7 +169,7 @@ Dots.Blocks.Handlers.setupMoveHandler = function(){
                     block_id: $item.attr('data-block'),
 //                    from: fromSection,
                     to: toSection,
-                    alias: Dots.Pages.Admin.getPageAlias(),
+                    alias:Dots.Pages.Model.Page.getPageAlias(),
                     position: position
                 };
                 $.getJSON('/dots/block/move/', data, function(resp){
@@ -203,7 +191,7 @@ Dots.Blocks.Handlers.setupSaveHandler = function ($block, opts){
     var blockId = $block.attr('data-block');
     var data = {
         type: type,
-        alias: Dots.Pages.Admin.getPageAlias(),
+        alias:Dots.Pages.Model.Page.getPageAlias(),
         section: section,
         block_id: blockId
     };
