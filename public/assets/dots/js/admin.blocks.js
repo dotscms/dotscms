@@ -1,10 +1,11 @@
 /* Setup Namespaces */
 Dots.namespace("Dots.Blocks.Handlers");
 Dots.namespace("Dots.Blocks.Helpers");
-
+Dots.namespace("Dots.Blocks.View.Section");
 
 Dots.Events.on('bootstrap', function (){
-    $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
+    Dots.Blocks.View.Section.init(); //init handling for all sections on the page
+//    $('.dots-blocks>.dots-block-header [data-action="add-block"]').click(Dots.Blocks.Handlers.addBlock);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="edit-block"]', Dots.Blocks.Handlers.editBlock);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="change-settings"]', Dots.Blocks.Handlers.changeSettings);
     $(document).on('click', '.dots-blocks>.dots-block>.dots-block-header [data-action="remove-block"]', Dots.Blocks.Handlers.removeBlock);
@@ -12,7 +13,45 @@ Dots.Events.on('bootstrap', function (){
     Dots.Blocks.Handlers.setupMoveHandler();
 });
 
-//Dots.Blocks.Handlers = {};
+Dots.Blocks.View.Section = Backbone.View.extend({
+    className:'dots-blocks',
+    events:{
+        'click .dots-block-header [data-action="add-block"]':'_addBlockEvent'
+    },
+    _addBlockEvent:function (event){
+        var _this = this;
+        var $target = $(event.target);
+        var type = $target.attr('href').split('#')[1];
+        var section = this.$el.attr('data-section');
+        var data = {
+            type: type,
+            alias: Dots.Pages.Model.Page.getAlias(),
+            section: section
+        };
+        $.get('/dots/block/add/', data, function(html){
+            var $currentBlock = $(html);
+            $currentBlock.addClass('edit-dots-block');
+            _this.$el.append($currentBlock);
+            Dots.Blocks._initEditors($currentBlock);
+            Dots.Blocks.Handlers.setupSaveHandler($currentBlock, {
+                url: '/dots/block/add/',
+                type: type
+            });
+        });
+        $($target.parents('.btn-group')[0]).removeClass('open');
+        return false;
+    }
+}, {
+    sections:[],
+    init:function (){
+        var _this = this;
+        var sections = Dots.Pages.View.Page.getInstance().$el.find('[data-section]');
+        _.each(sections, function (section){
+            _this.sections[_this.sections.length] = new Dots.Blocks.View.Section({el:section});
+        });
+    }
+});
+
 /**
  * Handle adding a new block
  * @param event
@@ -24,7 +63,7 @@ Dots.Blocks.Handlers.addBlock = function (event){
     var section = $(this).parents('.dots-blocks').attr('data-section');
     var data = {
         type: type,
-        alias: Dots.Pages.Model.Page.getPageAlias(),
+        alias: Dots.Pages.Model.Page.getAlias(),
         section: section
     };
     $.get('/dots/block/add/', data, function(html){
@@ -53,7 +92,7 @@ Dots.Blocks.Handlers.editBlock = function (event){
     var blockId = $block.attr('data-block');
     var data = {
         type: type,
-        alias: DDots.Pages.Model.Page.getPageAlias(),
+        alias: DDots.Pages.Model.Page.getAlias(),
         section: section,
         block_id: blockId
     };
@@ -169,7 +208,7 @@ Dots.Blocks.Handlers.setupMoveHandler = function(){
                     block_id: $item.attr('data-block'),
 //                    from: fromSection,
                     to: toSection,
-                    alias:Dots.Pages.Model.Page.getPageAlias(),
+                    alias:Dots.Pages.Model.Page.getAlias(),
                     position: position
                 };
                 $.getJSON('/dots/block/move/', data, function(resp){
@@ -191,7 +230,7 @@ Dots.Blocks.Handlers.setupSaveHandler = function ($block, opts){
     var blockId = $block.attr('data-block');
     var data = {
         type: type,
-        alias:Dots.Pages.Model.Page.getPageAlias(),
+        alias:Dots.Pages.Model.Page.getAlias(),
         section: section,
         block_id: blockId
     };

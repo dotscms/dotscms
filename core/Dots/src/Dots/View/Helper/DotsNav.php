@@ -35,7 +35,7 @@ class DotsNav extends AbstractHelper
         GlobalEventManager::attach('admin.head.pre', function(Event $event)
         {
             $event->getTarget()->plugin('headScript')
-                ->appendFile('/assets/default/js/jquery.form.js')
+                ->appendFile('/assets/default/js/jquery.form_new.js')
                 ->appendFile('/assets/default/js/jquery.json.js')
                 ->appendFile('/assets/dots/js/dots.js');
         });

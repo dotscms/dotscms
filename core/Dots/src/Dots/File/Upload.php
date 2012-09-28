@@ -23,6 +23,9 @@ class Upload
 
     public function process($files)
     {
+        if ($files instanceof \Zend\Stdlib\Parameters){
+            $files = $files->toArray();
+        }
         // Make sure a proper array of files has been provided
         if (!is_array($files)){
             throw new \Exception('Invalid files array provided');

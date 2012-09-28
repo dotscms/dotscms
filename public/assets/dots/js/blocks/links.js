@@ -72,7 +72,7 @@ Dots.Blocks.Links.Handlers.save = function (){
         position: blockPos,
         block_id: $block.attr('data-block'),
         section: section,
-        alias: Dots.Pages.Admin.getPageAlias()
+        alias: Dots.Pages.Model.Page.getAlias()
     };
     var id = $form.find('[name$="[id]"]').val();
     $form.find('[name$="[position]"]').val(pos);
@@ -152,7 +152,7 @@ Dots.Blocks.Links.Helpers.setupMoveHandler = function($block){
             var data = {
                 block_id:$block.attr('data-block'),
                 id: $item.attr('data-block-link-id'),
-                alias:Dots.Pages.Admin.getPageAlias(),
+                alias:Dots.Pages.Admin.getAlias(),
                 position:position
             };
             $.getJSON('/dots/link-block/move/', data, function (resp) {

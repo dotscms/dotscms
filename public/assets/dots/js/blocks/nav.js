@@ -19,7 +19,7 @@ Dots.Blocks.Nav.Handlers.edit = function () {
     var $li = $this.parents('li').first();
     var pos = $li.prevAll('li').length + 1;
     var data = {
-        alias: Dots.Pages.Admin.getPageAlias(),
+        alias: Dots.Pages.Model.Page.getAlias(),
         section: $this.parents('.dots-blocks').attr('data-section'),
         position: $block.prevAll('.dots-block').length + 1,
         block_id: $block.attr('data-block'),
@@ -81,7 +81,7 @@ Dots.Blocks.Nav.Handlers.add = function (){
     var pos = $li.prevAll('li').length + 1;
     var $block = $(this).parents('.dots-block');
     var data = {
-        alias: Dots.Pages.Admin.getPageAlias(),
+        alias: Dots.Pages.Model.Page.getAlias(),
         section: $(this).parents('.dots-blocks').attr('data-section'),
         position: $block.prevAll('.dots-block').length + 1,
         block_id: $block.attr('data-block')
@@ -182,7 +182,7 @@ Dots.Blocks.Nav.Helpers.setupMoveHandler = function($block){
             var data = {
                 block_id: $block.attr('data-block'),
                 id: $item.attr('data-block-nav-id'),
-                alias: Dots.Pages.Admin.getPageAlias(),
+                alias: Dots.Pages.Model.Page.getAlias(),
                 position: position
             };
             $.getJSON('/dots/nav-block/move/', data, function (resp) {

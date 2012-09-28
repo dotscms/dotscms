@@ -39,7 +39,7 @@ class ImageHandler implements HandlerAware
     /**
      * Attach events to the application and listen for the dispatch event
      * @param \Zend\EventManager\EventManagerInterface $events
-     * @return void
+     * @param $priority
      */
     public function attach(EventManagerInterface $events, $priority = null)
     {
@@ -168,6 +168,7 @@ class ImageHandler implements HandlerAware
         );
 
         $files = $request->getFiles();
+
         $data['image_content']['original_src'] = $files['original_src']['name'];
         $form->setData($data);
 

@@ -1,14 +1,15 @@
 /* Setup Namespaces */
 Dots.namespace("Dots.Pages.Model");
+Dots.namespace("Dots.Pages.View");
 
 //Update Admin View to handle DotsPage buttons
 Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
     events:{
-        'click #dots_pages_admin_add':'_add',
-        'click #dots_pages_admin_edit':'_edit',
-        'click #dots_pages_admin_remove':'_remove'
+        'click #dots_pages_admin_add':'_addPageEvent',
+        'click #dots_pages_admin_edit':'_editPageEvent',
+        'click #dots_pages_admin_remove':'_removePageEvent'
     },
-    _add:function () {
+    _addPageEvent:function () {
         Dots.View.Dialog.open({
             url:'/dots-pages/add/',
             id:'dotsPagesAdmin_AddDialog'
@@ -16,8 +17,8 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
         this.$el.find('.dropdown.open').removeClass('open');
         return false;
     },
-    _edit:function () {
-        var alias = Dots.Pages.Model.Page.getPageAlias();
+    _editPageEvent:function () {
+        var alias = Dots.Pages.Model.Page.getAlias();
         Dots.View.Dialog.open({
             url:'/dots-pages/edit/',
             id:'dotsPagesAdmin_EditDialog',
@@ -28,7 +29,7 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
         this.$el.find('.dropdown.open').removeClass('open');
         return false;
     },
-    _remove:function () {
+    _removePageEvent:function () {
         var alias = Dots.Pages.Model.Page.getPageAlias();
         var params = {
             'alias':alias
@@ -45,22 +46,32 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
 });
 
 Dots.Pages.Model.Page = Backbone.Model.extend({
-    defaults:function(){
-        return {
-            alias:'',
-            title:'',
-            template:'',
-            language:'en',
-            position:1
-        }
+    defaults:{
+        alias:'',
+        title:'',
+        template:'',
+        language:'en',
+        position:1
     },
     initialize:function (){
         if (!this.get("alias")){
-            this.set({alias:Dots.Pages.Model.Page.getPageAlias()});
+            this.set({alias:Dots.Pages.Model.Page.getAlias()});
         }
     }
 }, {
-    getPageAlias:function(){
+    getAlias:function(){
         return window.location.pathname.substr(1);
+    }
+});
+
+Dots.Pages.View.Page = Backbone.View.extend({
+    el: 'body'
+}, {
+    instance:null,
+    getInstance:function (){
+        if (!this.instance){
+            this.instance = new Dots.Pages.View.Page({});
+        }
+        return this.instance;
     }
 });
