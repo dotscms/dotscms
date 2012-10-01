@@ -1,7 +1,14 @@
-<div class="dots-block" data-block="{{block.id}}">
+<div class="dots-block {{block.class}}" data-block="{{ block.id }}" data-block-type="{{block.type}}" data-block-position="{{block.position}}">
     <div class="dots-block-header">
         <a data-action="move-block" href="#move-block"><i class="icon-move"></i></a>
-        <a data-action="edit-block" href="#edit-block"><i class="icon-pencil"></i></a>
+        <span class="btn-group">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-action="settings-block" href="#settings-block"><i
+                    class="icon-pencil"></i></a>
+            <ul class="dropdown-menu">
+                <li><a data-action="edit-block" href="#edit-block">Edit Block</a></li>
+                <li><a data-action="change-settings" href="#change-settings">Change Settings</a></li>
+            </ul>
+        </span>
         <a data-action="remove-block" href="#remove-block"><i class="icon-remove"></i></a>
     </div>
     {{ html | raw }}

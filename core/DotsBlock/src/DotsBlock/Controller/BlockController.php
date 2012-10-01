@@ -19,23 +19,28 @@ class BlockController extends AbstractActionController
      */
     public function addAction()
     {
-        $alias = $_REQUEST['alias'];
-        $type = $_REQUEST['type'];
-        $section = $_REQUEST['section'];
+        $request = $this->getRequest();
+        $post = $request->getPost();
+        $method = $post['_method'];
+        $model = json_decode($post['model'], true);
+
+        $alias = $post['alias'];
+        $section = $model['section'];
+        $type = $model['type'];
+
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
 
         $page = $pageModel->getByAlias($alias);
         $blockManager = Registry::get('block_manager');
 
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST'){
-            $responses = $blockManager->events()->trigger('saveBlock/'.$type, null, array('page'=>$page, 'section' => $section, 'request'=> $request));
-            if ($responses->stopped()){
-                return $this->jsonResponse(array('success' => false, 'errors'=>$responses->last()));
-            }
-            $block = $responses->last();
-            return $this->jsonResponse(array('success'=>true, 'block_id'=>$block->id));
-        }
+//        if ($request->getMethod() == 'POST'){
+//            $responses = $blockManager->events()->trigger('saveBlock/'.$type, null, array('page'=>$page, 'section' => $section, 'request'=> $request));
+//            if ($responses->stopped()){
+//                return $this->jsonResponse(array('success' => false, 'errors'=>$responses->last()));
+//            }
+//            $block = $responses->last();
+//            return $this->jsonResponse(array('success'=>true, 'block_id'=>$block->id));
+//        }
 
         $results = $blockManager->events()->trigger('editBlock/' . $type, null, array('page' => $page, 'section' => $section));
         return $this->getTerminalView(array('html'=>$results->last()));
@@ -73,6 +78,32 @@ class BlockController extends AbstractActionController
             'block'=>$block,
             'html'=>$results->last()
         ));
+    }
+
+    public function indexAction()
+    {
+        $request = $this->getRequest();
+        $post = $request->getPost();
+        $method = $post['_method'];
+        $model = json_decode($post['model'], true);
+        $alias = $post['alias'];
+
+        $section = $model['section'];
+        $blockId = $model['id'];
+
+        $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
+        $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
+
+        $page = $pageModel->getByAlias($alias);
+        $block = $blockModel->getById($blockId);
+        $blockManager = Registry::get('block_manager');
+
+        $responses = $blockManager->events()->trigger('saveBlock/'. $block->type, $block, array('page'=>$page, 'section' => $section, 'request'=> $request));
+        if ($responses->stopped()) {
+            return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
+        }
+        $block = $responses->last();
+        return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
     }
 
     public function editSettingsAction()

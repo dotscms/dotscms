@@ -16,6 +16,8 @@ window.Dots = {
 /* Setup Namespaces */
 Dots.namespace("Dots.Events");
 Dots.namespace("Dots.View.Menu");
+Backbone.emulateHTTP = true;
+Backbone.emulateJSON = true;
 
 /**
  * Dots Events
@@ -103,10 +105,14 @@ Dots.View.Dialog = Backbone.View.extend({
         return this;
     }
 }, {
+    instance:null,
     //open a new dialog window using the specified options
     open:function (opts){
-        var dialog = new Dots.View.Dialog(opts);
-        dialog.render();
+        this.instance = new Dots.View.Dialog(opts);
+        this.instance.render();
+    },
+    getInstance: function (){
+        return this.instance;
     },
     /**
      * @todo Remove this function or find a better alternative for specifying what action should be taken after a response
