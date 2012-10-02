@@ -64,14 +64,14 @@ class BlockController extends AbstractActionController
         $blockManager = Registry::get('block_manager');
 
         $request = $this->getRequest();
-        if ($request->getMethod() == 'POST'){
-            $responses = $blockManager->events()->trigger('saveBlock/'. $block->type, $block, array('page'=>$page, 'section' => $section, 'request'=> $request));
-            if ($responses->stopped()) {
-                return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
-            }
-            $block = $responses->last();
-            return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
-        }
+//        if ($request->getMethod() == 'POST'){
+//            $responses = $blockManager->events()->trigger('saveBlock/'. $block->type, $block, array('page'=>$page, 'section' => $section, 'request'=> $request));
+//            if ($responses->stopped()) {
+//                return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
+//            }
+//            $block = $responses->last();
+//            return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
+//        }
 
         $results = $blockManager->events()->trigger('editBlock/' . $block->type, $block, array('page' => $page, 'section' => $section));
         return $this->getTerminalView(array(
@@ -85,25 +85,43 @@ class BlockController extends AbstractActionController
         $request = $this->getRequest();
         $post = $request->getPost();
         $method = $post['_method'];
-        $model = json_decode($post['model'], true);
-        $alias = $post['alias'];
-
-        $section = $model['section'];
-        $blockId = $model['id'];
 
         $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
 
-        $page = $pageModel->getByAlias($alias);
-        $block = $blockModel->getById($blockId);
-        $blockManager = Registry::get('block_manager');
+        switch($method){
+            case 'POST': case 'PUT':
+                $model = json_decode($post['model'], true);
+                $section = $model['section'];
 
-        $responses = $blockManager->events()->trigger('saveBlock/'. $block->type, $block, array('page'=>$page, 'section' => $section, 'request'=> $request));
-        if ($responses->stopped()) {
-            return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
+                $page = $pageModel->getByAlias($post['alias']);
+                $block = null;
+                if (isset($model['id'])){
+                    $block = $blockModel->getById($model['id']);
+                }
+
+                $blockManager = Registry::get('block_manager');
+                $responses = $blockManager->events()->trigger('saveBlock/' . $model['type'], $block, array('page' => $page, 'section' => $section, 'request' => $request));
+                if ($responses->stopped()) {
+                    return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
+                }
+                $block = $responses->last();
+                return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
+
+                break;
+            case 'DELETE':
+                var_dump($_POST);
+                var_dump($_REQUEST);
+                exit;
+                break;
+            case 'GET':
+                var_dump($_POST);
+                var_dump($_REQUEST);
+                exit;
+                break;
         }
-        $block = $responses->last();
-        return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
+
+        return $this->jsonResponse(array('success' => false, 'msg'=>'Invalid request'));
     }
 
     public function editSettingsAction()
