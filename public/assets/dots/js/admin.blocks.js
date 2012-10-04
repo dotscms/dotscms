@@ -11,6 +11,10 @@ Dots.Events.on('bootstrap', function (){
 });
 
 /**
+ * SECTIONS
+ */
+
+/**
  * Section View
  * @type Dots.Blocks.View.Section
  */
@@ -83,6 +87,10 @@ Dots.Blocks.View.Section = Backbone.View.extend({
     }
 });
 
+/**
+ * Sections
+ * @type Backbone.Collection
+ */
 Dots.Blocks.Collection.Section = Backbone.Collection.extend({
     model: Dots.Blocks.Model.Section
 }, {
@@ -91,6 +99,10 @@ Dots.Blocks.Collection.Section = Backbone.Collection.extend({
     setInstance: function (instance){this.instance = instance;}
 });
 
+/**
+ * Section Model
+ * Backbone.Model
+ */
 Dots.Blocks.Model.Section = Backbone.Model.extend({
     blocks:null,
     initialize:function (args){
@@ -103,14 +115,22 @@ Dots.Blocks.Model.Section = Backbone.Model.extend({
         this.blocks = blocks;
         var id = this.get('id');
         var k = 1;
-
         _.each(this.blocks.models, function (val, index){
             val.set({section: id, position:k++});
         });
+        this.blocks.on('add remove', this._updateBlocksEvent, this);
         return this;
     },
     getBlocks:function(){
         return this.blocks;
+    },
+    _updateBlocksEvent: function (model, collection, options){
+        var self = this;
+        _.each(collection.models, function(val){
+            if (val.get('section') != self.get('id')){
+                val.set({section:self.get('id')});
+            }
+        })
     }
 });
 
@@ -121,10 +141,9 @@ Dots.Blocks.Model.Section = Backbone.Model.extend({
 Dots.Blocks.Collection.Block = Backbone.Collection.extend({
     model: Dots.Blocks.Model.Block,
     updatePositions:function(){
-        var pos = 0;
+        var pos = 1;
         _.each(this.models, function (model){
-            pos++;
-            model.set({position:pos});
+            model.set({position:pos++});
         });
     }
 });
@@ -158,10 +177,10 @@ Dots.Blocks.View.Block = Backbone.View.extend({
         }
     },
     initEditors: function(){
-        Dots.Events.trigger('block.initEditors', this.$el);
+        Dots.Events.trigger('block.view.initEditors', this.$el);
     },
     removeEditors: function (){
-        Dots.Events.trigger('block.removeEditors', this.$el);
+        Dots.Events.trigger('block.view.removeEditors', this.$el);
     },
     _changeModelEvent: function(model, changes){
         this.$el.attr('data-block', model.get('id'));
@@ -229,8 +248,8 @@ Dots.Blocks.View.Block = Backbone.View.extend({
                             $.get('/dots/block/view/', { block_id: self.model.get('id') }, function (html) {
                                 self.removeEditors();
                                 var $currentBlock = $(html);
-                                _self.$el.replaceWith($currentBlock);
-                                _self.setElement($currentBlock[0]);
+                                self.$el.replaceWith($currentBlock);
+                                self.setElement($currentBlock[0]);
                             });
                         }
                     }
@@ -396,7 +415,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
 /**
  * Init text editor on block event
  */
-Dots.Events.on('block.initEditors', function ($block){
+Dots.Events.on('block.view.initEditors', function ($block){
     $block.find('.editor').each(function () {
         $(this).attr('id', $(this).attr('id') + '_' + Math.floor(10000 * Math.random()));
     });
@@ -406,7 +425,7 @@ Dots.Events.on('block.initEditors', function ($block){
 /**
  * Remove text editor on block event
  */
-Dots.Events.on('block.removeEditors', function ($block) {
+Dots.Events.on('block.view.removeEditors', function ($block) {
     $block.find('.editor').each(function () {
         var id = $(this).attr('id');
         if (tinyMCE.getInstanceById(id)) {
@@ -420,7 +439,7 @@ Dots.Events.on('block.removeEditors', function ($block) {
 /**
  * Init image crop editor on block event
  */
-Dots.Events.on('block.initEditors', function ($block) {
+Dots.Events.on('block.view.initEditors', function ($block) {
     $block.find('.dots-img-crop [data-action="crop_image"]').click(function (event) {
         var $content = $block.find('.dots-img-crop .dots-img-content');
         var $x1 = $block.find('.dots-img-crop [data-img-crop-field="x1"]');
@@ -470,7 +489,7 @@ Dots.Events.on('block.initEditors', function ($block) {
 /**
  * Remove image crop editor on block event
  */
-Dots.Events.on('block.removeEditors', function ($block) {
+Dots.Events.on('block.view.removeEditors', function ($block) {
     var $img = $block.find('.dots-img-crop .dots-img-content img');
     if ($img.imgAreaSelect) {
         $img.imgAreaSelect({remove:true});
