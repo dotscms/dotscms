@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZendExperts/ZeDb",
-                "reference": "2cc9dd3e9b81bf2e724815a66c664bbeb3925350"
+                "reference": "be73f98ecb0eadcaa5db3504824f5800ae8647c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZendExperts/ZeDb/zipball/2cc9dd3e9b81bf2e724815a66c664bbeb3925350",
-                "reference": "2cc9dd3e9b81bf2e724815a66c664bbeb3925350",
+                "url": "https://github.com/ZendExperts/ZeDb/zipball/be73f98ecb0eadcaa5db3504824f5800ae8647c5",
+                "reference": "be73f98ecb0eadcaa5db3504824f5800ae8647c5",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
                 "zf2",
                 "module"
             ],
-            "time": "1347875979"
+            "time": "1349358911"
         },
         {
             "name": "zendexperts/ze-theme",
@@ -161,12 +161,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "release-2.0.1"
+                "reference": "1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/zipball/release-2.0.1",
-                "reference": "release-2.0.1",
+                "url": "https://github.com/zendframework/zf2/zipball/1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3",
+                "reference": "1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3",
                 "shasum": ""
             },
             "require": {
@@ -253,7 +253,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "1348173563"
+            "time": "1349288335"
         },
         {
             "name": "zf-commons/zfc-twig",

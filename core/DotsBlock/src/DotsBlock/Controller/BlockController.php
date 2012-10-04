@@ -14,70 +14,34 @@ use DotsBlock\Form\Setting\DefaultBlockSettingsForm;
 class BlockController extends AbstractActionController
 {
     /**
-     * Add a new block
+     * Get Edit/Add form
      * @return \Zend\View\Model\ViewModel
      */
-    public function addAction()
+    public function getFormAction()
     {
         $request = $this->getRequest();
         $post = $request->getPost();
-        $method = $post['_method'];
         $model = json_decode($post['model'], true);
-
         $alias = $post['alias'];
         $section = $model['section'];
         $type = $model['type'];
+        $block = null;
+        if (isset($model['id'])){
+            $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
+            $block = $blockModel->getById($model['id']);
+        }
 
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
 
         $page = $pageModel->getByAlias($alias);
         $blockManager = Registry::get('block_manager');
 
-//        if ($request->getMethod() == 'POST'){
-//            $responses = $blockManager->events()->trigger('saveBlock/'.$type, null, array('page'=>$page, 'section' => $section, 'request'=> $request));
-//            if ($responses->stopped()){
-//                return $this->jsonResponse(array('success' => false, 'errors'=>$responses->last()));
-//            }
-//            $block = $responses->last();
-//            return $this->jsonResponse(array('success'=>true, 'block_id'=>$block->id));
-//        }
-
-        $results = $blockManager->events()->trigger('editBlock/' . $type, null, array('page' => $page, 'section' => $section));
-        return $this->getTerminalView(array('html'=>$results->last()));
-    }
-
-    /**
-     * Edit existing block
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function editAction()
-    {
-        $alias = $_REQUEST['alias'];
-        $section = $_REQUEST['section'];
-        $blockId = $_REQUEST['block_id'];
-
-        $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
-        $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
-
-        $page = $pageModel->getByAlias($alias);
-        $block = $blockModel->getById($blockId);
-        $blockManager = Registry::get('block_manager');
-
-        $request = $this->getRequest();
-//        if ($request->getMethod() == 'POST'){
-//            $responses = $blockManager->events()->trigger('saveBlock/'. $block->type, $block, array('page'=>$page, 'section' => $section, 'request'=> $request));
-//            if ($responses->stopped()) {
-//                return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
-//            }
-//            $block = $responses->last();
-//            return $this->jsonResponse(array('success' => true, 'block_id' => $block->id));
-//        }
-
-        $results = $blockManager->events()->trigger('editBlock/' . $block->type, $block, array('page' => $page, 'section' => $section));
-        return $this->getTerminalView(array(
-            'block'=>$block,
-            'html'=>$results->last()
-        ));
+        $results = $blockManager->events()->trigger('editBlock/' . $type, $block, array('page' => $page, 'section' => $section, 'request'=>$request));
+        $params = array('html'=>$results->last());
+        if ($block){
+            $params['block'] = $block;
+        }
+        return $this->getTerminalView($params);
     }
 
     public function indexAction()
@@ -170,6 +134,38 @@ class BlockController extends AbstractActionController
      */
     public function moveAction()
     {
+        $request = $this->getRequest();
+        $post = $request->getPost();
+        $models = json_decode($post['models'], true);
+
+        $data = array();
+        foreach($models as $model){
+            if(!empty($model['id'])){
+                $data[$model['id']] = $model;
+            }
+        }
+
+        $ids = array_keys($data);
+
+        if (!empty($ids)){
+            $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
+            $blocks = $blockModel->getAllById($ids);
+            foreach($blocks as $block){
+                if ($block->position!= $data[$block->id]['position'] || $block->section != $data[$block->id]['section']){
+                    $block->position = $data[$block->id]['position'];
+                    $block->section = $data[$block->id]['section'];
+                    $blockModel->persist($block);
+                }
+            }
+            $blockModel->flush();
+        }
+
+        return $this->jsonResponse(array('success' => true));
+
+
+        //DEPRECATED CODE
+
+
         $request = $this->getRequest();
         $blockId = $request->getQuery('block_id',null);
         $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');

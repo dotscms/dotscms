@@ -7,6 +7,7 @@ Dots.namespace("Dots.Blocks.Collection");
 
 Dots.Events.on('bootstrap', function (){
     Dots.Blocks.View.Section.init(); //init handling for all sections on the page
+    Dots.Blocks.View.Block.init(); //init handling for all sections on the page
 });
 
 /**
@@ -18,52 +19,42 @@ Dots.Blocks.View.Section = Backbone.View.extend({
     events:{
         'click .dots-block-header [data-action="add-block"]':'_addBlockEvent'
     },
-    blocks:[],
     initialize:function(args){
         var self = this;
+        this.$el.data('view', this);
         if (this.$el){
             var blocks = this.$el.find('.dots-block');
             var cBlocks = new Dots.Blocks.Collection.Block();
             //go over all the blocks in the section and add them to the blocks collection and create a view for each one
             blocks.each(function () {
                 var $block = $(this);
-                var block = new Dots.Blocks.Model.Block({
+                var model = new Dots.Blocks.Model.Block({
                     id: $block.attr('data-block'),
                     type: $block.attr('data-block-type'),
                     position: $block.attr('data-block-position')
                 });
-                cBlocks.add(block, {at:block.get('position')});
-                self.blocks[self.blocks.length] = new Dots.Blocks.View.Block({el:this, model:block});
+                cBlocks.add(model, {at:model.get('position')});
+                new Dots.Blocks.View.Block({el:this, model:model});
             });
             if (this.model){
                 this.model.setBlocks(cBlocks);
+                this.model.getBlocks().on('add remove', this.updateViewBlocks, this);
             }
         }
     },
-    _addBlockEvent:function (event){
-        var self = this;
-        var $target = $(event.target);
-        var type = $target.attr('href').split('#')[1];
-        var section = this.$el.attr('data-section');
-        var blockModel = new Dots.Blocks.Model.Block({
-            type:type,
-            section:section,
-            position: this.model.getBlocks().length+1
-        });
-        var data = {
-            _method: 'POST',
-            model: JSON.stringify(blockModel),
-            alias: Dots.Pages.Model.Page.getAlias()
-        };
 
-        $.post('/dots/block/add/', data, function(html){
-            var $currentBlock = $(html);
-            $currentBlock.addClass('edit-dots-block');
-            self.$el.append($currentBlock);
-            var blockView = new Dots.Blocks.View.Block({el:$currentBlock[0], model:blockModel});
-            blockView.initEditors();
-            self.model.getBlocks().add(blockModel);
-        }, 'text');
+    updateViewBlocks:function (){
+        var self = this;
+        _.each(self.model.getBlocks(), function(block){
+            if (block.get('id')){
+                delete(self.blocks[block.get('id')]);
+            }
+        });
+    },
+
+    _addBlockEvent:function(event){
+        var $target = $(event.target);
+        Dots.Events.trigger('section.addBlock', this, $target);
         $($target.parents('.btn-group')[0]).removeClass('open');
         return false;
     }
@@ -88,50 +79,7 @@ Dots.Blocks.View.Section = Backbone.View.extend({
             self.sections[mSection.get('id')] = new Dots.Blocks.View.Section({el:section, model:mSection});
         });
         Dots.Blocks.Collection.Section.setInstance(cSections);
-        this.setupMoveHandler();
-    },
-    setupMoveHandler: function () {
-        var self = this;
-        $(".dots-blocks").sortable({
-            connectWith:".dots-blocks",
-            handle:'[data-action="move-block"]',
-            cursorAt:{ left:0, top:0 },
-            placeholder:"ui-state-highlight",
-            items:".dots-block",
-            tolerance:'pointer',
-            revert:true,
-//            //match the height of the placeholder with the size of the dragged content
-//            start:function (e, ui) {
-//                ui.placeholder.height(ui.item.height());
-//            },
-            stop:function (event, ui) {
-                var $target = $(event.target);
-                var $item = $(ui.item);
-                var fromSection = $target.attr('data-section');
-                var toSection = $item.parent().attr('data-section');
-                self.updateSectionPositions(fromSection);
-                self.updateSectionPositions(toSection);
-                if ($item.attr('data-block') != "") {
-                    var position = $item.attr('data-block-position');
-                    var data = {
-                        block_id:$item.attr('data-block'),
-    //                    from: fromSection,
-                        to:toSection,
-                        alias:Dots.Pages.Model.Page.getAlias(),
-                        position:position
-                    };
-                    $.getJSON('/dots/block/move/', data, function (resp) {
 
-                    });
-                }
-            }
-        }).disableSelection();
-    },
-    updateSectionPositions: function (section) {
-        var i = 1;
-        $('[data-section="' + section + '"] .dots-block').each(function () {
-            $(this).attr('data-block-position', i++);
-        });
     }
 });
 
@@ -155,7 +103,8 @@ Dots.Blocks.Model.Section = Backbone.Model.extend({
         this.blocks = blocks;
         var id = this.get('id');
         var k = 1;
-        _.each(this.blocks, function (val){
+
+        _.each(this.blocks.models, function (val, index){
             val.set({section: id, position:k++});
         });
         return this;
@@ -170,7 +119,14 @@ Dots.Blocks.Model.Section = Backbone.Model.extend({
  */
 
 Dots.Blocks.Collection.Block = Backbone.Collection.extend({
-    model: Dots.Blocks.Model.Block
+    model: Dots.Blocks.Model.Block,
+    updatePositions:function(){
+        var pos = 0;
+        _.each(this.models, function (model){
+            pos++;
+            model.set({position:pos});
+        });
+    }
 });
 
 Dots.Blocks.Model.Block = Backbone.Model.extend({
@@ -196,6 +152,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
     },
     initialize: function(args){
         var self = this;
+        this.$el.data('view', this);
         if (args.model){
             args.model.on('change', this._changeModelEvent, this);
         }
@@ -206,23 +163,23 @@ Dots.Blocks.View.Block = Backbone.View.extend({
     removeEditors: function (){
         Dots.Events.trigger('block.removeEditors', this.$el);
     },
-    _changeModelEvent: function(model, val, a,b){
-        console.log(model, val, a,b);
+    _changeModelEvent: function(model, changes){
+        this.$el.attr('data-block', model.get('id'));
+        this.$el.attr('data-block-position', model.get('position'));
+        this.$el.attr('data-block-type', model.get('type'));
     },
     _editBlockEvent: function (event){
         var self = this;
         var data = {
-            type: this.model.get('type'),
             alias: Dots.Pages.Model.Page.getAlias(),
-            section: this.model.get('section'),
-            block_id: this.model.get('id')
+            model: JSON.stringify(this.model)
         };
-        $.get('/dots/block/edit/', data, function (html) {
+        $.post('/dots/block/get-form/', data, function (html) {
             var $currentBlock = $(html).addClass('edit-dots-block');
             self.$el.replaceWith($currentBlock);
             self.setElement($currentBlock[0]);
             self.initEditors();
-        });
+        }, 'text');
         $($(event.target).parents('.btn-group')[0]).removeClass('open');
         return false;
     },
@@ -243,7 +200,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
                 if (!response.success) {
                     Dots.View.Dialog.renderErrors(form, response.errors, null);
                 } else {
-                    self.$el.attr('data-block', response.block_id);
+                    self.model.set({id:response.block_id});
                     self._cancelBlockEvent();
                 }
             }
@@ -320,6 +277,115 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             });
         }
         return false;
+    },
+    setElement:function(element, delegateEvents){
+        Backbone.View.prototype.setElement.call(this, element, delegateEvents);
+        this.$el.data('view', this);
+        return this;
+    }
+}, {
+    init: function (){
+        Dots.Events.on('section.addBlock', this._addBlockToSection, this);
+        this.setupMoveHandler();
+    },
+    _addBlockToSection:function (view, target) {
+        var type = target.attr('href').split('#')[1];
+        var section = view.$el.attr('data-section');
+        var blockModel = new Dots.Blocks.Model.Block({
+            type: type,
+            section: section,
+            position: view.model.getBlocks().length + 1
+        });
+        var data = {
+            model:JSON.stringify(blockModel),
+            alias:Dots.Pages.Model.Page.getAlias()
+        };
+
+        $.post('/dots/block/get-form/', data, function (html) {
+            var $currentBlock = $(html);
+            $currentBlock.addClass('edit-dots-block');
+            view.$el.append($currentBlock);
+            var blockView = new Dots.Blocks.View.Block({el:$currentBlock[0], model:blockModel});
+            blockView.initEditors();
+            view.model.getBlocks().add(blockModel);
+        }, 'text');
+    },
+    setupMoveHandler:function () {
+        var self = this;
+        $(".dots-blocks").sortable({
+            connectWith:".dots-blocks",
+            handle:'[data-action="move-block"]',
+            cursorAt:{ left:0, top:0 },
+            placeholder:"ui-state-highlight",
+            items:".dots-block",
+            tolerance:'pointer',
+            revert:true,
+            stop:function (event, ui) {
+                var $item = $(ui.item),
+                    view = $item.data('view'),
+                    fromSection = $(event.target).data('view'),
+                    toSection = $item.parent().data('view'),
+                    pos = $item.prevAll('.dots-block').length,
+                    data = {},models = null;
+
+                fromSection.model.getBlocks().remove(view.model);
+                fromSection.model.getBlocks().updatePositions();
+                toSection.model.getBlocks().add(view.model, {at:pos});
+                toSection.model.getBlocks().updatePositions();
+
+                models = _.toArray(fromSection.model.getBlocks());
+                if (fromSection.model.get('id')!= toSection.model.get('id')){
+                    models = models.concat(_.toArray(toSection.model.getBlocks()));
+                }
+                data['models'] = JSON.stringify(models);
+                $.post('/dots/block/move/', data, function (resp) {
+
+                }, 'json');
+            }
+        }).disableSelection();
+    },
+    setupMoveHandlerOld:function () {
+        var self = this;
+        $(".dots-blocks").sortable({
+            connectWith:".dots-blocks",
+            handle:'[data-action="move-block"]',
+            cursorAt:{ left:0, top:0 },
+            placeholder:"ui-state-highlight",
+            items:".dots-block",
+            tolerance:'pointer',
+            revert:true,
+//            //match the height of the placeholder with the size of the dragged content
+//            start:function (e, ui) {
+//                ui.placeholder.height(ui.item.height());
+//            },
+            stop:function (event, ui) {
+                var $target = $(event.target);
+                var $item = $(ui.item);
+                var fromSection = $target.attr('data-section');
+                var toSection = $item.parent().attr('data-section');
+                self.updateSectionPositions(fromSection);
+                self.updateSectionPositions(toSection);
+                if ($item.attr('data-block') != "") {
+                    var position = $item.attr('data-block-position');
+                    var data = {
+                        block_id:$item.attr('data-block'),
+                        //                    from: fromSection,
+                        to:toSection,
+                        alias:Dots.Pages.Model.Page.getAlias(),
+                        position:position
+                    };
+                    $.getJSON('/dots/block/move/', data, function (resp) {
+
+                    });
+                }
+            }
+        }).disableSelection();
+    },
+    updateSectionPositions:function (section) {
+        var i = 1;
+        $('[data-section="' + section + '"] .dots-block').each(function () {
+            $(this).attr('data-block-position', i++);
+        });
     }
 });
 
