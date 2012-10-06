@@ -9,6 +9,7 @@ use Zend\View\Model\JsonModel;
 use Dots\Registry;
 use Dots\Form\MultiForm;
 use DotsBlock\Db\Entity;
+use DotsBlock\Db\Entity\Block;
 use DotsBlock\Form\Setting\DefaultBlockSettingsForm;
 
 class BlockController extends AbstractActionController
@@ -25,10 +26,16 @@ class BlockController extends AbstractActionController
         $alias = $post['alias'];
         $section = $model['section'];
         $type = $model['type'];
+        $position = $model['position'];
         $block = null;
         if (isset($model['id'])){
             $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
             $block = $blockModel->getById($model['id']);
+        }else{
+            $block = new Block();
+            $block->type = $type;
+            $block->section = $section;
+            $block->position = $position;
         }
 
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
@@ -38,9 +45,7 @@ class BlockController extends AbstractActionController
 
         $results = $blockManager->events()->trigger('editBlock/' . $type, $block, array('page' => $page, 'section' => $section, 'request'=>$request));
         $params = array('html'=>$results->last());
-        if ($block){
-            $params['block'] = $block;
-        }
+        $params['block'] = $block;
         return $this->getTerminalView($params);
     }
 
@@ -56,16 +61,20 @@ class BlockController extends AbstractActionController
         switch($method){
             case 'POST': case 'PUT':
                 $model = json_decode($post['model'], true);
-                $section = $model['section'];
-
                 $page = $pageModel->getByAlias($post['alias']);
                 $block = null;
                 if (isset($model['id'])){
                     $block = $blockModel->getById($model['id']);
+                }else{
+                    $block = new Block();
+                    $block->position = $model['position'];
+                    $block->section = $model['section'];
+                    $block->type = $model['type'];
+                    $block->page_id = $page->id;
                 }
 
                 $blockManager = Registry::get('block_manager');
-                $responses = $blockManager->events()->trigger('saveBlock/' . $model['type'], $block, array('page' => $page, 'section' => $section, 'request' => $request));
+                $responses = $blockManager->events()->trigger('saveBlock/' . $model['type'], $block, array('page' => $page, 'section' => $model['section'], 'request' => $request));
                 if ($responses->stopped()) {
                     return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
                 }

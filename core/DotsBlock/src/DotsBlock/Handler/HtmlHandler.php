@@ -113,14 +113,10 @@ class HtmlHandler implements HandlerAware
         $locator = Registry::get('service_locator');
         $block = $event->getTarget();
         $page = $event->getParam('page');
-        $section = $event->getParam('section');
-        if ($block){
+        if ($block->id){
             $model = $locator->get('DotsBlock\Db\Model\HtmlBlock');
             $htmlBlock = $model->getByBlockId($block->id);
         }else{
-            $block = new Block();
-            $block->type = static::TYPE;
-            $block->section = $section;
             $htmlBlock = new HtmlBlock();
         }
         $form = new MultiForm(array(
@@ -146,12 +142,8 @@ class HtmlHandler implements HandlerAware
     public function saveBlock(Event $event)
     {
         $locator = Registry::get('service_locator');
-        $modelBlock = $locator->get('DotsBlock\Db\Model\Block');
         $modelHtmlBlock = $locator->get('DotsBlock\Db\Model\HtmlBlock');
         $block = $event->getTarget();
-        $page = $event->getParam('page');
-        $section = $event->getParam('section');
-        $position = $event->getParam('position', 1);
         $request = $event->getParam('request');
         $form = new MultiForm(array(
             'html_content' => new HtmlContentForm()
@@ -160,15 +152,9 @@ class HtmlHandler implements HandlerAware
         $form->setData($request->getPost()->toArray());
         if ($form->isValid()){
             $data = $form->getInputFilter()->getValues();
-            if ($block) {
-                $block->position = $position;
+            if ($block->id) {
                 $htmlBlock = $modelHtmlBlock->getByBlockId($block->id);
             } else {
-                $block = new Block();
-                $block->position = $position;
-                $block->type = static::TYPE;
-                $block->section = $section;
-                $block->page_id = $page->id;
                 $block->save();
                 $htmlBlock = new HtmlBlock();
                 $htmlBlock->block_id = $block->id;

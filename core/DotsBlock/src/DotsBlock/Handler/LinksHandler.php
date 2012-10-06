@@ -299,14 +299,10 @@ END
         $locator = Registry::get('service_locator');
         $block = $event->getTarget();
         $page = $event->getParam('page');
-        $section = $event->getParam('section');
-        if ($block) {
+        if ($block->id) {
             $model = $locator->get('DotsBlock\Db\Model\LinkBlock');
             $linkBlocks = $model->getAllByBlockIdOrderByPosition( $block->id);
         } else {
-            $block = new Block();
-            $block->type = static::TYPE;
-            $block->section = $section;
             $linkBlocks = array();
         }
 

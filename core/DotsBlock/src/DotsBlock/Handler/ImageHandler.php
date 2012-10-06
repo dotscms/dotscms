@@ -118,23 +118,15 @@ class ImageHandler implements HandlerAware
         $view = $locator->get('TwigViewRenderer');
         $block = $event->getTarget();
         $page = $event->getParam('page');
-        $section = $event->getParam('section');
-        if ($block){
+        if ($block->id){
             $model = $locator->get('DotsBlock\Db\Model\ImageBlock');
             $imageBlock = $model->getByBlockId($block->id);
         }else{
-            $block = new Block();
-            $block->type = static::TYPE;
-            $block->section = $section;
             $imageBlock = new ImageBlock();
         }
         $form = new MultiForm(array(
             'image_content' => new ImageContentForm($imageBlock)
         ));
-//        $form->setView($view);
-//        $form->setDecorators(array(
-//            array('ViewScript', array('viewScript' => 'dots-block/handler/image/edit-form'))
-//        ));
         $form->addButtons();
         $form->setData(array('image_content'=>$imageBlock->toArray()));
         return $this->renderViewModel('dots-block/handler/image/edit', array(
@@ -154,12 +146,8 @@ class ImageHandler implements HandlerAware
     {
         $request = $event->getParam('request');
         $locator = Registry::get('service_locator');
-        $modelBlock = $locator->get('DotsBlock\Db\Model\Block');
         $modelImageBlock = $locator->get('DotsBlock\Db\Model\ImageBlock');
         $block = $event->getTarget();
-        $page = $event->getParam('page');
-        $section = $event->getParam('section');
-        $position = $event->getParam('position', 1);
         $form = new MultiForm(array(
             'image_content' => new ImageContentForm()
         ));
@@ -175,15 +163,9 @@ class ImageHandler implements HandlerAware
         if ($form->isValid()){
             $data = $form->getInputFilter()->getValues();
 
-            if ($block) {
-                $block->position = $position;
+            if ($block->id) {
                 $imageBlock = $modelImageBlock->getByBlockId($block->id);
             } else {
-                $block = new Block();
-                $block->position = $position;
-                $block->type = static::TYPE;
-                $block->section = $section;
-                $block->page_id = $page->id;
                 $block->save();
                 $imageBlock = new ImageBlock();
                 $imageBlock->block_id = $block->id;
@@ -210,17 +192,6 @@ class ImageHandler implements HandlerAware
                 ));
                 $path = $upload->process($files);
                 $data['image_content']['original_src'] = $path['original_src'];
-//                $tmp_name = $files['original_src']['tmp_name'];
-//                $src = basename($files['original_src']['name']);
-//                $filename = '/data/uploads/' . uniqid(rand()) . '_' . $src;
-//                $target = PUBLIC_PATH . $filename;
-//                $rename = new RenameFilter(array(
-//                    'source'=>$tmp_name,
-//                    'target'=>$target,
-//                    'overwrite'=>true)
-//                );
-//                $name = $rename->filter($files['original_src']['tmp_name']);
-//                $data['image_content']['original_src'] = $filename;
             }
 
             if ( !($imageBlock->id && empty($data['image_content']['original_src'])) ){
