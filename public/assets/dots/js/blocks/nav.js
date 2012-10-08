@@ -2,12 +2,75 @@
 Dots.namespace("Dots.Blocks.Nav.Handlers");
 Dots.namespace("Dots.Blocks.Nav.Helpers");
 
+Dots.Events.on('bootstrap', function () {
+    Dots.Blocks.View.NavBlock.init(); //init events
+});
+
 Dots.Blocks.Nav.init = function(){
-    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_add"]', Dots.Blocks.Nav.Handlers.add);
-    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_remove"]', Dots.Blocks.Nav.Handlers.remove);
-    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_edit"]', Dots.Blocks.Nav.Handlers.edit);
+//    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_add"]', Dots.Blocks.Nav.Handlers.add);
+//    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_remove"]', Dots.Blocks.Nav.Handlers.remove);
+//    $(document).on('click', '.dots-blocks>.dots-block .dots-nav-block [data-action="nav_edit"]', Dots.Blocks.Nav.Handlers.edit);
     Dots.Blocks.Nav.Helpers.setupFormActions();
 };
+
+/**
+ * Dots Navigation Block View class
+ * @type Backbone.View
+ */
+Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
+    events:function(){
+        var events = {
+            'click .dots-nav-block [data-action="nav_add"]':    '_onNavAddEvent',
+            'click .dots-nav-block [data-action="nav_remove"]': '_onNavRemoveEvent',
+            'click .dots-nav-block [data-action="nav_edit"]':   '_onNavEditEvent'
+        };
+        return _.extend(events, Dots.Blocks.View.NavBlock.__super__.events);
+    },
+    _onNavAddEvent: function(){
+
+    },
+    _onNavRemoveEvent:function (event) {
+        var $this = $(event.target);
+        var nav_id = $this.parents('li').first().attr('data-block-nav-id');
+        var data = {
+            id:nav_id
+        };
+        $.get('/dots/nav-block/remove/', data, function (response) {
+            $this.parents('li').first().remove();
+        });
+        return false;
+    },
+    _onNavEditEvent:function () {
+
+    }
+}, {
+    init:function () {
+        Dots.Events.on('section.blocks.init.navigation', function (view, block) {
+            var $block = $(block);
+            var model = new Dots.Blocks.Model.NavBlock({
+                id:$block.attr('data-block'),
+                type:$block.attr('data-block-type'),
+                position:$block.attr('data-block-position')
+            });
+            view.model.getBlocks().add(model, {at:model.get('position')});
+            new Dots.Blocks.View.NavBlock({el:block, model:model});
+        }, this);
+    }
+});
+
+Dots.Blocks.Model.NavBlock = Dots.Blocks.Model.Block.extend({
+    defaults:function () {
+        return {
+            section:'',
+            type:null,
+            position:1,
+            class:''
+        }
+    },
+    url:'dots/block'
+});
+
+
 
 /**
  * Action Handlers
@@ -135,17 +198,17 @@ Dots.Blocks.Nav.Handlers.add = function (){
     return false;
 };
 
-Dots.Blocks.Nav.Handlers.remove = function (){
-    var $this = $(this);
-    var nav_id = $this.parents('li').first().attr('data-block-nav-id');
-    var data = {
-        id: nav_id
-    };
-    $.get('/dots/nav-block/remove/', data, function (response) {
-        $this.parents('li').first().remove();
-    });
-    return false;
-};
+//Dots.Blocks.Nav.Handlers.remove = function (){
+//    var $this = $(this);
+//    var nav_id = $this.parents('li').first().attr('data-block-nav-id');
+//    var data = {
+//        id: nav_id
+//    };
+//    $.get('/dots/nav-block/remove/', data, function (response) {
+//        $this.parents('li').first().remove();
+//    });
+//    return false;
+//};
 
 /**
  * Helpers

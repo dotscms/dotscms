@@ -21,7 +21,7 @@ class DotsNav extends AbstractHelper
                 ->appendFile('/assets/default/js/underscore.min.js')
                 ->appendFile('/assets/default/js/json2.js')
                 ->appendFile('/assets/default/js/backbone.min.js');
-        });
+        },100);
         // trigger the head.pre event
         GlobalEventManager::trigger('head.pre', $this->view);
 
@@ -38,7 +38,7 @@ class DotsNav extends AbstractHelper
                 ->appendFile('/assets/default/js/jquery.form.js')
                 ->appendFile('/assets/default/js/jquery.json.js')
                 ->appendFile('/assets/dots/js/dots.js');
-        });
+        }, 100);
 
         GlobalEventManager::attach('admin.head.post', function(Event $event)
         {

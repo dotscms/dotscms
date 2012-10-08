@@ -22,7 +22,7 @@ class Module implements AutoloaderProviderInterface
         GlobalEventManager::attach('admin.head.pre',function (Event $event){
             $view = $event->getTarget();
             $view->plugin('headScript')->appendFile('/assets/dots/js/admin.blocks.js');
-        }, -100);
+        });
     }
 
     /**
