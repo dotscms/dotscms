@@ -39,11 +39,12 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
     /**
      * Attach events to the application and listen for the dispatch event
      * @param \Zend\EventManager\EventManagerInterface $events
-     * @return void
+     * @param int $priority
      */
-    public function attach(EventManagerInterface $events, $priority = null)
+    public function attach(EventManagerInterface $events, $priority = 100)
     {
         GlobalEventManager::attach('admin.head.pre', array($this, 'initHeaders'), $priority);
+        GlobalEventManager::attach('admin.body.inline', array($this, 'initTemplates'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
@@ -76,6 +77,11 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $this->handler;
     }
 
+    public function initTemplates(Event $event)
+    {
+        return $this->renderViewModel('dots-block/handler/navigation/templates');
+    }
+
     /**
      * Add code in the header section of the page
      * @param \Zend\EventManager\Event $event
@@ -84,10 +90,6 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
     {
         $view = $event->getTarget();
         $view->plugin('headScript')->appendFile('/assets/dots/js/blocks/nav.js');
-        $view->plugin('headScript')->appendScript(<<<END
-    Dots.Blocks.Nav.init();
-END
-);
     }
 
     /**

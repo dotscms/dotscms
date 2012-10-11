@@ -8,6 +8,11 @@ class Dispatcher
     protected $handlers = array(
         'DotsPages\Handler\Admin'=>array(
             array(
+                'event' => 'dots:admin.head.pre',
+                'handler' => 'appendHead',
+                'priority' => 100
+            ),
+            array(
                 'event' => 'dots:admin/menu',
                 'handler' => 'renderNav'
             )

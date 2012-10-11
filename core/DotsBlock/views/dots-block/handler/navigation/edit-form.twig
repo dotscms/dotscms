@@ -14,7 +14,7 @@
                     <ul class="nav">
                         {% for item in form.getParam('items') %}
                             {% if (item.type == 'header') %}
-                            <li data-block-nav-id="{{item.id}}" class="nav-header">
+                            <li data-dots-type="dots-nav-item" data-block-nav-id="{{item.id}}" class="nav-header">
                                 <div class="nav-edit">
                                     <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
                                     <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>
@@ -22,14 +22,14 @@
                                 <span>{{item.title}}</span>
                             </li>
                             {% elseif (item.type == '-')%}
-                            <li data-block-nav-id="{{item.id}}" class="divider-vertical">
+                            <li data-dots-type="dots-nav-item" data-block-nav-id="{{item.id}}" class="divider-vertical">
                                 <div class="nav-edit">
                                     <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
                                     <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>
                                 </div>
                             </li>
                             {% else %}
-                            <li data-block-nav-id="{{item.id}}">
+                            <li data-dots-type="dots-nav-item" data-block-nav-id="{{item.id}}">
                                 <div class="nav-edit">
                                     <a href="#" data-action="nav_edit"><i class="icon-pencil icon-white"></i></a>
                                     <a href="#" data-action="nav_remove"><i class="icon-remove icon-white"></i></a>

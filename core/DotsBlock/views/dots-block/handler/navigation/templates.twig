@@ -1,0 +1,28 @@
+<script type="text/html-template" id="dots-tpl-nav-item-default">
+    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>">
+        <div class="nav-edit">
+            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
+            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
+        </div>
+        <a href="<%= href %>"><%= title %></a>
+    </li>
+</script>
+
+<script type="text/html-template" id="dots-tpl-nav-item-header">
+    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>" class="nav-header">
+        <div class="nav-edit">
+            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
+            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
+        </div>
+        <span><%= title %></span>
+    </li>
+</script>
+
+<script type="text/html-template" id="dots-tpl-nav-item-divider" class="divider-vertical">
+    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>">
+        <div class="nav-edit">
+            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
+            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
+        </div>
+    </li>
+</script>

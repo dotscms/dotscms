@@ -39,9 +39,10 @@ class HtmlHandler implements HandlerAware
      * @param \Zend\EventManager\EventManagerInterface $events
      * @return void
      */
-    public function attach(EventManagerInterface $events, $priority = null)
+    public function attach(EventManagerInterface $events, $priority = 100)
     {
         GlobalEventManager::attach('admin.head.pre', array($this, 'initHeaders'), $priority);
+        GlobalEventManager::attach('admin.body.inline', array($this, 'initTemplates'), $priority);
 //        $this->listeners[] = $events->attach('initHeaders', array($this, 'initHeaders'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
@@ -74,6 +75,11 @@ class HtmlHandler implements HandlerAware
             $this->handler = new ContentHandler(static::TYPE, 'Html Content');
         }
         return $this->handler;
+    }
+
+    public function initTemplates(Event $event)
+    {
+        return $this->renderViewModel('dots-block/handler/html/templates');
     }
 
     /**

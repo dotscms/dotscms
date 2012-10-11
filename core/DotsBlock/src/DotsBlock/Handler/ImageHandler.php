@@ -41,9 +41,10 @@ class ImageHandler implements HandlerAware
      * @param \Zend\EventManager\EventManagerInterface $events
      * @param $priority
      */
-    public function attach(EventManagerInterface $events, $priority = null)
+    public function attach(EventManagerInterface $events, $priority = 100)
     {
         GlobalEventManager::attach('admin.head.pre', array($this, 'initHeaders'), $priority);
+        GlobalEventManager::attach('admin.body.inline', array($this, 'initTemplates'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);
@@ -75,6 +76,11 @@ class ImageHandler implements HandlerAware
             $this->handler = new ContentHandler(static::TYPE, 'Image Content');
         }
         return $this->handler;
+    }
+
+    public function initTemplates(Event $event)
+    {
+        return $this->renderViewModel('dots-block/handler/image/templates');
     }
 
     /**
