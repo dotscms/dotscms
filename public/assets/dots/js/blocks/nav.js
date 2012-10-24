@@ -46,9 +46,10 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
         var pos = $item.prevAll('[data-dots-type="dots-nav-item"]').length + 1;
         var data = {
             alias: Dots.Pages.Model.Page.getAlias(),
-            model: self.model,
+            block_id: self.model.id,
             id: $item.attr('data-block-nav-id')
         };
+
         Dots.View.Dialog.open({
             url:'/dots/nav-block/edit/',
             id:'dotsBlockNav_EditDialog',
