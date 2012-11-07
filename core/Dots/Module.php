@@ -30,8 +30,11 @@ class Module implements AutoloaderProviderInterface
         // set up view helper manager to allow addition of helper classes via the config file
         $config = $serviceManager->get('Configuration');
         $helperManager = $serviceManager->get('ViewHelperManager');
+        $twigEnvironment = $serviceManager->get('TwigEnvironment');
+        $manager = $twigEnvironment->manager();
         foreach ($config['view_manager']['helper_map'] as $alias => $class) {
             $helperManager->setInvokableClass($alias, $class);
+            $manager->setInvokableClass($alias, $class);
         }
     }
 

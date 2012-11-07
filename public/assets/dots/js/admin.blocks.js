@@ -241,6 +241,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
                         }
                     }
                 });
+                return false;
             }
         });
         return false;
@@ -292,14 +293,14 @@ Dots.Blocks.View.Block = Backbone.View.extend({
 }, {
     init: function (){
         Dots.Events.on('section.addBlock', this._addBlockToSection, this);
-        Dots.Events.on('section.blocks.init.html_content section.blocks.init.image_content', function(view, block){
+        Dots.Events.on('section.blocks.init.html_content section.blocks.init.image_content', function(sectionView, block){
             var $block = $(block);
             var model = new Dots.Blocks.Model.Block({
                 id:$block.attr('data-block'),
                 type:$block.attr('data-block-type'),
                 position:$block.attr('data-block-position')
             });
-            view.model.getBlocks().add(model, {at:model.get('position')});
+            sectionView.model.getBlocks().add(model, {at:model.get('position')});
             new Dots.Blocks.View.Block({el:block, model:model});
         }, this);
         this.setupMoveHandler();
@@ -321,9 +322,13 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             var $currentBlock = $(html);
             $currentBlock.addClass('edit-dots-block');
             view.$el.append($currentBlock);
-            var blockView = new Dots.Blocks.View.Block({el:$currentBlock[0], model:blockModel});
-            blockView.initEditors();
-            view.model.getBlocks().add(blockModel);
+            Dots.Events.trigger('section.blocks.init.'+type, view, $currentBlock[0]);
+//            var $currentBlock = $(html);
+//            $currentBlock.addClass('edit-dots-block');
+//            view.$el.append($currentBlock);
+//            var blockView = new Dots.Blocks.View.Block({el:$currentBlock[0], model:blockModel});
+//            blockView.initEditors();
+//            view.model.getBlocks().add(blockModel);
         }, 'text');
     },
     setupMoveHandler:function () {

@@ -1,27 +1,28 @@
 {
-    "hash": "dec4aa6c6e2558ea385a8ab14d63c9b1",
+    "hash": "22108c393c30953ad8b6022cbfe68768",
     "packages": [
         {
             "name": "twig/twig",
-            "version": "v1.9.2",
+            "version": "v1.10.3",
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.9.2"
+                "reference": "v1.10.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/v1.9.2",
-                "reference": "v1.9.2",
+                "url": "https://github.com/fabpot/Twig/zipball/v1.10.3",
+                "reference": "v1.10.3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "time": "2012-10-19 03:45:49",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.10-dev"
                 }
             },
             "installation-source": "dist",
@@ -36,15 +37,11 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": null,
-                    "role": null
+                    "email": "fabien@symfony.com"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "homepage": null,
-                    "role": null
+                    "email": "armin.ronacher@active-4.com"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -161,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3"
+                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/zipball/1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3",
-                "reference": "1d12f86e95fe2a0a4f4ec3767c4e9b0b27e57fc3",
+                "url": "https://github.com/zendframework/zf2/archive/ef6320a48cfe3dbdf28421a78f007e2b304c9fc7.zip",
+                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7",
                 "shasum": ""
             },
             "require": {
@@ -222,7 +219,8 @@
                 "zendframework/zend-i18n": "self.version"
             },
             "require-dev": {
-                "doctrine/common": ">=2.1"
+                "doctrine/common": ">=2.1",
+                "phpunit/phpunit": "3.7.*"
             },
             "suggest": {
                 "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
@@ -231,6 +229,10 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
             },
+            "time": "1352128732",
+            "bin": [
+                "bin/classmap_generator.php"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -252,8 +254,7 @@
             "keywords": [
                 "framework",
                 "zf2"
-            ],
-            "time": "1349288335"
+            ]
         },
         {
             "name": "zf-commons/zfc-twig",
@@ -261,18 +262,19 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/ZF-Commons/ZfcTwig.git",
-                "reference": "cdc570cff5d710555426a86d9cde967e05867176"
+                "reference": "bced0be50e2401aa95468cfba71bc226f1492f4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZF-Commons/ZfcTwig/zipball/cdc570cff5d710555426a86d9cde967e05867176",
-                "reference": "cdc570cff5d710555426a86d9cde967e05867176",
+                "url": "https://github.com/ZF-Commons/ZfcTwig/archive/ca5939a2466b9a8a54182dc4e36bc947f6c5deff.zip",
+                "reference": "bced0be50e2401aa95468cfba71bc226f1492f4a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "twig/twig": "1.9.*"
+                "twig/twig": "1.10.*"
             },
+            "time": "1347868568",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -301,8 +303,7 @@
                 "twig",
                 "zf2",
                 "module"
-            ],
-            "time": "1347966322"
+            ]
         }
     ],
     "packages-dev": null,

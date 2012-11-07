@@ -2,7 +2,7 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework":"dev-master",
-        "zf-commons/zfc-twig": "dev-master",
+        "zf-commons/zfc-twig": "dev-master#bced0be50e2401aa95468cfba71bc226f1492f4a",
         "zendexperts/ze-db":"dev-master",
         "zendexperts/ze-theme":"dev-master"
     },

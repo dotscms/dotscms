@@ -66,7 +66,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
     }
 
     /**
-     * Get Content Handler
+     * Return ContentHandler instance for the navigation block
      * @return ContentHandler
      */
     public function getHandler()
@@ -77,13 +77,18 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $this->handler;
     }
 
+    /**
+     * Render the templates that should be used on the edit page for navigation
+     * @param \Zend\EventManager\Event $event
+     * @return string
+     */
     public function initTemplates(Event $event)
     {
         return $this->renderViewModel('dots-block/handler/navigation/templates');
     }
 
     /**
-     * Add code in the header section of the page
+     * Add code in the header section of the page for the admin area
      * @param \Zend\EventManager\Event $event
      */
     public function initHeaders(Event $event)
@@ -112,12 +117,16 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         ));
     }
 
+    /**
+     * Returns a JsonModel that contains a list of all the pages that contain the provided query
+     * @return \Zend\View\Model\JsonModel
+     */
     public function getPagesAction()
     {
         $locator = Registry::get('service_locator');
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
-        $QUERY = $this->getRequest()->getQuery()->toArray();
-        $pages = $modelPage->getAllLikeTitle('%' . $QUERY['term'] . '%');
+        $query = $this->getRequest()->getQuery()->toArray();
+        $pages = $modelPage->getAllLikeTitle('%' . $query['term'] . '%');
         $data = array();
         foreach($pages as $page){
             $data[] = array(
@@ -129,6 +138,10 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $this->jsonResponse($data);
     }
 
+    /**
+     * Remove a navigation item
+     * @return \Zend\View\Model\JsonModel
+     */
     public function removeAction()
     {
         $locator = Registry::get('service_locator');
@@ -140,20 +153,27 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $this->jsonResponse(array('success' => true, 'id' => $nav_id));
     }
 
+    /**
+     * Render the add navigation item page
+     * @return \Zend\Stdlib\ResponseInterface
+     */
     public function addAction()
     {
-        $form = $this->getEditForm();
+        $form = $this->getEditItemForm();
         $response = $this->getResponse();
         $content = $this->renderViewModel('dots-block/handler/navigation/item-add', array('form' => $form));
         $response->setContent($content);
         return $response;
     }
 
+    /**
+     * Render the edit navigation item page
+     * @return \Zend\Stdlib\ResponseInterface
+     */
     public function editAction()
     {
         $locator = Registry::get('service_locator');
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
-        $modelBlock = $locator->get('DotsBlock\Db\Model\Block');
         $modelNavBlock = $locator->get('DotsBlock\Db\Model\NavigationBlock');
         $QUERY = $this->getRequest()->getQuery()->toArray();
         $nav = $modelNavBlock->getById($QUERY['id']);
@@ -170,7 +190,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
                 break;
         }
 
-        $form = $this->getEditForm();
+        $form = $this->getEditItemForm();
         $form->setData(array('navigation'=>$data));
         $response = $this->getResponse();
         $content = $this->renderViewModel('dots-block/handler/navigation/item-edit', array('form' => $form));
@@ -178,6 +198,10 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $response;
     }
 
+    /**
+     * Persist changes to a navigation item
+     * @return \Zend\View\Model\JsonModel
+     */
     public function saveAction()
     {
         $locator = Registry::get('service_locator');
@@ -186,7 +210,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         $modelNavBlock = $locator->get('DotsBlock\Db\Model\NavigationBlock');
 
         $POST = $this->getRequest()->getPost()->toArray();
-        $form = $this->getEditForm();
+        $form = $this->getEditItemForm();
         $form->setData($POST);
         if ($form->isValid()){
             $data = $form->getInputFilter()->getValues();
@@ -239,19 +263,28 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         ));
     }
 
+    /**
+     * Move handler for navigation items
+     * @return \Zend\View\Model\JsonModel
+     */
     public function moveAction(){
-        $blockId = $_REQUEST['block_id'];
-        $navId = $_REQUEST['id'];
+        // get variables from request
+        $query = $this->getRequest()->getQuery()->toArray();
+        $blockId = $query['block_id'];
+        $navId = $query['id'];
+        $position = $query['position'];
+        // get navigation block model
         $navBlockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\NavigationBlock');
+        // get an instance of the item that changes position and set the new position
         $nav = $navBlockModel->getById($navId);
-        $position = $_REQUEST['position'];
-        $oldPosition = $nav->position;
         $nav->position = $position;
+        // get all other items from the navigation
         $items = $navBlockModel->getAllByColumnsOrderByPosition(array(
             'block_id = ?' => $blockId,
             'id != ?' => $navId
         ));
 
+        // update positions for all items
         $pos = 1;
         if ($items){
             foreach ($items as $itm){
@@ -263,6 +296,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
             }
         }
         $navBlockModel->persist($nav);
+        // save everything in the DB
         $navBlockModel->flush();
 
         return $this->jsonResponse(array('success' => true));
@@ -284,7 +318,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         } else {
             $navigationBlocks = array();
         }
-        $form = $this->getForm($navigationBlocks);
+        $form = $this->getEditBlockForm($navigationBlocks);
         return $this->renderViewModel('dots-block/handler/navigation/edit-form', array(
             'page'  => $page,
             'block' => $block,
@@ -302,7 +336,7 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         $locator = Registry::get('service_locator');
         $modelNavigationBlock = $locator->get('DotsBlock\Db\Model\NavigationBlock');
         $block = $event->getTarget();
-        $navBlock = $modelNavigationBlock->removeByBlockId($block->id);
+        $modelNavigationBlock->removeByBlockId($block->id);
         $block->delete();
         return true;
     }
@@ -317,6 +351,12 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return new JsonModel($data);
     }
 
+    /**
+     * Render a specific template
+     * @param null $template
+     * @param array $vars
+     * @return string
+     */
     private function renderViewModel($template = null, $vars = array())
     {
         $view = Registry::get('service_locator')->get('view');
@@ -331,10 +371,8 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
      * @param null $navigationBlocks
      * @return \Dots\Form\MultiForm
      */
-    public function getForm($navigationBlocks = null)
+    public function getEditBlockForm($navigationBlocks = null)
     {
-        $locator = Registry::get('service_locator');
-        $view = $locator->get('view');
         $form = new MultiForm(array());
         $form->setParams(array(
             'items' => $navigationBlocks
@@ -342,10 +380,11 @@ class NavigationHandler extends AbstractActionController implements HandlerAware
         return $form;
     }
 
-    public function getEditForm($data = null)
+    /**
+     * Get edit navigation item form
+     */
+    public function getEditItemForm($data = null)
     {
-        $locator = Registry::get('service_locator');
-        $view = $locator->get('view');
         $navForm = new NavigationContentForm();
         $form = new MultiForm(array('navigation'=>$navForm));
         if ($data!==null)

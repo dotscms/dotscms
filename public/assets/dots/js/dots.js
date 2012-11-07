@@ -24,35 +24,35 @@ Backbone.emulateJSON = true;
 /**
  * Architecture class that allows the extension of JS classes to completely overwrite any functionality in the application core
  */
-Dots.namespace("Dots.Arch");
-Dots._Arch = function(classes){
-    this.classes = classes || {};
-
-};
-_.extend(Dots._Arch.prototype, {}, {
-    get: function (name) {
-        if (!this.has(name)) {
-            name = name.replace(/\.([^\.]*)$/, '._default');
-        }
-        if (this.classes[name]) {
-            return this.classes[name];
-        }
-        throw new Error('Invalid architectural block requested: "' + name +'".');
-    },
-
-    has: function (name) {
-        return (this.classes[name] != undefined);
-    },
-
-    set: function (name, func) {
-        this.classes[name] = func;
-    },
-    getObject: function (name, opts) {
-        var cls = this.get(name);
-        return new cls(opts);
-    }
-});
-Dots.arch = new Dots._Arch();
+//Dots.namespace("Dots.Arch");
+//Dots._Arch = function(classes){
+//    this.classes = classes || {};
+//
+//};
+//_.extend(Dots._Arch.prototype, {}, {
+//    get: function (name) {
+//        if (!this.has(name)) {
+//            name = name.replace(/\.([^\.]*)$/, '._default');
+//        }
+//        if (this.classes[name]) {
+//            return this.classes[name];
+//        }
+//        throw new Error('Invalid architectural block requested: "' + name +'".');
+//    },
+//
+//    has: function (name) {
+//        return (this.classes[name] != undefined);
+//    },
+//
+//    set: function (name, func) {
+//        this.classes[name] = func;
+//    },
+//    getObject: function (name, opts) {
+//        var cls = this.get(name);
+//        return new cls(opts);
+//    }
+//});
+//Dots.arch = new Dots._Arch();
 
 /**
  * Dots Events
@@ -121,7 +121,7 @@ Dots.View.Dialog = Backbone.View.extend({
                 }
             }
         });
-        return this;
+        return false;
     },
     //render the dialog based on the provided options
     render: function(){
