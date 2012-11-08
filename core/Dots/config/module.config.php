@@ -29,6 +29,9 @@ return array(
         'template_path_stack' => array(
             'dots' => __DIR__ . '/../views',
         ),
+        'template_map' => array(
+            'layouts/layout' => __DIR__ . '/../views/layouts/layout.twig',
+        ),
         'helper_map' => array(
             'dotsNav' => 'Dots\\View\\Helper\\DotsNav',
             'dotsForm' => 'Dots\\View\\Helper\\DotsForm',

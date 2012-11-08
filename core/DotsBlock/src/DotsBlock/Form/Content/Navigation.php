@@ -129,7 +129,8 @@ class Navigation extends Form
                 'link' => array(
                     'required' => false,
                     'validators' => array(
-                        new UrlValidator()
+                        //@todo Replace the URL validator with a path and url validator
+//                        new UrlValidator()
                     )
                 ),
                 'page' => array('required' => false),

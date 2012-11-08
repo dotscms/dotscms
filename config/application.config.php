@@ -1,11 +1,9 @@
 <?php
 return array(
     'modules' => array(
-//        'Application',
         'ZfcTwig',       //Template engine module: defines how the template files should be processed
         'ZeDb',         //Database abstraction layer: defines how the application exchanges data with the database server
         'ZeAuth',       //Allows user accounts to log into the application
-        'Core',         //Contains core functionality like homepages and default routes
         'Dots', 'DotsBlock', 'DotsPages',
         'ZeTheme',        //Contains html design elements and themes
     ),
