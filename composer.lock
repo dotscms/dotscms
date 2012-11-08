@@ -1,5 +1,5 @@
 {
-    "hash": "22108c393c30953ad8b6022cbfe68768",
+    "hash": "316c200e5cd8812195bf108d4c948405",
     "packages": [
         {
             "name": "twig/twig",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7"
+                "reference": "18bce16cdda7c0bb4d95e5d51d014f7ffc66475a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/ef6320a48cfe3dbdf28421a78f007e2b304c9fc7.zip",
-                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7",
+                "url": "https://github.com/zendframework/zf2/archive/18bce16cdda7c0bb4d95e5d51d014f7ffc66475a.zip",
+                "reference": "18bce16cdda7c0bb4d95e5d51d014f7ffc66475a",
                 "shasum": ""
             },
             "require": {
@@ -229,7 +229,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
             },
-            "time": "1352128732",
+            "time": "1352323363",
             "bin": [
                 "bin/classmap_generator.php"
             ],

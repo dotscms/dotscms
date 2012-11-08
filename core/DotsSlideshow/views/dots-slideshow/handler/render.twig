@@ -1,0 +1,11 @@
+<div class="slider-wrapper theme-default">
+    <div id="slider" class="nivoSlider">
+        {% for image in images %}
+            <img src="{% image.src %}" data-thumb="{% image.src %}" alt="{% image.alt %}"
+                    {% if image.caption %}
+                        title="image.caption"
+                    {% endif %}
+                    />
+        {% endfor %}
+    </div>
+</div>
