@@ -1,0 +1,19 @@
+{% block html %}
+{{ doctype('XHTML11') }}
+<html lang="en">
+
+    {# HTML HEAD SECTION#}
+    <head>
+        <base href="{{ basePath() }}/" />
+        {{ headTitle() }}
+        {{ headMeta() }}
+        {% block head %}{% endblock %}
+    </head>
+
+    {# HTML BODY SECTION#}
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+
+</html>
+{% endblock %}

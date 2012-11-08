@@ -1,0 +1,16 @@
+{% extends 'layout/html' %}
+
+{# DEFAULT HTML HEAD CONTENTS FOR ALL PAGES #}
+{% block head %}
+    {{ headScript() }}
+    <link rel="shortcut icon" href="/assets/default/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/default/css/default.css" />
+    {{ headLink() }}
+    {{ headStyle() }}
+{% endblock %}
+
+{# DEFAULT HTML BODY CONTENT FOR ALL PAGES #}
+{% block body %}
+    {{ content | raw }}
+{% endblock %}
