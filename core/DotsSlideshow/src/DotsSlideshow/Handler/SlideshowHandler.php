@@ -70,7 +70,7 @@ class SlideshowHandler implements HandlerAware
     public function getHandler()
     {
         if (!$this->handler){
-            $this->handler = new ContentHandler(static::TYPE, 'Slideshow Content');
+            $this->handler = new ContentHandler(static::TYPE, 'Slideshow');
         }
         return $this->handler;
     }
@@ -100,9 +100,9 @@ class SlideshowHandler implements HandlerAware
         $view = $event->getTarget();
         $view->plugin('headScript')->appendFile('/assets/nivo_slider/jquery.nivo.slider.pack.js');
         $view->plugin('headLink')->appendStylesheet('/assets/nivo_slider/nivo-slider.css');
-        $view->plugin('headScript')->appendFile('/assets/file-upload/js/vendor/jquery.ui.widget.js')
-            ->appendFile('/assets/file-upload/js/jquery.iframe-transport.js')
-            ->appendFile('/assets/file-upload/js/jquery.fileupload.js');
+        $view->plugin('headScript')->appendFile('/assets/file_upload/js/vendor/jquery.ui.widget.js')
+            ->appendFile('/assets/file_upload/js/jquery.iframe-transport.js')
+            ->appendFile('/assets/file_upload/js/jquery.fileupload.js');
     }
     /**
      * Render slideshow block
@@ -152,11 +152,7 @@ class SlideshowHandler implements HandlerAware
         }else{
             $slideshowBlock = new SlideshowBlock();
         }
-//        $form = new MultiForm(array(
-//            'image_content' => new ImageContentForm($slideshowBlock)
-//        ));
-//        $form->addButtons();
-//        $form->setData(array('image_content'=>$imageBlock->toArray()));
+
         return $this->renderViewModel('dots-slideshow/handler/edit', array(
             'page' => $page,
             'block' => $block,

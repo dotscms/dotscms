@@ -1,10 +1,5 @@
 <h1>An error occurred</h1>
 <h2>{{message}}</h2>
-
-{% if isset(display_exception) and display_exceptions %}
-
-{% if isset(exception) and is_a(exception, 'Exception') %}
-<hr/>
 <h2>Additional information:</h2>
 <h3>{{get_class(exception)}}</h3>
 <dl>
@@ -21,6 +16,11 @@
         <pre class="prettyprint linenums">{{exception.getTraceAsString()}}</pre>
     </dd>
 </dl>
+{% if display_exception and display_exceptions %}
+
+{% if exception and is_a(exception, 'Exception') %}
+<hr/>
+
 {% else %}
 
 <h3>No Exception available</h3>

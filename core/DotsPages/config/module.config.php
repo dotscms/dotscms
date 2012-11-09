@@ -45,6 +45,7 @@ return array(
                     ),
                 ),
             ),
+
             'dots-page' => array(
                 'type' => 'DotsPages\Router\Page',
                 'options' => array(
