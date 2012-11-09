@@ -1,5 +1,5 @@
 {
-    "hash": "22108c393c30953ad8b6022cbfe68768",
+    "hash": "9c905f95e1c24728dbfe3e84ccae13cf",
     "packages": [
         {
             "name": "twig/twig",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7"
+                "reference": "4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/ef6320a48cfe3dbdf28421a78f007e2b304c9fc7.zip",
-                "reference": "ef6320a48cfe3dbdf28421a78f007e2b304c9fc7",
+                "url": "https://github.com/zendframework/zf2/archive/4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4.zip",
+                "reference": "4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4",
                 "shasum": ""
             },
             "require": {
@@ -229,14 +229,15 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
             },
-            "time": "1352128732",
+            "time": "1352398806",
             "bin": [
                 "bin/classmap_generator.php"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.0-dev",
+                    "dev-develop": "2.1-dev"
                 }
             },
             "installation-source": "source",
@@ -258,23 +259,23 @@
         },
         {
             "name": "zf-commons/zfc-twig",
-            "version": "dev-master",
+            "version": "dev-cleanup",
             "source": {
                 "type": "git",
-                "url": "git://github.com/ZF-Commons/ZfcTwig.git",
-                "reference": "bced0be50e2401aa95468cfba71bc226f1492f4a"
+                "url": "https://github.com/Rovak/ZfcTwig.git",
+                "reference": "c422e79d1486e04e9920cb0fb3d73137fef67d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZF-Commons/ZfcTwig/archive/ca5939a2466b9a8a54182dc4e36bc947f6c5deff.zip",
-                "reference": "bced0be50e2401aa95468cfba71bc226f1492f4a",
+                "url": "https://github.com/Rovak/ZfcTwig/archive/c422e79d1486e04e9920cb0fb3d73137fef67d1e.zip",
+                "reference": "c422e79d1486e04e9920cb0fb3d73137fef67d1e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "twig/twig": "1.10.*"
             },
-            "time": "1347868568",
+            "time": "1352398668",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -301,9 +302,12 @@
             "homepage": "http://www.github.com/ZF-Commons/ZfcTwig/",
             "keywords": [
                 "twig",
-                "zf2",
-                "module"
-            ]
+                "module",
+                "zf2"
+            ],
+            "support": {
+                "source": "https://github.com/Rovak/ZfcTwig/tree/cleanup"
+            }
         }
     ],
     "packages-dev": null,

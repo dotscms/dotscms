@@ -31,7 +31,7 @@ class Module implements AutoloaderProviderInterface
         $config = $serviceManager->get('Configuration');
         $helperManager = $serviceManager->get('ViewHelperManager');
         $twigEnvironment = $serviceManager->get('TwigEnvironment');
-        $manager = $twigEnvironment->manager();
+        $manager = $twigEnvironment->getManager();
         foreach ($config['view_manager']['helper_map'] as $alias => $class) {
             $helperManager->setInvokableClass($alias, $class);
             $manager->setInvokableClass($alias, $class);
@@ -51,11 +51,6 @@ class Module implements AutoloaderProviderInterface
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
-    }
-
-    public function getServiceConfig()
-    {
-        return array();
     }
 
 }
