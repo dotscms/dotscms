@@ -1,14 +1,20 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsBlock\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Json\Encoder;
 use Zend\View\Model\JsonModel;
 
 use Dots\Registry;
 use Dots\Form\MultiForm;
-use DotsBlock\Db\Entity;
 use DotsBlock\Db\Entity\Block;
 use DotsBlock\Form\Setting\DefaultBlockSettingsForm;
 
@@ -83,12 +89,12 @@ class BlockController extends AbstractActionController
 
                 break;
             case 'DELETE':
-                var_dump($_POST);
+                echo "DELETE block model not implemented yet.\n\n";
                 var_dump($_REQUEST);
                 exit;
                 break;
             case 'GET':
-                var_dump($_POST);
+                echo "GET block model not implemented yet.\n\n";
                 var_dump($_REQUEST);
                 exit;
                 break;
@@ -170,74 +176,6 @@ class BlockController extends AbstractActionController
         }
 
         return $this->jsonResponse(array('success' => true));
-
-
-        //DEPRECATED CODE
-
-
-        $request = $this->getRequest();
-        $blockId = $request->getQuery('block_id',null);
-        $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
-        $block = $blockModel->getById($blockId);
-        $fromSection = $block->section;
-        $toSection = $request->getQuery('to', null);
-        $alias = $request->getQuery('alias', null);
-        $position = $request->getQuery('position', 1);
-        $pageId = $block->page_id;
-        $oldPosition = $block->position;
-        $block->section = $toSection;
-        $block->position = $position;
-        if ($fromSection==$toSection){
-            $blocks = $blockModel->getAllByColumnsOrderByPosition(array(
-                'page_id = ?' => $pageId,
-                'section = ?' => $fromSection,
-                'id != ?' => $blockId
-            ));
-            $pos = 1;
-            if ($blocks){
-                foreach ($blocks as $blk){
-                    if ($pos == $position) {
-                        $pos++;
-                    }
-                    $blk->position = $pos++;
-                    $blockModel->persist($blk);
-                }
-            }
-            $blockModel->persist($block);
-
-        }else{
-            $fromBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
-                'page_id = ?' => $pageId,
-                'section = ?' => $fromSection,
-                'id != ?' => $blockId
-            ));
-            $pos = 1;
-            if ($fromBlocks) {
-                foreach ($fromBlocks as $blk) {
-                    $blk->position = $pos++;
-                    $blockModel->persist($blk);
-                }
-            }
-            $toBlocks = $blockModel->getAllByColumnsOrderByPosition(array(
-                'page_id = ?' => $pageId,
-                'section = ?' => $toSection,
-                'id != ?' => $blockId
-            ));
-            $pos = 1;
-            if ($toBlocks) {
-                foreach ($toBlocks as $blk) {
-                    if ($block->position == $pos){
-                        $pos++;
-                    }
-                    $blk->position = $pos++;
-                    $blockModel->persist($blk);
-                }
-            }
-            $blockModel->persist($block);
-        }
-        $blockModel->flush();
-
-        return $this->jsonResponse(array('success' => true));
     }
 
     /**
@@ -308,7 +246,7 @@ class BlockController extends AbstractActionController
     /**
      * Check if the form is valid and return a response object if invalid
      * @param $form
-     * @return bool|\Zend\Stdlib\ResponseDescription
+     * @return bool|\Zend\View\Model\ModelInterface
      */
     private function handleErrors($form)
     {
@@ -326,7 +264,7 @@ class BlockController extends AbstractActionController
     /**
      * Create a json response based on the data
      * @param $data
-     * @return \Zend\Stdlib\ResponseDescription
+     * @return \Zend\View\Model\ModelInterface
      */
     private function jsonResponse ($data)
     {

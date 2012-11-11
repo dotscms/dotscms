@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsBlock;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -34,9 +42,9 @@ class BlockManager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @param HandlerAware $contentHandler
+     * @param HandlerInterface $contentHandler
      */
-    public function addContentHandler(HandlerAware $contentHandler)
+    public function addContentHandler(HandlerInterface $contentHandler)
     {
         $this->contentHandlers[] = $contentHandler;
     }

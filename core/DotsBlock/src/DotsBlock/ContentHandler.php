@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsBlock;
 
 /**
@@ -14,8 +22,6 @@ class ContentHandler
      * Content Handler constructor
      * @param null $alias
      * @param null $name
-     * @param null $renderCallback
-     * @param null $editCallback
      */
     public function __construct($alias = null, $name = null){
         $this->alias = $alias;
@@ -25,7 +31,8 @@ class ContentHandler
 
     /**
      * Set alias
-     * @param $alias
+     * @param string $alias
+     * @return \DotsBlock\ContentHandler
      */
     public function setAlias($alias){
         $this->alias = $alias;
@@ -42,7 +49,8 @@ class ContentHandler
 
     /**
      * Set name
-     * @param $name
+     * @param string $name
+     * @return \DotsBlock\ContentHandler
      */
     public function setName($name){
         $this->name = $name;

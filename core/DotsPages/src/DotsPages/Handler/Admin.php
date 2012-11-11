@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsPages\Handler;
 
 use Dots\Registry;
@@ -13,10 +21,8 @@ class Admin
         $serviceLocator = Registry::get('service_locator');
         $view = $serviceLocator->get('TwigViewRenderer');
 
-        //append css code
-        $view->plugin('headLink')->appendStylesheet('/assets/dots/css/admin.css');
         //append javascript code
-        $view->plugin('headScript')->appendFile('/assets/dots/js/pages/admin.js');
+        $view->plugin('headScript')->appendFile('/assets/dots-pages/js/admin.js');
     }
 
     public static function renderNav(Event $event)

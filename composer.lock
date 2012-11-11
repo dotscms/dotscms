@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4"
+                "reference": "06f30d03a15692411b47401a69c6c5c2f2316e3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4.zip",
-                "reference": "4fdb7ff7fe8aa6659feba7bea4f1ee1f3f1a3cf4",
+                "url": "https://github.com/zendframework/zf2/archive/06f30d03a15692411b47401a69c6c5c2f2316e3b.zip",
+                "reference": "06f30d03a15692411b47401a69c6c5c2f2316e3b",
                 "shasum": ""
             },
             "require": {
@@ -229,7 +229,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
             },
-            "time": "1352398806",
+            "time": "1352474621",
             "bin": [
                 "bin/classmap_generator.php"
             ],
@@ -263,19 +263,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Rovak/ZfcTwig.git",
-                "reference": "c422e79d1486e04e9920cb0fb3d73137fef67d1e"
+                "reference": "5d1e273ef98b7eee21fd5ca456a84609fd0274e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Rovak/ZfcTwig/archive/c422e79d1486e04e9920cb0fb3d73137fef67d1e.zip",
-                "reference": "c422e79d1486e04e9920cb0fb3d73137fef67d1e",
+                "url": "https://github.com/Rovak/ZfcTwig/archive/5d1e273ef98b7eee21fd5ca456a84609fd0274e6.zip",
+                "reference": "5d1e273ef98b7eee21fd5ca456a84609fd0274e6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "twig/twig": "1.10.*"
             },
-            "time": "1352398668",
+            "time": "1352493784",
             "type": "library",
             "installation-source": "source",
             "autoload": {

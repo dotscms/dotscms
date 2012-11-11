@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsPages;
 use Zend\EventManager\StaticEventManager;
 
@@ -13,7 +21,7 @@ class Dispatcher
                 'priority' => 100
             ),
             array(
-                'event' => 'dots:admin/menu',
+                'event' => 'dots:admin.menu',
                 'handler' => 'renderNav'
             )
         )

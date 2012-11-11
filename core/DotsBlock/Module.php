@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace DotsBlock;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -19,10 +27,6 @@ class Module implements AutoloaderProviderInterface
         $serviceManager = $app->getServiceManager();
         $blockManager = $serviceManager->get('DotsBlockManager');
         Registry::set('block_manager', $blockManager);
-        GlobalEventManager::attach('admin.head.pre',function (Event $event){
-            $view = $event->getTarget();
-            $view->plugin('headScript')->appendFile('/assets/dots/js/admin.blocks.js');
-        }, 150);
     }
 
     /**

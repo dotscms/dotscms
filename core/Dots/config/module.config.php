@@ -5,20 +5,27 @@ return array(
             'events'=>array(
                 'head.pre'=>array(
                     'scripts'=>array(
-                        '/assets/default/js/html5.js',
-                        '/assets/default/js/jquery.min.js',
-                        '/assets/default/js/jquery-ui.min.js',
-                        '/assets/bootstrap/js/bootstrap.min.js',
-                        '/assets/default/js/underscore.min.js',
-                        '/assets/default/js/json2.js',
-                        '/assets/default/js/backbone.min.js',
+                        'html5'         => '/assets/dots/lib/html5.js',
+                        'jquery'        => '/assets/dots/lib/jquery.min.js',
+                        'jquery-ui'     => '/assets/dots/lib/jquery-ui/js/jquery-ui.min.js',
+                        'bootstrap'     => '/assets/dots/lib/bootstrap/js/bootstrap.min.js',
+                        'underscore'    => '/assets/dots/lib/underscore.min.js',
+                        'json2'         => '/assets/dots/lib/json2.js',
+                        'backbone'      => '/assets/dots/lib/backbone.min.js',
+                    ),
+                    'links'=>array(
+                        'bootstrap'     => '/assets/dots/lib/bootstrap/css/bootstrap.min.css',
+                        'dots'          => '/assets/dots/css/default.css'
                     )
                 ),
                 'admin.head.pre' => array(
                     'scripts' => array(
-                        '/assets/default/js/jquery.form.js',
-                        '/assets/default/js/jquery.json.js',
-                        '/assets/dots/js/dots.js',
+                        'jquery.form'   => '/assets/dots/lib/jquery.form.js',
+                        'jquery.json'   => '/assets/dots/lib/jquery.json.js',
+                        'dots'          => '/assets/dots/js/dots.js',
+                    ),
+                    'links' => array(
+                        'dots' => '/assets/dots/css/admin.css'
                     )
                 )
             )
