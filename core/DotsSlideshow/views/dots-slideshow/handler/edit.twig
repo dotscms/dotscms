@@ -1,0 +1,60 @@
+<div class="slideshow-wrapper">
+    <div class="slideshow-images">
+        <ul class="thumbnails">
+            {% for image in slideshowImages %}
+                <li>
+                    <div class="thumbnail">
+                        <img data-id="{{ image.id }}" data-filname="{{ filename }}" class="slideshow-image" src="{{ image.src }}"/>
+                        <div class="caption">
+                            <label for="thumbnail-caption">Caption</label>
+                            <textarea name="thumbnail-caption" class="thumbnail-caption" cols="30" rows="10"></textarea>
+                            <p>
+                                <a href="#" class="save-thumbnail btn btn-success">Save</a>
+                                <a href="#" class="delete-thumbnail btn btn-danger">Delete</a>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <hr>
+    <div class="upload-area">
+        <input class="fileupload" type="file" name="files[]" data-url="dots/slideshow/upload" multiple>
+    </div>
+    <hr>
+    <div class="slideshow-options">
+        <form action="">
+            <div class="control-group">
+                <label class="control-label" for="slideshowEffect">Effect</label>
+
+                <div class="controls">
+                    <select id="slideshowEffect">
+                        {% for effect in slideshowEffects %}
+                            <option value="{{ effect }}">{{ effect }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="animSpeed">Animation Speed</label>
+
+                <div class="controls">
+                    <input type="text" class="animSpeed" value="{{ slideshowBlock.animSpeed }}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pauseTime">Pause Time</label>
+
+                <div class="controls">
+                    <input type="text" class="pauseTime" value="{{ slideshowBlock.pauseTime }}">
+                </div>
+            </div>
+
+        </form>
+        <button class="cancel-slideshow btn">Cancel</button>
+        <button class="save-slideshow btn btn-primary">Save</button>
+    </div>
+
+
+</div>

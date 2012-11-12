@@ -37,4 +37,5 @@ return array(
             'dotsForm' => 'Dots\\View\\Helper\\DotsForm',
         )
     ),
+
 );

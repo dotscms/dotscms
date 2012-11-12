@@ -5,6 +5,7 @@
 return array(
     'ze-auth' => array(
         'restricted_routes' => array(),
+        'home_route' => 'dots-page',
     ),
 
     //Router Service

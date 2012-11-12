@@ -22,6 +22,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'DotsSlideshow\Handler\SlideshowHandler' => 'DotsSlideshow\Handler\SlideshowHandler',
+            'DotsSlideshow\Controller\SlideshowController' => 'DotsSlideshow\Controller\SlideshowController'
         ),
     ),
 
@@ -36,7 +37,7 @@ return array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
-                        'controller' => 'DotsSlideshow\Controller\Slideshow',
+                        'controller' => 'DotsSlideshow\Controller\SlideshowController',
                         'action' => 'index',
                     ),
                 ),

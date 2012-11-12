@@ -14,6 +14,7 @@ use DotsBlock\Form\Content\Html as HtmlContentForm;
 use DotsBlock\ContentHandler;
 use DotsBlock\HandlerAware;
 use DotsSlideshow\Db\Entity\SlideshowBlock;
+use DotsSlideshow\Db\Entity\SlideshowImage;
 
 class SlideshowHandler implements HandlerAware
 {
@@ -102,7 +103,8 @@ class SlideshowHandler implements HandlerAware
         $view->plugin('headLink')->appendStylesheet('/assets/nivo_slider/nivo-slider.css');
         $view->plugin('headScript')->appendFile('/assets/file_upload/js/vendor/jquery.ui.widget.js')
             ->appendFile('/assets/file_upload/js/jquery.iframe-transport.js')
-            ->appendFile('/assets/file_upload/js/jquery.fileupload.js');
+            ->appendFile('/assets/file_upload/js/jquery.fileupload.js')
+            ->appendFile('/assets/dots_slideshow/slideshow.js');
     }
     /**
      * Render slideshow block
@@ -117,7 +119,7 @@ class SlideshowHandler implements HandlerAware
         $slideshowModel = $locator->get('DotsSlideshow\Db\Model\SlideshowBlock');
         $slideshowBlock = $slideshowModel->getByBlockId($block->id);
         $slideshowImagesModel = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
-        $slideshowImages = $slideshowImagesModel->getAllBySlideshowId($slideshowBlock['id']);
+        $slideshowImages = $slideshowImagesModel->getAllBySlideshowId($slideshowBlock->id);
         return $this->renderViewModel('dots-slideshow/handler/render', array(
             'page' => $page,
             'block' => $block,
@@ -152,11 +154,19 @@ class SlideshowHandler implements HandlerAware
         }else{
             $slideshowBlock = new SlideshowBlock();
         }
-
+        if($slideshowBlock->id){
+            $slideshowImagesModel = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
+            $slideshowImages = $slideshowImagesModel->getAllBySlideshowIdSortByOrder($slideshowBlock->id);
+        }else{
+            $slideshowImages = array();
+        }
+        $slideshowEffects = array("sliceDown","sliceDownLeft","sliceUp","sliceUpLeft","sliceUpDown","sliceUpDownLeft","fold","fade","random","slideInRight","slideInLeft","boxRandom","boxRain","boxRainReverse","boxRainGrow","boxRainGrowReverse");
         return $this->renderViewModel('dots-slideshow/handler/edit', array(
             'page' => $page,
             'block' => $block,
             'slideshowBlock' => $slideshowBlock,
+            'slideshowImages' => $slideshowImages,
+            "slideshowEffects" => $slideshowEffects
         ));
     }
 }
