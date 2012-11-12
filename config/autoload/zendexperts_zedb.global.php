@@ -34,6 +34,14 @@ return array(
                 'tableName' => 'block_navigation',
                 'entityClass' => 'DotsNavBlock\Db\Entity\NavigationBlock',
             ),
+            'DotsSlideshow\Db\Model\SlideshowBlock' => array(
+                'tableName' => 'block_slideshows',
+                'entityClass' => 'DotsSlideshow\Db\Entity\SlideshowBlock',
+            ),
+            'DotsSlideshow\Db\Model\SlideshowImage' => array(
+                'tableName' => 'block_slideshow_images',
+                'entityClass' => 'DotsSlideshow\Db\Entity\SlideshowImage',
+            ),
         ),
     ),
 

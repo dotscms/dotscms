@@ -10,6 +10,7 @@ class SlideshowBlock extends Entity
         'block_id'      => null,
         'effect' => 'random',
         'animSpeed' => '500',
-        'pauseTime' => '3000'
+        'pauseTime' => '3000',
+        'theme' => 'default'
     );
 }

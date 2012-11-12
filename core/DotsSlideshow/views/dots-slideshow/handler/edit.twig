@@ -1,17 +1,14 @@
-<div class="slideshow-wrapper">
+<div data-id="{{ slideshowBlock.id }}" class="slideshow-wrapper">
     <div class="slideshow-images">
         <ul class="thumbnails">
             {% for image in slideshowImages %}
                 <li>
                     <div class="thumbnail">
-                        <img data-id="{{ image.id }}" data-filname="{{ filename }}" class="slideshow-image" src="{{ image.src }}"/>
+                        <a href="#" class="delete-slideshow-image">x</a>
+                        <img data-id="{{ image.id }}" data-filename="{{ image.src }}" class="slideshow-image" src="data/uploads/thumbnail/{{ image.src }}"/>
                         <div class="caption">
                             <label for="thumbnail-caption">Caption</label>
-                            <textarea name="thumbnail-caption" class="thumbnail-caption" cols="30" rows="10"></textarea>
-                            <p>
-                                <a href="#" class="save-thumbnail btn btn-success">Save</a>
-                                <a href="#" class="delete-thumbnail btn btn-danger">Delete</a>
-                            </p>
+                            <textarea name="thumbnail-caption" class="thumbnail-caption" cols="30" rows="10">{{ image.caption }}</textarea>
                         </div>
                     </div>
                 </li>
@@ -29,9 +26,26 @@
                 <label class="control-label" for="slideshowEffect">Effect</label>
 
                 <div class="controls">
-                    <select id="slideshowEffect">
+                    <select class="slideshowEffect">
                         {% for effect in slideshowEffects %}
-                            <option value="{{ effect }}">{{ effect }}</option>
+                            <option {% if slideshowBlock.effect == effect %}
+                                    selected="selected"
+                                    {% endif %}
+                                    value="{{ effect }}">{{ effect }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="slideshowTheme">Theme</label>
+
+                <div class="controls">
+                    <select class="slideshowTheme">
+                        {% for theme in slideshowThemes %}
+                            <option {% if slideshowBlock.theme == theme %}
+                                selected="selected"
+                            {% endif %}
+                                    value="{{ theme }}">{{ theme }}</option>
                         {% endfor %}
                     </select>
                 </div>

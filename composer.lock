@@ -267,13 +267,8 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
-                "url": "https://github.com/Rovak/ZfcTwig/zipball/c422e79d1486e04e9920cb0fb3d73137fef67d1e",
-                "reference": "c422e79d1486e04e9920cb0fb3d73137fef67d1e",
-=======
-                "url": "https://github.com/Rovak/ZfcTwig/archive/5d1e273ef98b7eee21fd5ca456a84609fd0274e6.zip",
+                "url": "https://github.com/Rovak/ZfcTwig/zipball/5d1e273ef98b7eee21fd5ca456a84609fd0274e6",
                 "reference": "5d1e273ef98b7eee21fd5ca456a84609fd0274e6",
->>>>>>> feature/refactor-backbone
                 "shasum": ""
             },
             "require": {

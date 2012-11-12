@@ -26,6 +26,19 @@ class SlideshowController extends AbstractActionController
 
     }
 
+    public function deleteImageAction()
+    {
+        $locator = Registry::get('service_locator');
+        $post = $this->getRequest()->getPost()->toArray();
+        $modelSlideshowImage = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
+        if($post['id']){
+            $modelSlideshowImage->removeById($post['id']);
+        }
+        $filename = IMAGE_PATH."/".$post['filename'];
+        $deleted = unlink($filename);
+        return $this->jsonResponse(array("success"=>$deleted));
+    }
+
     /**
      * Create a json response based on the data
      * @param $data
