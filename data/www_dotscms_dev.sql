@@ -269,3 +269,22 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `password_salt`, `last_login`, `role`) VALUES
 (1, 'admin', 'cosmin@around25.com', 'secret', '', NULL, 'guest');
+
+CREATE TABLE IF NOT EXISTS `block_slideshows` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `block_id` int(11) DEFAULT NULL,
+  `effect` varchar(50) DEFAULT NULL,
+  `animSpeed` int(11) DEFAULT NULL,
+  `pauseTime` int(11) DEFAULT NULL,
+  `theme` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `block_slideshow_images` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `block_slideshow_id` int(11) NOT NULL,
+  `src` varchar(250) NOT NULL DEFAULT '',
+  `caption` text,
+  `order` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
