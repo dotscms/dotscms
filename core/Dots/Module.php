@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of Dots
+ * This file is part of DotsCMS
  *
- * (c) 2012 ZendExperts <team@zendexperts.com>
+ * (c) 2012 DotsCMS <team@dotscms.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,16 +26,6 @@ class Module implements AutoloaderProviderInterface
         $jsonStrategy = $serviceManager->get('Zend\View\Strategy\JsonStrategy');
         $view = $serviceManager->get('Zend\View\View');
         $view->getEventManager()->attach($jsonStrategy, 200);
-
-        // set up view helper manager to allow addition of helper classes via the config file
-        $config = $serviceManager->get('Configuration');
-        $helperManager = $serviceManager->get('ViewHelperManager');
-        $twigEnvironment = $serviceManager->get('TwigEnvironment');
-        $manager = $twigEnvironment->getManager();
-        foreach ($config['view_manager']['helper_map'] as $alias => $class) {
-            $helperManager->setInvokableClass($alias, $class);
-            $manager->setInvokableClass($alias, $class);
-        }
     }
 
     public function getAutoloaderConfig() {

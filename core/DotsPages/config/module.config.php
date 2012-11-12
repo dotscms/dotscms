@@ -10,6 +10,12 @@ return array(
         )
     ),
 
+    'dots'=>array(
+        'view'=>array(
+
+        )
+    ),
+
     // View Manager Service
     'view_manager' => array(
         'template_path_stack' => array(

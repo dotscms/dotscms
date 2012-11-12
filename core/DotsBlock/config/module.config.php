@@ -6,31 +6,37 @@ return array(
             'dots-block' => __DIR__ . '/../views',
         ),
     ),
-    // View Manager Service
+    // Add DotsBlock extension to ZfcTwig
     'zfctwig' => array(
         'extensions' => array(
             'DotsBlock' => 'DotsBlock\Twig\Extension'
         ),
     ),
+    // Set up default blocks, css and js
     'dots'=>array(
-        'blocks'=>array(
-            'DotsBlock\Handler\HtmlHandler',
-            'DotsBlock\Handler\ImageHandler',
-            'DotsBlock\Handler\LinksHandler',
-            'DotsBlock\Handler\NavigationHandler'
-        ),
+        'blocks'=>array(),
+        'view' => array(
+            'events' => array(
+                'head.post' => array(
+                    'links' => array(
+                        'dots-block' => '/assets/dots-block/css/style.css',
+                    ),
+                ),
+                'admin.head.pre' => array(
+                    'scripts' => array(
+                        'dots-block' => '/assets/dots-block/js/admin.js',
+                    ),
+                )
+            )
+        )
     ),
-
-    // Controller Service
+    // Set up default functionality for managing blocks
     'controllers' => array(
         'invokables' => array(
             'DotsBlock\Controller\Block' => 'DotsBlock\Controller\BlockController',
-            'DotsBlock\Handler\LinksHandler' => 'DotsBlock\Handler\LinksHandler',
-            'DotsBlock\Handler\NavigationHandler' => 'DotsBlock\Handler\NavigationHandler',
         ),
     ),
-
-    //Router Service
+    // Set up default routes for dots blocks management
     'router' => array(
         'routes' => array(
             'dots-block' => array(
@@ -42,32 +48,6 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'DotsBlock\Controller\Block',
-                        'action' => 'index',
-                    ),
-                ),
-            ),
-            'dots-block-link' => array(
-                'type' => 'Segment',
-                'options' => array(
-                    'route' => '/dots/link-block[/:action][/]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'DotsBlock\Handler\LinksHandler',
-                        'action' => 'index',
-                    ),
-                ),
-            ),
-            'dots-block-navigation' => array(
-                'type' => 'Segment',
-                'options' => array(
-                    'route' => '/dots/nav-block[/:action][/]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'DotsBlock\Handler\NavigationHandler',
                         'action' => 'index',
                     ),
                 ),

@@ -18,21 +18,21 @@ return array(
                 'tableName' => 'blocks',
                 'entityClass' => 'DotsBlock\Db\Entity\Block',
             ),
-            'DotsBlock\Db\Model\HtmlBlock' => array(
+            'DotsHtmlBlock\Db\Model\HtmlBlock' => array(
                 'tableName' => 'block_html',
-                'entityClass' => 'DotsBlock\Db\Entity\HtmlBlock',
+                'entityClass' => 'DotsHtmlBlock\Db\Entity\HtmlBlock',
             ),
-            'DotsBlock\Db\Model\ImageBlock' => array(
+            'DotsImageBlock\Db\Model\ImageBlock' => array(
                 'tableName' => 'block_image',
-                'entityClass' => 'DotsBlock\Db\Entity\ImageBlock',
+                'entityClass' => 'DotsImageBlock\Db\Entity\ImageBlock',
             ),
-            'DotsBlock\Db\Model\LinkBlock' => array(
+            'DotsLinkBlock\Db\Model\LinkBlock' => array(
                 'tableName' => 'block_links',
-                'entityClass' => 'DotsBlock\Db\Entity\LinkBlock',
+                'entityClass' => 'DotsLinkBlock\Db\Entity\LinkBlock',
             ),
-            'DotsBlock\Db\Model\NavigationBlock' => array(
+            'DotsNavBlock\Db\Model\NavigationBlock' => array(
                 'tableName' => 'block_navigation',
-                'entityClass' => 'DotsBlock\Db\Entity\NavigationBlock',
+                'entityClass' => 'DotsNavBlock\Db\Entity\NavigationBlock',
             ),
         ),
     ),

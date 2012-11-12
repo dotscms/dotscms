@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of DotsCMS
+ *
+ * (c) 2012 DotsCMS <team@dotscms.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Dots\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\EventManager\Event;
@@ -25,16 +33,10 @@ class DotsNav extends AbstractHelper
         //trigger the event listeners
         $dotsBodyInline = $this->triggerInlineEvent('body.inline');
 
-        // do not render anything if not logged in
+        // do not render anything for the admin section if not logged in
         if (!$this->view->plugin("auth")->isLoggedIn()) {
             return $dotsBodyInline;
         }
-
-        GlobalEventManager::attach('admin.head.post', function(Event $event)
-        {
-            $event->getTarget()->plugin('headScript')
-                ->appendScript('$(function(){Dots.Events.trigger("init");})');
-        }, 100);
 
         // trigger the admin.head.pre event
         GlobalEventManager::trigger('admin.head.pre', $this->view);
@@ -67,7 +69,8 @@ class DotsNav extends AbstractHelper
 
     /**
      * Attach scripts and links to the view helpers based on the configuration file.
-     * @todo Handle link specification
+     * @todo Handle priority
+     * @todo Add extended specification for scripts and links
      */
     protected function attachConfigEvents()
     {
@@ -82,6 +85,11 @@ class DotsNav extends AbstractHelper
                         if (isset($options['scripts']) && is_array($options['scripts'])) {
                             foreach ($options['scripts'] as $script) {
                                 $view->plugin('headScript')->appendFile($script);
+                            }
+                        }
+                        if (isset($options['links']) && is_array($options['links'])) {
+                            foreach ($options['links'] as $script) {
+                                $view->plugin('headLink')->appendStylesheet($script);
                             }
                         }
                     }, 200);
