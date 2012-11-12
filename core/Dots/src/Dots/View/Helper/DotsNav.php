@@ -33,16 +33,10 @@ class DotsNav extends AbstractHelper
         //trigger the event listeners
         $dotsBodyInline = $this->triggerInlineEvent('body.inline');
 
-        // do not render anything if not logged in
+        // do not render anything for the admin section if not logged in
         if (!$this->view->plugin("auth")->isLoggedIn()) {
             return $dotsBodyInline;
         }
-
-        GlobalEventManager::attach('admin.head.post', function(Event $event)
-        {
-            $event->getTarget()->plugin('headScript')
-                ->appendScript('$(function(){Dots.Events.trigger("init");})');
-        }, 1);
 
         // trigger the admin.head.pre event
         GlobalEventManager::trigger('admin.head.pre', $this->view);

@@ -31,8 +31,11 @@ return array(
         'template_path_stack' => array(
             'ze-auth'       => __DIR__ . '/../views',
         ),
-        'helper_map'=>array(
-            'auth'=> __NAMESPACE__ . '\Plugin\Auth',
+    ),
+
+    'view_helpers' => array(
+        'invokables' => array(
+            'auth' => __NAMESPACE__ . '\Plugin\Auth',
         )
     ),
 
