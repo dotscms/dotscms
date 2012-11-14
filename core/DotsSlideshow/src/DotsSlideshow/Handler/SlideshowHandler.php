@@ -187,7 +187,7 @@ class SlideshowHandler implements HandlerInterface
     }
 
     /**
-     * Remove slideshow block
+     * Remove slide show block
      * @param \Zend\EventManager\Event $event
      * @return bool
      */
@@ -198,14 +198,14 @@ class SlideshowHandler implements HandlerInterface
         $modelSlideshowImage = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
         $block = $event->getTarget();
         $slideshowBlock = $modelSlideshowBlock->getByBlockId($block->id);
+        $images = $modelSlideshowImage->getAllByBlockSlideshowId($slideshowBlock->id);
         $slideshowBlock->delete();
         $block->delete();
-        $images = $modelSlideshowImage->getByBlockSlideshowId($block->id);
         if(!empty($images)){
             foreach($images as $image){
                 $image->delete();
                 $filename = IMAGE_PATH."/".$image->src;
-                @unlink($filename);
+                unlink($filename);
             }
         }
         return true;

@@ -18,7 +18,7 @@ class SlideshowController extends AbstractActionController
     public function uploadAction()
     {
         $upload_handler = new UploadHandler(
-            array('upload_dir' => IMAGE_PATH, 'upload_url' => '/data/uploads/'), false
+            array('upload_dir' => IMAGE_PATH, 'upload_url' => 'data/uploads/'), false
         );
         $response = $upload_handler->post(false);
 
