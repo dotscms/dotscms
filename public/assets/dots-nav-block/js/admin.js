@@ -40,7 +40,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
             block_id:self.model.get('id')
         };
         Dots.View.Dialog.open({
-            url:'/dots/nav-block/add/',
+            url:'dots/nav-block/add/',
             id:'dotsBlockNav_AddDialog',
             onLoad:function () {
                 Dots.Events.trigger('navBlock.view.enableEditors', this.find('form'));
@@ -53,7 +53,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
                     dataType:'json',
                     data:data,
                     type:'POST',
-                    url:'/dots/nav-block/save/',
+                    url:'dots/nav-block/save/',
                     success:function (response, status, xhr, form) {
                         if (!response.success) {
                             Dots.View.Dialog.renderErrors(form, response.errors, null);
@@ -90,7 +90,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
         var data = {
             id:nav_id
         };
-        $.get('/dots/nav-block/remove/', data, function (response) {
+        $.get('dots/nav-block/remove/', data, function (response) {
             item.remove();
         });
         return false;
@@ -107,7 +107,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
         };
 
         Dots.View.Dialog.open({
-            url:'/dots/nav-block/edit/',
+            url:'dots/nav-block/edit/',
             id:'dotsBlockNav_EditDialog',
             params:data,
             onLoad:function () {
@@ -121,7 +121,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
                     dataType:'json',
                     data:data,
                     type:'POST',
-                    url:'/dots/nav-block/save/',
+                    url:'dots/nav-block/save/',
                     success:function (response, status, xhr, form) {
                         if (!response.success) {
                             Dots.View.Dialog.renderErrors(form, response.errors, null);
@@ -211,7 +211,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
                     alias:Dots.Pages.Model.Page.getAlias(),
                     position:position
                 };
-                $.getJSON('/dots/nav-block/move/', data, function (resp) {
+                $.getJSON('dots/nav-block/move/', data, function (resp) {
 
                 });
             },

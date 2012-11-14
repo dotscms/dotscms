@@ -188,8 +188,8 @@ class ImageHandler implements HandlerInterface
 
             if (!empty($files['original_src']['tmp_name'])){
                 $upload = new Upload(array(
-                    'path' => '/data/uploads/',
-                    'destination' => PUBLIC_PATH
+                    'path' => 'data/uploads/',
+                    'destination' => PUBLIC_PATH.'/'
                 ));
                 $path = $upload->process($files);
                 $data['image_content']['original_src'] = $path['original_src'];
@@ -199,25 +199,26 @@ class ImageHandler implements HandlerInterface
                 // success - do something with the uploaded file
                 $fullFilePath = $data['image_content']['original_src'];
                 if ($imageBlock->original_src){
-                    unlink(PUBLIC_PATH.$imageBlock->original_src);
+                    unlink(PUBLIC_PATH . '/' . $imageBlock->original_src);
                 }
                 if ($imageBlock->src != $imageBlock->original_src) {
-                    unlink(PUBLIC_PATH . $imageBlock->src);
+                    unlink(PUBLIC_PATH . '/' . $imageBlock->src);
                 }
                 $imageBlock->original_src = $fullFilePath;
                 $imageBlock->src = $fullFilePath;
-                $thumb = PhpThumbFactory::create(PUBLIC_PATH . $imageBlock->original_src);
+                $thumb = PhpThumbFactory::create(PUBLIC_PATH . '/' . $imageBlock->original_src);
                 $dimensions = $thumb->getCurrentDimensions();
                 $imageBlock->width = $dimensions['width'];
                 $imageBlock->height = $dimensions['height'];
             }
 
             if ($editedCrop){
+
                 if ($imageBlock->src != $imageBlock->original_src) {
-                    unlink(PUBLIC_PATH . $imageBlock->src);
+                    unlink(PUBLIC_PATH . '/' . $imageBlock->src);
                 }
                 if ($imageBlock->crop_x1 !== "" && $imageBlock->crop_y1 !== "" && $imageBlock->crop_x2 !== "" && $imageBlock->crop_y2 !== "") {
-                    $thumb = PhpThumbFactory::create(PUBLIC_PATH . $imageBlock->original_src);
+                    $thumb = PhpThumbFactory::create(PUBLIC_PATH . '/' . $imageBlock->original_src);
                     if ($imageBlock->width && $imageBlock->height){
                         $w = $imageBlock->width;
                         $h = $imageBlock->height;
@@ -234,8 +235,8 @@ class ImageHandler implements HandlerInterface
                     $thumb->crop($x1, $y1, $x2 - $x1, $y2 - $y1);
                     $filename = basename($imageBlock->original_src);
                     $filename = substr($filename, 0, strrpos($filename, '.')) . '.jpg';
-                    $filename = '/data/uploads/edited/' . uniqid(rand()) . '_' . $filename;
-                    $thumb->save(PUBLIC_PATH . $filename, 'jpg');
+                    $filename = 'data/uploads/edited/' . uniqid(rand()) . '_' . $filename;
+                    $thumb->save(PUBLIC_PATH .'/'. $filename, 'jpg');
                     $imageBlock->src = $filename;
                 } else {
                     $imageBlock->src = $imageBlock->original_src;
@@ -262,11 +263,11 @@ class ImageHandler implements HandlerInterface
         $block = $event->getTarget();
         $imageBlock = $modelImageBlock->getByBlockId($block->id);
         if ($imageBlock){
-            if ($imageBlock->original_src){
-                unlink(PUBLIC_PATH . $imageBlock->original_src);
+            if ($imageBlock->original_src && file_exists(PUBLIC_PATH . '/' . $imageBlock->original_src)){
+                unlink(PUBLIC_PATH .'/'. $imageBlock->original_src);
             }
-            if ($imageBlock->src) {
-                unlink(PUBLIC_PATH . $imageBlock->src);
+            if ($imageBlock->src && file_exists(PUBLIC_PATH . '/' . $imageBlock->src)) {
+                unlink(PUBLIC_PATH .'/'. $imageBlock->src);
             }
             $imageBlock->delete();
         }

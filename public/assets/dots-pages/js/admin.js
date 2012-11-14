@@ -11,7 +11,7 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
     },
     _addPageEvent:function () {
         Dots.View.Dialog.open({
-            url:'/dots-pages/add/',
+            url:'dots-pages/add/',
             id:'dotsPagesAdmin_AddDialog'
         });
         this.$el.find('.dropdown.open').removeClass('open');
@@ -20,7 +20,7 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
     _editPageEvent:function () {
         var alias = Dots.Pages.Model.Page.getAlias();
         Dots.View.Dialog.open({
-            url:'/dots-pages/edit/',
+            url:'dots-pages/edit/',
             id:'dotsPagesAdmin_EditDialog',
             params:{
                 'alias':alias
@@ -34,7 +34,7 @@ Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
         var params = {
             'alias':alias
         };
-        var url = '/dots-pages/remove/';
+        var url = 'dots-pages/remove/';
         $.getJSON(url, params, function (resp) {
             if (resp.success) {
                 Dots.View.Dialog.runAction(resp);
@@ -60,7 +60,12 @@ Dots.Pages.Model.Page = Backbone.Model.extend({
     }
 }, {
     getAlias:function(){
-        return window.location.pathname.substr(1);
+        var base = $('base').attr('href');
+        var uri = window.location.pathname;
+        if (base.substring(0,4)=='http'){
+            uri = "" + window.location;
+        }
+        return uri.substring(base.length);
     }
 });
 

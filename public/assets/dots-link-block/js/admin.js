@@ -90,7 +90,7 @@ Dots.Blocks.View.LinkBlock = Dots.Blocks.View.Block.extend({
     _onLinkAddEvent:function (event) {
         var self = this;
         var $target = $(event.target);
-        $.get('/dots/link-block/add/', function (html) {
+        $.get('dots/link-block/add/', function (html) {
             var $form = $('<li class="link-form static">' + html + '</li>');
             $form.insertBefore($target.parent('li'));
             $form.find('[name$="[type]"]').trigger('change');
@@ -107,7 +107,7 @@ Dots.Blocks.View.LinkBlock = Dots.Blocks.View.Block.extend({
         var data = {
             id:link_id
         };
-        $.get('/dots/link-block/remove/', data, function (response) {
+        $.get('dots/link-block/remove/', data, function (response) {
             item.remove();
         });
         return false;
@@ -121,7 +121,7 @@ Dots.Blocks.View.LinkBlock = Dots.Blocks.View.Block.extend({
             block_id:block_id,
             id:link_id
         };
-        $.get('/dots/link-block/edit/', data, function (html) {
+        $.get('dots/link-block/edit/', data, function (html) {
             var $form = $('<li class="link-form static">' + html + '</li>');
             $form.insertBefore($this.parents('li').first());
             $form.find('[name$="[type]"]').trigger('change');
@@ -191,7 +191,7 @@ Dots.Blocks.View.LinkBlock = Dots.Blocks.View.Block.extend({
                     id: $item.attr('data-block-link-id'),
                     position: position
                 };
-                $.getJSON('/dots/link-block/move/', data, function (resp) {
+                $.getJSON('dots/link-block/move/', data, function (resp) {
 
                 });
             },

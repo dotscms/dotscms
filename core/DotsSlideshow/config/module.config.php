@@ -14,23 +14,23 @@ return array(
             'events' => array(
                 'admin.head.pre' => array(
                     'scripts' => array(
-                        'jquery.ui.widget'                  => '/assets/file_upload/js/vendor/jquery.ui.widget.js',
-                        'jquery.iframe-transport'           => '/assets/file_upload/js/jquery.iframe-transport.js',
-                        'jquery.fileupload' => '/assets/file_upload/js/jquery.fileupload.js',
-                        'dots-slideshow'                => '/assets/dots_slideshow/slideshow.js',
+                        'jquery.ui.widget'                  => 'assets/dots-slideshow/lib/file_upload/js/vendor/jquery.ui.widget.js',
+                        'jquery.iframe-transport'           => 'assets/dots-slideshow/lib/file_upload/js/jquery.iframe-transport.js',
+                        'jquery.fileupload'                 => 'assets/dots-slideshow/lib/file_upload/js/jquery.fileupload.js',
+                        'dots-slideshow'                    => 'assets/dots-slideshow/js/slideshow.js',
                     ),
                 ),
                 'head.pre' => array(
                     'scripts' => array(
-                        'jquery.nivo.slider' => '/assets/nivo_slider/jquery.nivo.slider.pack.js',
-                        'dots-slider' => '/assets/dots_slideshow/slider.js'
+                        'jquery.nivo.slider'                => 'assets/dots-slideshow/lib/nivo_slider/jquery.nivo.slider.pack.js',
+                        'dots-slider'                       => 'assets/dots-slideshow/js/slider.js'
                     ),
                     'links' => array(
-                        'jquery.nivo.slider' => '/assets/nivo_slider/nivo-slider.css',
-                        'jquery.nivo.slider.bar' => '/assets/nivo_slider/themes/bar/bar.css',
-                        'jquery.nivo.slider.default' => '/assets/nivo_slider/themes/default/default.css',
-                        'jquery.nivo.slider.dark' => '/assets/nivo_slider/themes/dark/dark.css',
-                        'jquery.nivo.slider.light' => '/assets/nivo_slider/themes/light/light.css',
+                        'jquery.nivo.slider'                => 'assets/dots-slideshow/lib/nivo_slider/nivo-slider.css',
+                        'jquery.nivo.slider.bar'            => 'assets/dots-slideshow/lib/nivo_slider/themes/bar/bar.css',
+                        'jquery.nivo.slider.default'        => 'assets/dots-slideshow/lib/nivo_slider/themes/default/default.css',
+                        'jquery.nivo.slider.dark'           => 'assets/dots-slideshow/lib/nivo_slider/themes/dark/dark.css',
+                        'jquery.nivo.slider.light'          => 'assets/dots-slideshow/lib/nivo_slider/themes/light/light.css',
                     )
                 )
             )
@@ -40,7 +40,7 @@ return array(
     // Controller Service
     'controllers' => array(
         'invokables' => array(
-            'DotsSlideshow\Controller\SlideshowController' => 'DotsSlideshow\Controller\SlideshowController'
+            'DotsSlideshow\Controller\Slideshow' => 'DotsSlideshow\Controller\SlideshowController'
         ),
     ),
 
@@ -55,7 +55,7 @@ return array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
-                        'controller' => 'DotsSlideshow\Controller\SlideshowController',
+                        'controller' => 'DotsSlideshow\Controller\Slideshow',
                         'action' => 'index',
                     ),
                 ),

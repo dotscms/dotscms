@@ -14,17 +14,16 @@ return array(
             'events' => array(
                 'head.post' => array(
                     'links' => array(
-                        'dots-image-block' => '/assets/dots-image-block/css/style.css',
+                        'dots-image-block'      => 'assets/dots-image-block/css/style.css',
                     ),
                 ),
                 'admin.head.pre' => array(
                     'links' => array(
-                        'imgareaselect-default' => '/assets/dots-image-block/lib/img_crop/css/imgareaselect-default.css',
-//                        'dots-image-block' => '/assets/dots-image-block/css/style.css',
+                        'imgareaselect-default' => 'assets/dots-image-block/lib/img_crop/css/imgareaselect-default.css',
                     ),
                     'scripts' => array(
-                        'jquery.imgareaselect'  => '/assets/dots-image-block/lib/img_crop/scripts/jquery.imgareaselect.js',
-                        'dots-image-block'      => '/assets/dots-image-block/js/admin.js',
+                        'jquery.imgareaselect'  => 'assets/dots-image-block/lib/img_crop/scripts/jquery.imgareaselect.js',
+                        'dots-image-block'      => 'assets/dots-image-block/js/admin.js',
                     ),
                 )
             )

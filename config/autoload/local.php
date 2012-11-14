@@ -23,7 +23,7 @@ return array(
             'driver'    => 'Pdo_Mysql', //'MySqli',
             'database'  => 'www_dotscms_dev',
             'username'  => 'root',
-            'password'  => 'root'
+            'password'  => ''
         )
     ),
 
@@ -35,7 +35,7 @@ return array(
                         'driver' => 'Pdo_Mysql', //'MySqli',
                         'database' => 'www_dotscms_dev',
                         'username' => 'root',
-                        'password' => 'root'
+                        'password' => ''
                     )
                 )
             ),

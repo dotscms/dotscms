@@ -16,10 +16,10 @@ return array(
             'events' => array(
                 'admin.head.pre' => array(
                     'scripts' => array(
-                        'dots-nav-block' => '/assets/dots-nav-block/js/admin.js',
+                        'dots-nav-block'    => 'assets/dots-nav-block/js/admin.js',
                     ),
                     'links' => array(
-                        'dots-nav-block'    => '/assets/dots-nav-block/css/style.css',
+                        'dots-nav-block'    => 'assets/dots-nav-block/css/style.css',
                     )
                 )
             )

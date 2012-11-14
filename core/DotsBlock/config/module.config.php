@@ -19,12 +19,12 @@ return array(
             'events' => array(
                 'head.post' => array(
                     'links' => array(
-                        'dots-block' => '/assets/dots-block/css/style.css',
+                        'dots-block' => 'assets/dots-block/css/style.css',
                     ),
                 ),
                 'admin.head.pre' => array(
                     'scripts' => array(
-                        'dots-block' => '/assets/dots-block/js/admin.js',
+                        'dots-block' => 'assets/dots-block/js/admin.js',
                     ),
                 )
             )

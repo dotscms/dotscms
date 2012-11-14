@@ -22,9 +22,7 @@ class Page implements RouteInterface
 
     /**
      * Create a new page route.
-     *
-     * @param  array  $defaults
-     * @return void
+     * @param array $defaults
      */
     public function __construct(array $defaults = array())
     {
@@ -33,9 +31,10 @@ class Page implements RouteInterface
 
     /**
      * Create a new route with given options.
-     *
-     * @param  array|\Traversable $options
-     * @return Page
+     * @static
+     * @param array $options
+     * @return Page|void
+     * @throws \Zend\Mvc\Router\Exception\InvalidArgumentException
      */
     public static function factory($options = array())
     {
@@ -55,15 +54,20 @@ class Page implements RouteInterface
     /**
      * Match a given request.
      *
-     * @param  Request $request
-     * @return RouteMatch
+     * @param \Zend\Stdlib\RequestInterface $request
+     * @param null $pathOffset
+     * @return null|\Zend\Mvc\Router\Http\RouteMatch|\Zend\Mvc\Router\RouteMatch
      */
-    public function match(Request $request)
+    public function match(Request $request, $pathOffset = null)
     {
-        if (!($request instanceof PhpRequest)){
+        if (!method_exists($request, 'getUri')) {
             return null;
         }
-        $path = $request->getUri()->getPath();
+
+        $uri = $request->getUri();
+        $fullPath = $uri->getPath();
+
+        $path = substr($fullPath, $pathOffset);
         $alias = trim($path, '/');
 
         $model = Registry::get('service_locator')->get('DotsPages\Db\Model\Page');

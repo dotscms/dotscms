@@ -24,16 +24,16 @@ Dots.Blocks.View.Slideshow = Dots.Blocks.View.Block.extend({
             return _.extend(events, Dots.Blocks.View.Slideshow.__super__.events);
         },
         _cancelSlideshow:function (e) {
-            console.log(this);
             var self = this,
                 blockId = this.model.get('id');
             if (!blockId) {
                 this.removeEditors();
+                this.remove();
             } else {
                 var data = {
                     block_id:blockId
                 };
-                $.get('/dots/block/view/', data, function (html) {
+                $.get('dots/block/view/', data, function (html) {
                     self.removeEditors();
                     var $block = $(html);
                     self.$el.replaceWith($block);
@@ -82,7 +82,7 @@ Dots.Blocks.View.Slideshow = Dots.Blocks.View.Block.extend({
                 images:images,
                 slideshow:slideshow
             };
-            $.post("/dots/block", data, function (data) {
+            $.post("dots/block", data, function (data) {
                 if (true == data.success) {
                     self.model.set({id:data.block_id});
                     self._cancelSlideshow(self);
@@ -94,7 +94,7 @@ Dots.Blocks.View.Slideshow = Dots.Blocks.View.Block.extend({
             var $element = $(event.target).parents("li"),
                 filename = $element.find("img").data("filename"),
                 id = $element.find("img").data("id");
-            $.post("/dots/slideshow/delete-image",{filename:filename,id:id},function(data){
+            $.post("dots/slideshow/delete-image",{filename:filename,id:id},function(data){
                 if(true == data.success){
                     $element.remove();
                 }
