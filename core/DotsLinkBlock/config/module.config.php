@@ -17,12 +17,12 @@ return array(
             'events' => array(
                 'head.post' => array(
                     'links' => array(
-                        'dots-link-block' => '/assets/dots-link-block/css/style.css',
+                        'dots-link-block'   => 'assets/dots-link-block/css/style.css',
                     ),
                 ),
                 'admin.head.pre' => array(
                     'scripts' => array(
-                        'dots-link-block' => '/assets/dots-link-block/js/admin.js',
+                        'dots-link-block'   => 'assets/dots-link-block/js/admin.js',
                     ),
                 )
             )

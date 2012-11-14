@@ -10,9 +10,15 @@ return array(
         )
     ),
 
-    'dots'=>array(
-        'view'=>array(
-
+    'dots' => array(
+        'view' => array(
+            'events' => array(
+                'admin.head.pre' => array(
+                    'scripts' => array(
+                        'dots-pages'    => 'assets/dots-pages/js/admin.js'
+                    )
+                )
+            )
         )
     ),
 
@@ -51,6 +57,7 @@ return array(
                     ),
                 ),
             ),
+
             'dots-page' => array(
                 'type' => 'DotsPages\Router\Page',
                 'options' => array(

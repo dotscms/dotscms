@@ -17,7 +17,8 @@
             "Core":     "core/Core/src",
             "ZeAuth":   "core/ZeAuth/src",
             "Dots":     "core/Dots/src",
-            "DotsPages":"core/DotsPages/src"
+            "DotsPages":"core/DotsPages/src",
+            "DotsSlideshow":"core/DotsSlideshow/src"
         }
     }
 }

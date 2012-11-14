@@ -127,7 +127,11 @@ Dots.View.Dialog = Backbone.View.extend({
         }
         return '';
     },
-    //render provided errors on a form
+
+    /**
+     * render provided errors on a form
+     * @todo fix this to work with a class and render the errors in the last version
+     */
     renderErrors: function (form, errors, context) {
         var postContext = "", preContext = "";
         if (!context) {

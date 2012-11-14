@@ -69,7 +69,7 @@ class BlockController extends AbstractActionController
                 $model = json_decode($post['model'], true);
                 $page = $pageModel->getByAlias($post['alias']);
                 $block = null;
-                if (isset($model['id'])){
+                if (isset($model['id']) && !empty($model['id'])){
                     $block = $blockModel->getById($model['id']);
                 }else{
                     $block = new Block();

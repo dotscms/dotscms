@@ -16,14 +16,6 @@ use DotsPages\Db\Entity\Page;
 
 class Admin
 {
-    public static function appendHead(Event $event)
-    {
-        $serviceLocator = Registry::get('service_locator');
-        $view = $serviceLocator->get('TwigViewRenderer');
-
-        //append javascript code
-        $view->plugin('headScript')->appendFile('/assets/dots-pages/js/admin.js');
-    }
 
     public static function renderNav(Event $event)
     {
@@ -42,4 +34,5 @@ class Admin
         $viewModel->setTerminal(true);
         return $view->render($viewModel);
     }
+
 }

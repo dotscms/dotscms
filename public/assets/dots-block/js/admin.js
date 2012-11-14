@@ -180,7 +180,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             alias: Dots.Pages.Model.Page.getAlias(),
             model: JSON.stringify(this.model)
         };
-        $.post('/dots/block/get-form/', data, function (html) {
+        $.post('dots/block/get-form/', data, function (html) {
             var $currentBlock = $(html).addClass('edit-dots-block');
             self.$el.replaceWith($currentBlock);
             self.setElement($currentBlock[0]);
@@ -201,7 +201,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             dataType: 'json',
             data: data,
             type: 'POST',
-            url: '/dots/block',
+            url: 'dots/block',
             success: function (response, status, xhr, form) {
                 if (!response.success) {
                     Dots.View.Dialog.renderErrors(form, response.errors, null);
@@ -216,7 +216,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
     _changeSettingsEvent: function (){
         var self = this;
         Dots.View.Dialog.open({
-            url:'/dots/block/edit-settings/',
+            url:'dots/block/edit-settings/',
             id:'dotsBlock_EditSettingsDialog',
             params:{id: self.model.get('id')},
             onSave:function (event, opts) {
@@ -232,7 +232,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
                         } else {
                             _self.$el.modal('hide');
                             _self.remove();
-                            $.get('/dots/block/view/', { block_id: self.model.get('id') }, function (html) {
+                            $.get('dots/block/view/', { block_id: self.model.get('id') }, function (html) {
                                 self.removeEditors();
                                 var $currentBlock = $(html);
                                 self.$el.replaceWith($currentBlock);
@@ -253,7 +253,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             self.removeEditors();
             this.remove();
         } else {
-            $.getJSON('/dots/block/remove/', {block_id: blockId}, function (response) {
+            $.getJSON('dots/block/remove/', {block_id: blockId}, function (response) {
                 if (response.success) {
                     self.removeEditors();
                     self.remove();
@@ -276,7 +276,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             var data = {
                 block_id:blockId
             };
-            $.get('/dots/block/view/', data, function (html) {
+            $.get('dots/block/view/', data, function (html) {
                 self.removeEditors();
                 var $block = $(html);
                 self.$el.replaceWith($block);
@@ -319,7 +319,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             alias:Dots.Pages.Model.Page.getAlias()
         };
 
-        $.post('/dots/block/get-form/', data, function (html) {
+        $.post('dots/block/get-form/', data, function (html) {
             var $currentBlock = $(html);
             $currentBlock.addClass('edit-dots-block');
             view.$el.append($currentBlock);
@@ -360,7 +360,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
                     models = models.concat(_.toArray(toSection.model.getBlocks()));
                 }
                 data['models'] = JSON.stringify(models);
-                $.post('/dots/block/move/', data, function (resp) {
+                $.post('dots/block/move/', data, function (resp) {
 
                 }, 'json');
             }

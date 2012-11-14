@@ -1,5 +1,5 @@
 {
-    "hash": "9c905f95e1c24728dbfe3e84ccae13cf",
+    "hash": "f6098836007d1149198461219ee59a78",
     "packages": [
         {
             "name": "twig/twig",
@@ -267,7 +267,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Rovak/ZfcTwig/archive/5d1e273ef98b7eee21fd5ca456a84609fd0274e6.zip",
+                "url": "https://github.com/Rovak/ZfcTwig/zipball/5d1e273ef98b7eee21fd5ca456a84609fd0274e6",
                 "reference": "5d1e273ef98b7eee21fd5ca456a84609fd0274e6",
                 "shasum": ""
             },

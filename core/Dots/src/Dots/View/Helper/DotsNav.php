@@ -83,13 +83,15 @@ class DotsNav extends AbstractHelper
                     {
                         $view = $event->getTarget();
                         if (isset($options['scripts']) && is_array($options['scripts'])) {
-                            foreach ($options['scripts'] as $script) {
-                                $view->plugin('headScript')->appendFile($script);
+                            $scripts = array_filter($options['scripts'], function ($script){return $script!=null;});
+                            foreach ($scripts as $script) {
+                                $view->plugin('headScript')->appendFile( $script);
                             }
                         }
                         if (isset($options['links']) && is_array($options['links'])) {
-                            foreach ($options['links'] as $script) {
-                                $view->plugin('headLink')->appendStylesheet($script);
+                            $links = array_filter($options['links'], function ($link){return $link!=null;});
+                            foreach ($links as $script) {
+                                $view->plugin('headLink')->appendStylesheet( $script);
                             }
                         }
                     }, 200);
