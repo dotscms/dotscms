@@ -9,15 +9,15 @@
  */
 namespace DotsPages\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController,
-    Zend\View\Model\ViewModel,
-    Zend\Json\Encoder,
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use Zend\Json\Encoder;
 
-    DotsPages\Db\Entity,
+use DotsPages\Db\Entity;
 
-    Dots\Form\MultiForm,
-    DotsPages\Form\Page,
-    DotsPages\Form\PageMeta;
+use Dots\Form\MultiForm;
+use DotsPages\Form\Page;
+use DotsPages\Form\PageMeta;
 
 class AdminController extends AbstractActionController
 {
@@ -89,6 +89,10 @@ class AdminController extends AbstractActionController
         $metaModel = $this->getServiceLocator()->get('DotsPages\Db\Model\PageMeta');
         $page = $pageModel->getByAlias($alias);
         $meta = $metaModel->getByPageId($page->id);
+        if (!$meta){
+            $meta = new Entity\PageMeta();
+            $meta->page_id = $page->id;
+        }
 
         //on post return the response as a json string
         if ($request->getMethod() == 'POST') {
@@ -114,8 +118,8 @@ class AdminController extends AbstractActionController
             ));
         }else{
             $form->setData(array(
-                'page'=>$page->toArray(),
-                'meta'=>$meta->toArray()
+                'page'=> $page->toArray(),
+                'meta'=> $meta->toArray()
             ));
         }
 

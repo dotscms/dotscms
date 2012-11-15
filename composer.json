@@ -1,14 +1,8 @@
 {
-    "repositories":[
-        {
-            "type":"vcs",
-            "url":"https://github.com/Rovak/ZfcTwig.git"
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework":"dev-master",
-        "zf-commons/zfc-twig": "dev-cleanup",
+        "zf-commons/zfc-twig": "dev-master",
         "zendexperts/ze-db":"dev-master",
         "zendexperts/ze-theme":"dev-master"
     },
