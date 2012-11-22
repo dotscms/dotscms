@@ -34,14 +34,6 @@ class BlockManager implements ServiceLocatorAwareInterface
     protected $blockHandlers = array();
 
     /**
-     *
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
      * @param HandlerInterface $contentHandler
      */
     public function addContentHandler(HandlerInterface $contentHandler)

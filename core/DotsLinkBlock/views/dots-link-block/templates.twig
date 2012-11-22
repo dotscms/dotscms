@@ -1,28 +1,10 @@
-<script type="text/html-template" id="dots-tpl-link-item-wrap">
-    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>">
-        <div class="nav-edit">
-            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
-            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
+<script type="text/html-template" id="dots-tpl-link-item">
+    <li data-block-link-id="<%= id %>">
+        <div class="link-edit">
+            <a data-action="link_move" href="#"><i class="icon-move"></i></a>
+            <a data-action="link_edit" href="#"><i class="icon-pencil"></i></a>
+            <a data-action="link_remove" href="#"><i class="icon-remove"></i></a>
         </div>
         <a href="<%= href %>"><%= title %></a>
-    </li>
-</script>
-
-<script type="text/html-template" id="dots-tpl-link-item-header">
-    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>" class="nav-header">
-        <div class="nav-edit">
-            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
-            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
-        </div>
-        <span><%= title %></span>
-    </li>
-</script>
-
-<script type="text/html-template" id="dots-tpl-link-item-divider">
-    <li data-dots-type="dots-nav-item" data-block-nav-id="<%= id %>" class="divider-vertical">
-        <div class="nav-edit">
-            <a data-action="nav_edit" href="#"><i class="icon-pencil icon-white"></i></a>
-            <a data-action="nav_remove" href="#"><i class="icon-remove icon-white"></i></a>
-        </div>
     </li>
 </script>

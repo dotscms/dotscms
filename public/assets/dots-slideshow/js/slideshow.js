@@ -91,7 +91,7 @@ Dots.Blocks.View.Slideshow = Dots.Blocks.View.Block.extend({
         },
         _deleteSlideshowImage:function(event){
             event.preventDefault();
-            var $element = $(event.target).parents("li"),
+            var $element = $(event.currentTarget).parents("li"),
                 filename = $element.find("img").data("filename"),
                 id = $element.find("img").data("id");
             $.post("dots/slideshow/delete-image",{filename:filename,id:id},function(data){

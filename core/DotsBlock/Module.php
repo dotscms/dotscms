@@ -12,8 +12,10 @@ namespace DotsBlock;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\Event;
+use Zend\View\Model\ViewModel;
 use Dots\Registry;
 use Dots\EventManager\GlobalEventManager;
+use Zend\EventManager\StaticEventManager;
 
 /**
  * DotsBlock module
@@ -27,6 +29,18 @@ class Module implements AutoloaderProviderInterface
         $serviceManager = $app->getServiceManager();
         $blockManager = $serviceManager->get('DotsBlockManager');
         Registry::set('block_manager', $blockManager);
+        $events = StaticEventManager::getInstance();
+        $events->attach('dots','admin.menu',function (){
+            $serviceLocator = Registry::get('service_locator');
+            $view = $serviceLocator->get('TwigViewRenderer');
+            $blockManager = Registry::get('block_manager');
+            $handlers = $blockManager->getContentBlockHandlers();
+            //render admin navigation
+            $viewModel = new ViewModel(array('handlers'=> $handlers));
+            $viewModel->setTemplate('dots-block/admin/nav');
+            $viewModel->setTerminal(true);
+            return $view->render($viewModel);
+        }, 100);
     }
 
     /**

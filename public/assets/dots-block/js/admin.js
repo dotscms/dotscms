@@ -42,7 +42,7 @@ Dots.Blocks.View.Section = Backbone.View.extend({
     },
 
     _addBlockEvent:function(event){
-        var $target = $(event.target);
+        var $target = $(event.currentTarget);
         Dots.Events.trigger('section.addBlock', this, $target);
         $($target.parents('.btn-group')[0]).removeClass('open');
         return false;
@@ -186,7 +186,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             self.setElement($currentBlock[0]);
             self.initEditors();
         }, 'text');
-        $($(event.target).parents('.btn-group')[0]).removeClass('open');
+        $($(event.currentTarget).parents('.btn-group')[0]).removeClass('open');
         return false;
     },
     _saveBlockEvent: function (){
@@ -324,12 +324,6 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             $currentBlock.addClass('edit-dots-block');
             view.$el.append($currentBlock);
             Dots.Events.trigger('section.blocks.init.'+type, view, $currentBlock[0], {isEditMode:true});
-//            var $currentBlock = $(html);
-//            $currentBlock.addClass('edit-dots-block');
-//            view.$el.append($currentBlock);
-//            var blockView = new Dots.Blocks.View.Block({el:$currentBlock[0], model:blockModel});
-//            blockView.initEditors();
-//            view.model.getBlocks().add(blockModel);
         }, 'text');
     },
     setupMoveHandler:function () {
@@ -345,7 +339,7 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             stop:function (event, ui) {
                 var $item = $(ui.item),
                     view = $item.data('view'),
-                    fromSection = $(event.target).data('view'),
+                    fromSection = $(event.currentTarget).data('view'),
                     toSection = $item.parent().data('view'),
                     pos = $item.prevAll('.dots-block').length,
                     data = {},models;

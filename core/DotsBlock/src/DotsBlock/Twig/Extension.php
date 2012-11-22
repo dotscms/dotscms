@@ -38,7 +38,7 @@ class Extension extends Twig_Extension
     }
 
     /**
-     * Return a list of token parsers to register with the envirionment
+     * Return a list of token parsers to register with the environment
      * @return array
      */
     public function getTokenParsers()

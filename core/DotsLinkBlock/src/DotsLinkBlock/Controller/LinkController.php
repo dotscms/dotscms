@@ -32,7 +32,6 @@ class LinkController extends AbstractActionController
     public function addAction()
     {
         $form = new LinkContentForm();
-        $form->setName('link_content[1]');
         $form->addButtons();
         $output = $this->renderViewModel('dots-link-block/form', array('form' => $form));
         $this->getResponse()->setContent($output);
@@ -85,7 +84,6 @@ class LinkController extends AbstractActionController
         }
 
         $form = new LinkContentForm();
-        $form->setName('link_content[1]');
         $form->addButtons();
         $form->setData($data);
 
@@ -105,11 +103,10 @@ class LinkController extends AbstractActionController
         $POST = $this->getRequest()->getPost()->toArray();
         $FILES = $this->getRequest()->getFiles()->toArray();
         $form = new LinkContentForm();
-        $form->setName('link_content[1]');
         if (!empty($FILES)){
-            $POST['link_content'][1]['file'] = $FILES['link_content'][1]['file'];
+            $POST['file'] = $FILES['file'];
         }
-        $form->setData($POST['link_content'][1]);
+        $form->setData($POST);
         if ($form->isValid()){
             $data = $form->getInputFilter()->getValues();
 
@@ -142,10 +139,10 @@ class LinkController extends AbstractActionController
                     break;
                 case 'file':
                     $upload = new Upload(array(
-                        'path' => '/data/uploads/',
-                        'destination' => PUBLIC_PATH
+                        'path' => 'data/uploads/',
+                        'destination' => PUBLIC_PATH . '/'
                     ));
-                    $path = $upload->process(array('file'=>$POST['link_content'][1]['file']));
+                    $path = $upload->process(array('file'=>$POST['file']));
                     $data['file'] = $path['file'];
 
                     if ($data['file']) {
@@ -164,6 +161,7 @@ class LinkController extends AbstractActionController
             if (!is_numeric($data['position'])){
                 $linkBlock->position = 1;
             }
+
             $linkBlock->save();
 
             return $this->jsonResponse(array('success' => true, 'data'=>$linkBlock->toArray()));
@@ -175,17 +173,22 @@ class LinkController extends AbstractActionController
     }
 
     public function moveAction(){
+        // get variables from request
         $blockId = $_REQUEST['block_id'];
         $linkId = $_REQUEST['id'];
+        // get link block model
         $linkBlockModel = $this->getServiceLocator()->get('DotsLinkBlock\Db\Model\LinkBlock');
+        // get an instance of the item that changes position and set the new position
         $link = $linkBlockModel->getById($linkId);
         $position = $_REQUEST['position'];
         $link->position = $position;
+        // get all other items from the link list
         $links = $linkBlockModel->getAllByColumnsOrderByPosition(array(
             'block_id = ?' => $blockId,
             'id != ?' => $linkId
         ));
 
+        // update positions for all items
         $pos = 1;
         if ($links){
             foreach ($links as $lnk){
@@ -197,6 +200,7 @@ class LinkController extends AbstractActionController
             }
         }
         $linkBlockModel->persist($link);
+        // save everything in the DB
         $linkBlockModel->flush();
 
         return $this->jsonResponse(array('success' => true));

@@ -29,7 +29,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
      */
     _onNavAddEvent: function(event){
         var self = this;
-        var $target = $(event.target);
+        var $target = $(event.currentTarget);
         var $li = $target.parents('li').first();
         var pos = $li.prevAll('li').length + 1;
         var $block = self.$el;
@@ -84,7 +84,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
         return false;
     },
     _onNavRemoveEvent:function (event) {
-        var $this = $(event.target);
+        var $this = $(event.currentTarget);
         var item = $this.parents('[data-dots-type="dots-nav-item"]:first');
         var nav_id = item.attr('data-block-nav-id');
         var data = {
@@ -97,7 +97,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
     },
     _onNavEditEvent:function (event) {
         var self = this;
-        var $target = $(event.target);
+        var $target = $(event.currentTarget);
         var $item = $target.parents('[data-dots-type="dots-nav-item"]:first');
         var pos = $item.prevAll('[data-dots-type="dots-nav-item"]').length + 1;
         var data = {
@@ -201,7 +201,7 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
     onEdit_MoveHandler:function ($block) {
         $block.find(".dots-nav-block .nav").sortable({
             stop:function (event, ui) {
-                var $target = $(event.target);
+                var $target = $(event.currentTarget);
                 var $item = $(ui.item);
                 $block = $item.parents('.dots-block');
                 var position = $item.prevAll('li').length + 1;

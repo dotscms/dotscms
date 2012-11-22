@@ -26,20 +26,43 @@ Backbone.emulateJSON = true;
  */
 _.extend(Dots.Events, Backbone.Events);
 Dots.Events.on('init', function(){
-    this.on('bootstrap', function () {
-        new Dots.View.Menu.Admin();
-    });
     this.trigger('bootstrap');
     this.trigger('route');
     this.trigger('dispatch');
 });
 
+
 /**
- * Dots View for the admin menu bar
+ * Dots Application
+ * @type {*}
+ */
+Dots.View.Application = Backbone.View.extend({
+    events:{},
+    el:'body',
+    menuView:null,
+    initialize:function(){
+        this.$el.addClass('dots-app');
+        this.menuView = new Dots.View.Menu.Admin();
+    },
+    run:function (){
+        Dots.Events.trigger("init");
+    }
+}, {
+    _instance:null,
+    getInstance:function (){
+        if (!this._instance) {
+            this._instance = new Dots.View.Application();
+        }
+        return this._instance;
+    }
+});
+
+/**
+ * Dots Menu Bar
  */
 Dots.View.Menu.Admin = Backbone.View.extend({
-    el: '#dotsAdminBar',
-    initialize:function (args){
+    el:'.dotsAdminBar',
+    initialize:function (args) {
         this.$el.data('view', this);
     }
 });
@@ -148,24 +171,21 @@ Dots.View.Dialog = Backbone.View.extend({
 
             if (typeof(errList[errKey]) == "string" || errList[errKey] instanceof String) {
                 // handle errors
+                var $input = $('[name="' + preContext + name + postContext + '"]');
                 for (errKey in errList) {
-                    var $input = $('[name="' + preContext + name + postContext + '"]');
-                    var $errors = $('<ul class="errors"></ul>');
-                    $errors.append('<li>' + errList[errKey] + '</li>');
-                    $errors.insertAfter($input);
+                    var errStr = '<ul class="errors">';
+                    errStr += '<li>' + errList[errKey] + '</li>';
+                    errStr += '</ul>';
+                    $input.after(errStr);
                 }
             } else {
                 // handle subform errors
-                if (!context) {
-                    Dots.View.Dialog.renderErrors(form, errList, name);
-                } else {
-                    Dots.View.Dialog.renderErrors(form, errList, context + '[' + name + ']');
-                }
+                Dots.View.Dialog.renderErrors(form, errList, (!context ? name :context + '[' + name + ']'));
             }
         }
     }
 });
 
 $(function () {
-    Dots.Events.trigger("init");
-})
+    Dots.View.Application.getInstance().run();
+});

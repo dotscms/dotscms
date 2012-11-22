@@ -115,7 +115,6 @@ class Link extends Form
             ),
         ));
         $this->setWrapElements(true);
-
     }
 
     public function setData($data)
@@ -171,33 +170,13 @@ class Link extends Form
         return $this->filter;
     }
 
-//    public function getValues($suppressArrayNotation = false)
-//    {
-//        //handle file upload
-//        $srcElement = $this->getElement('file');
-//        $src = $this->getValue('file');
-//        $srcElement->addFilter('Rename', array(
-//                'target' => PUBLIC_PATH . '/data/files/' . uniqid('file_'.rand()) . '_' . $src
-//            ));
-//        $values = parent::getValues($suppressArrayNotation);
-//        if ($srcElement->isUploaded()) {
-//            if ($srcElement->receive()) {
-//                $fullFilePath = $srcElement->getFileName();
-//                $fullFilePath = str_replace(PUBLIC_PATH, "", $fullFilePath);
-//                $fullFilePath = str_replace('\\','/', $fullFilePath);
-//                $values['file'] = $fullFilePath;
-//            }
-//        }
-//        return $values;
-//    }
-
     public function addButtons()
     {
-        $fieldset = new Fieldset('buttons');
-        $fieldset->setAttributes(array(
+        $fieldSet = new Fieldset('buttons');
+        $fieldSet->setAttributes(array(
             'class'=>'dots-form-buttons'
         ));
-        $fieldset->add(array(
+        $fieldSet->add(array(
             'name' => 'cancel',
             'options' => array(
                 'label' => 'Cancel',
@@ -205,10 +184,10 @@ class Link extends Form
             'attributes' => array(
                 'type' => 'button',
                 'class' => 'btn',
-                'data-action' => 'cancel-link-block',
+                'data-action' => 'link_cancel',
             ),
         ));
-        $fieldset->add(array(
+        $fieldSet->add(array(
             'name' => 'save',
             'options' => array(
                 'label' => 'Save',
@@ -216,10 +195,10 @@ class Link extends Form
             'attributes' => array(
                 'type' => 'button',
                 'class' => 'btn btn-primary',
-                'data-action' => 'save-link-block',
+                'data-action' => 'link_save',
             ),
         ));
-        $this->add($fieldset);
+        $this->add($fieldSet);
     }
 
 }

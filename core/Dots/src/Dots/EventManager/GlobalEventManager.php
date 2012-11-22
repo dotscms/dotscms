@@ -11,12 +11,15 @@ namespace Dots\EventManager;
 
 use Zend\EventManager\GlobalEventManager as GlobalManager;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\StaticEventManager;
 
 class GlobalEventManager extends GlobalManager
 {
     public static function setEventCollection(EventManagerInterface $events = null)
     {
         parent::setEventCollection($events);
+        $sharedManager = StaticEventManager::getInstance();
+        static::$events->setSharedManager($sharedManager);
         static::$events->setIdentifiers(array(
             __CLASS__,
             get_called_class(),

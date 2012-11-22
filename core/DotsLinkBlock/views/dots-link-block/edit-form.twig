@@ -3,14 +3,14 @@
     {% for link in form.getParam('links') %}
         <li data-block-link-id="{{link.id}}">
             <div class="link-edit">
-                <a data-action="move_link" href="#move-link"><i class="icon-move"></i></a>
-                <a data-action="edit_link" href="#edit-link"><i class="icon-pencil"></i></a>
-                <a data-action="remove_link" href="#remove-link"><i class="icon-remove"></i></a>
+                <a data-action="link_move" href="#"><i class="icon-move"></i></a>
+                <a data-action="link_edit" href="#"><i class="icon-pencil"></i></a>
+                <a data-action="link_remove" href="#"><i class="icon-remove"></i></a>
             </div>
             <a href="{{link.href}}">{{link.title}}</a>
         </li>
     {% endfor %}
-        <li class="static"><a href="#add_link" data-action="add_link"><i class="icon-plus"></i><span>Add a new link</span></a></li>
+        <li class="static"><a href="#" data-action="link_add"><i class="icon-plus"></i><span>Add a new link</span></a></li>
     </ul>
     <div class="buttons">
         <button data-action="cancel-block" class="btn btn-primary">Done</button>
