@@ -14,7 +14,6 @@ return array(
         'config_cache_enabled' => false,
         'cache_dir' => dirname(__DIR__) . '/data/cache',
         'module_paths' => array(
-            './core',
             './vendor',
         ),
     ),

@@ -1,8 +1,0 @@
-<li class="dropdown" id="dots_block_admin_nav">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blocks <b class="caret"></b></a>
-    <ul class="dropdown-menu">
-        {% for handler in handlers %}
-        <li><a dots-block-type="{{handler.alias}}" href="#{{handler.alias}}">{{handler.name}}</a></li>
-        {% endfor %}
-    </ul>
-</li>

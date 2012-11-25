@@ -168,6 +168,10 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
     enableEditors: function (form){
         form.find('[name$="[page]"]').autocomplete({
             source:'dots/nav-block/get-pages/',
+            messages:{
+                noResults:"",
+                results:function(){return '';}
+            },
             minLength:2,
             select:function (event, ui) {
                 $(this).parents('form').find('[name$="[entity_id]"]').val(ui.item.id);
@@ -175,9 +179,8 @@ Dots.Blocks.View.NavBlock = Dots.Blocks.View.Block.extend({
         }).data('autocomplete')._renderMenu = function (ui, items) {
             if (!ui.hasClass('dropdown-menu'))
                 ui.addClass('dropdown-menu');
-
             for (var key in items) {
-                this._renderItem(ui, items[key]);
+                this._renderItemData(ui, items[key]);
             }
         };
         form.find('[name$="[type]"]').change(function (event) {

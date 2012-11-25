@@ -1,0 +1,18 @@
+<div class="dots-blocks" data-section="{{section}}">
+    {#<div class="dots-block-header">#}
+        {#<div class="btn-group">#}
+            {#<a class="btn btn-primary btn-mini dropdown-toggle" data-toggle="dropdown" href="#add-block">#}
+                {#<i class="icon-plus icon-white"></i>#}
+                {#<span class="caret"></span>#}
+            {#</a>#}
+            {#<ul class="dropdown-menu">#}
+                {#{% for handler in handlers %}#}
+                {#<li><a data-action="add-block" href="#{{handler.alias}}">{{handler.name}}</a></li>#}
+                {#{% endfor %}#}
+            {#</ul>#}
+        {#</div>#}
+    {#</div>#}
+    {% for block in blocks %}
+    {% include 'dots-block/handler/edit-block' %}
+    {% endfor %}
+</div>

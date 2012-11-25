@@ -1,4 +1,5 @@
 .ui-state-highlight {background: url('../images/ui-bg-highlight.png');height:100px;}
+.ui-state-highlight-hover{background: url('../images/ui-bg-highlight.png');}
 
 /* Dots: Blocks */
 .dots-blocks {border: dashed 1px #DDD;min-height: 16px;margin-top: 22px;padding:2px;}
@@ -16,3 +17,4 @@
     /*border-radius: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;display:inline;}*/
 .dots-blocks .dots-block form dd ul.errors {color: #ad070e;}
 /*.dots-blocks .dots-block form dd ul.errors li{display:inline;}*/
+#dots_blocks_admin_menu .dropdown-menu [dots-block-type]{cursor: move;}

@@ -27,3 +27,6 @@
     border-right: 0px;
 }
 .dots-block .dots-links-block li.dots-move-link-helper .link-edit + a {background: #F6F6F6;}
+
+.icon-dots-links-big{min-height:65px; min-width:64px; background: url(../images/icon-links.png) no-repeat 50% 50%;}
+.icon-dots-links-big.helper{display:none;}

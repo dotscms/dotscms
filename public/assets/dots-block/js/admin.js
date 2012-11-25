@@ -304,10 +304,11 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             sectionView.model.getBlocks().add(model, {at:model.get('position')});
             new Dots.Blocks.View.Block({el:block, model:model, opts:opts});
         }, this);
+
         this.setupMoveHandler();
+        this.setupAddMoveHandler();
     },
-    _addBlockToSection:function (view, target) {
-        var type = target.attr('href').split('#')[1];
+    _addBlockToSection:function (view, type) {
         var section = view.$el.attr('data-section');
         var blockModel = new Dots.Blocks.Model.Block({
             type: type,
@@ -326,6 +327,33 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             Dots.Events.trigger('section.blocks.init.'+type, view, $currentBlock[0], {isEditMode:true});
         }, 'text');
     },
+    setupAddMoveHandler:function (){
+        var self = this;
+        $("#dots_blocks_admin_menu").on('click', '[dots-block-type]', function (){return false;});
+        $("#dots_blocks_admin_menu [dots-block-type]").draggable({
+//            connectToSortable: ".dots-blocks",
+            delay:0,
+            helper:function (event, ui){
+                var helper = $(this).find('.helper');
+                if (helper.length)
+                    return helper.clone().removeClass('helper')[0];
+                return $(this).clone()[0];
+            },
+            scope: "dots-block",
+            iframeFix:true,
+            revert: 'invalid'
+        });
+        $('.dots-blocks').droppable({
+            tolerance:'pointer',
+            activeClass:"ui-state-highlight-hover",
+            scope:"dots-block",
+            drop:function (event, ui) {
+                var type = $(ui.draggable).attr('dots-block-type');
+                Dots.Events.trigger('section.addBlock', $(this).data('view'), type);
+                $($(ui.draggable).parents('.btn-group')[0]).removeClass('open');
+            }
+        });
+    },
     setupMoveHandler:function () {
         var self = this;
         $(".dots-blocks").sortable({
@@ -337,26 +365,29 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             tolerance:'pointer',
             revert:true,
             stop:function (event, ui) {
-                var $item = $(ui.item),
-                    view = $item.data('view'),
-                    fromSection = $(event.currentTarget).data('view'),
-                    toSection = $item.parent().data('view'),
-                    pos = $item.prevAll('.dots-block').length,
-                    data = {},models;
+                // process only existing blocks from another sortable
+                if (ui.sender){
+                    var $item = $(ui.item),
+                        view = $item.data('view'),
+                        fromSection = $(event.currentTarget).data('view'),
+                        toSection = $item.parent().data('view'),
+                        pos = $item.prevAll('.dots-block').length,
+                        data = {},models;
 
-                fromSection.model.getBlocks().remove(view.model);
-                fromSection.model.getBlocks().updatePositions();
-                toSection.model.getBlocks().add(view.model, {at:pos});
-                toSection.model.getBlocks().updatePositions();
+                    fromSection.model.getBlocks().remove(view.model);
+                    fromSection.model.getBlocks().updatePositions();
+                    toSection.model.getBlocks().add(view.model, {at:pos});
+                    toSection.model.getBlocks().updatePositions();
 
-                models = _.toArray(fromSection.model.getBlocks());
-                if (fromSection.model.get('id')!= toSection.model.get('id')){
-                    models = models.concat(_.toArray(toSection.model.getBlocks()));
+                    models = _.toArray(fromSection.model.getBlocks());
+                    if (fromSection.model.get('id')!= toSection.model.get('id')){
+                        models = models.concat(_.toArray(toSection.model.getBlocks()));
+                    }
+                    data['models'] = JSON.stringify(models);
+                    $.post('dots/block/move/', data, function (resp) {
+
+                    }, 'json');
                 }
-                data['models'] = JSON.stringify(models);
-                $.post('dots/block/move/', data, function (resp) {
-
-                }, 'json');
             }
         }).disableSelection();
     }

@@ -4,3 +4,6 @@
 .dots-block .dl-group dl dt{float: left;width:40px;padding:6px 6px 6px 0px;}
 .dots-block .dl-group dl dd{float: left;margin-left:0px;padding:0 12px 0 0;}
 .dots-block .dots-img-crop .dots-img-content{overflow: hidden;position: relative;}
+
+.icon-dots-link-big{min-height:65px; min-width:64px; background: url(../images/icon-image.png) no-repeat 50% 50%;}
+.icon-dots-link-big.helper{display:none;}

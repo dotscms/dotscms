@@ -14,3 +14,6 @@
 }
 
 .dots-block .dots-block-header .btn-group > .dropdown-toggle{padding:0;}
+
+.icon-dots-nav-big{min-height:65px; min-width:64px; background: url(../images/icon-nav.png) no-repeat 50% 50%;}
+.icon-dots-nav-big.helper{display:none;}

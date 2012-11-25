@@ -1,4 +1,4 @@
-/* Reset Layout * /
+/* Reset ALL Layout * /
 html,body{margin:0;padding:0;}
 h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,cite,code,del,dfn,em,img,q,s,samp,small,strike,strong,sub,sup,tt,var,dd,dl,dt,li,ol,ul,fieldset,form,label,legend,button,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;line-height:1;font-family:inherit;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -13,9 +13,15 @@ button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*ve
 button,input{line-height:normal;*overflow:visible;}
 button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
 button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
-/* General */
+
+/* Bootstrap reset to some common base */
 body{padding-top:60px; font-family: Tahoma, Arial, sans-serif;font-size: 11px;}
-body *{font-size: 11px;}
+.btn-group > .btn, .btn-group > .dropdown-menu{font-size:11px;}
+h1, h2, h3, h4, h5, h6{font-size: 13px;}
+legend{font-size: 13px;}
+label, input, button, select, textarea{font-size: 11px;}
+
+/*body *{font-size: 11px;}*/
 
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
     font-size: 11px;
