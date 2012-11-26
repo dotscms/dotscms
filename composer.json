@@ -8,15 +8,15 @@
     },
     "autoload":{
         "psr-0":{
-            "ZeAuth":   "core/ZeAuth/src",
-            "Dots":     "core/Dots/src",
-            "DotsBlock":"core/DotsBlock/src",
-            "DotsHtmlBlock":"core/DotsHtmlBlock/src",
-            "DotsImageBlock":"core/DotsImageBlock/src",
-            "DotsLinkBlock":"core/DotsLinkBlock/src",
-            "DotsNavBlock":"core/DotsNavBlock/src",
-            "DotsPages":"core/DotsPages/src",
-            "DotsSlideshow":"core/DotsSlideshow/src"
+            "ZeAuth":   "modules/ZeAuth/src",
+            "Dots":     "modules/Dots/src",
+            "DotsBlock":"modules/DotsBlock/src",
+            "DotsHtmlBlock":"modules/DotsHtmlBlock/src",
+            "DotsImageBlock":"modules/DotsImageBlock/src",
+            "DotsLinkBlock":"modules/DotsLinkBlock/src",
+            "DotsNavBlock":"modules/DotsNavBlock/src",
+            "DotsPages":"modules/DotsPages/src",
+            "DotsSlideshow":"modules/DotsSlideshow/src"
         }
     }
 }
