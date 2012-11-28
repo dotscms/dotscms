@@ -1,7 +1,7 @@
 <h1>A 404 error occurred</h1>
 <h2>{{message}}</h2>
 
-{% if isset(reason) and reason %}
+{% if reason %}
 
     {% if (reason == 'error-controller-cannot-dispatch') %}
         {% set reasonMessage = 'The requested controller was unable to dispatch the request.' %}
@@ -19,12 +19,12 @@
 
 {% endif %}
 
-{% if isset(controller) and controller %}
+{% if controller %}
 
 <dl>
     <dt>Controller:</dt>
     <dd>{{controller}}
-    {% if (isset(controller_class) and controller_class and controller_class !=controller) %}
+    {% if controller_class and controller_class !=controller %}
          (resolves to {{ controller_class }})
     {% endif %}
     </dd>
@@ -32,7 +32,7 @@
 
 {% endif %}
 
-{% if isset(exception) and exception %}
+{% if exception %}
 
 <h2>Exception:</h2>
 

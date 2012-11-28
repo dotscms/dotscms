@@ -11,15 +11,15 @@ namespace DotsBlock\Twig;
 
 use Zend\EventManager\EventManager;
 use Zend\EventManager\Event;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Twig_Extension;
 use Twig_Filter_Method;
-use Dots\Registry;
 use DotsBlock\Db\Entity\Block;
 use DotsBlock\Db\Model\Block as BlockModel;
 use DotsBlock\Twig\Extension\Section\TokenParser as SectionTokenParser;
 
 /**
- * Twig Extension for ZeTwig
+ * Twig Extension for rendering blocks and sections
  */
 class Extension extends Twig_Extension
 {
@@ -27,6 +27,12 @@ class Extension extends Twig_Extension
      * @var \Zend\EventManager\EventManager | null
      */
     protected $events = null;
+    protected $serviceLocator = null;
+
+    public function __construct($sm)
+    {
+        $this->serviceLocator = $sm;
+    }
 
     /**
      * Returns the name of the extension.
@@ -64,7 +70,7 @@ class Extension extends Twig_Extension
     public function renderBlock($block, $page = null)
     {
         if ($block instanceof Block){
-            $blockManager = Registry::get('block_manager');
+            $blockManager = $this->serviceLocator->get('DotsBlockManager');
             $type = $block->type;
             $results = $blockManager->events()->trigger('renderBlock/'.$type, $block, array('page'=>$page));
             return $results->last();
@@ -75,7 +81,7 @@ class Extension extends Twig_Extension
     public function renderEditBlock($block, $page = null)
     {
         if ($block instanceof Block) {
-            $blockManager = Registry::get('block_manager');
+            $blockManager = $this->serviceLocator->get('DotsBlockManager');
             $type = $block->type;
             $results = $blockManager->events()->trigger('editBlock/' . $type, $block, array('page' => $page));
             return $results->last();
@@ -95,10 +101,10 @@ class Extension extends Twig_Extension
      */
     public function renderSection($name, $page, $params)
     {
-        $view = Registry::get('service_locator')->get('TwigViewRenderer');
+        $view = $this->serviceLocator->get('DotsTwigViewRenderer');
         $edit = $view->plugin("auth")->isLoggedIn();
 
-        $model = Registry::get('service_locator')->get('DotsBlock\Db\Model\Block');
+        $model = $this->serviceLocator->get('DotsBlock\Db\Model\Block');
         $is_static = (isset($params['is_static']) && $params['is_static']);
         if ($is_static){
             $blocks = $model->getAllBySectionOrderByPosition($name);
@@ -111,7 +117,7 @@ class Extension extends Twig_Extension
         }
 
         if ($edit){
-            $blockManager = Registry::get('block_manager');
+            $blockManager = $this->serviceLocator->get('DotsBlockManager');
             $block_handlers = $blockManager->getContentBlockHandlers();
             return $view->render('dots-block/handler/edit-blocks', array(
                 'blocks' => $blocks,

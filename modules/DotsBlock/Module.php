@@ -11,8 +11,9 @@ namespace DotsBlock;
 
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
-use Dots\Registry;
 use Zend\EventManager\StaticEventManager;
+use Dots\Registry;
+use DotsBlock\Twig\Extension;
 
 /**
  * DotsBlock module
@@ -29,7 +30,7 @@ class Module
         $events = StaticEventManager::getInstance();
 
         $events->attach('dots','admin.menu',function () use ($serviceManager){
-            $view = $serviceManager->get('TwigViewRenderer');
+            $view = $serviceManager->get('DotsTwigViewRenderer');
             //render admin navigation
             $viewModel = new ViewModel();
             $viewModel->setTemplate('dots-block/admin/nav');
@@ -39,7 +40,7 @@ class Module
     }
 
     /**
-     * Get core configuration array
+     * Get configuration array
      * @return array
      */
     public function getConfig()
@@ -47,11 +48,18 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * Get service configuration
+     * @return array
+     */
     public function getServiceConfig()
     {
         return array(
             'factories' => array(
                 'DotsBlockManager' => 'DotsBlock\Service\BlockManagerFactory',
+                'DotsBlock\Twig\Extension' => function ($sm){
+                    return new Extension($sm);
+                }
             ),
             'aliases' => array(
                 'DotsBlock\BlockManager' => 'DotsBlockManager'

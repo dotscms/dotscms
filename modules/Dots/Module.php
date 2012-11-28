@@ -11,6 +11,8 @@ namespace Dots;
 
 use Zend\Mvc\MvcEvent;
 use Dots\Registry;
+use Dots\Twig\Helper\Trigger as TriggerHelper;
+use Dots\Twig\Extension as TwigExtension;
 
 class Module
 {
@@ -30,6 +32,25 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'aliases'=>array(
+                'DotsTwigViewRenderer'=>'ZfcTwigRenderer'
+            ),
+            'factories'=>array(
+                'DotsTwigTriggerHelper' => function ($sm){
+                    $helper = new TriggerHelper($sm);
+                    return $helper;
+                },
+                'DotsTwigExtension' => function ($sm){
+                    $extension = new TwigExtension($sm);
+                    return $extension;
+                }
+            )
+        );
     }
 
 }

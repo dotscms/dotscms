@@ -19,7 +19,7 @@ class Module implements AutoloaderProviderInterface
 
         $events->attach('dots', 'blocks.admin.menu', function () use ($serviceManager)
         {
-            $view = $serviceManager->get('TwigViewRenderer');
+            $view = $serviceManager->get('DotsTwigViewRenderer');
             //render admin navigation
             $viewModel = new ViewModel();
             $viewModel->setTemplate('dots-slideshow/admin/menu');

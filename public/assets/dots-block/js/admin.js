@@ -365,29 +365,28 @@ Dots.Blocks.View.Block = Backbone.View.extend({
             tolerance:'pointer',
             revert:true,
             stop:function (event, ui) {
-                // process only existing blocks from another sortable
-                if (ui.sender){
-                    var $item = $(ui.item),
-                        view = $item.data('view'),
-                        fromSection = $(event.currentTarget).data('view'),
-                        toSection = $item.parent().data('view'),
-                        pos = $item.prevAll('.dots-block').length,
-                        data = {},models;
+                // update model positions
+                var $item = $(ui.item),
+                    view = $item.data('view'),
+                    fromSection = $(this).data('view'),
+                    toSection = $item.parent().data('view'),
+                    pos = $item.prevAll('.dots-block').length,
+                    data = {},models;
 
-                    fromSection.model.getBlocks().remove(view.model);
-                    fromSection.model.getBlocks().updatePositions();
-                    toSection.model.getBlocks().add(view.model, {at:pos});
-                    toSection.model.getBlocks().updatePositions();
+                fromSection.model.getBlocks().remove(view.model);
+                fromSection.model.getBlocks().updatePositions();
+                toSection.model.getBlocks().add(view.model, {at:pos});
+                toSection.model.getBlocks().updatePositions();
 
-                    models = _.toArray(fromSection.model.getBlocks());
-                    if (fromSection.model.get('id')!= toSection.model.get('id')){
-                        models = models.concat(_.toArray(toSection.model.getBlocks()));
-                    }
-                    data['models'] = JSON.stringify(models);
-                    $.post('dots/block/move/', data, function (resp) {
-
-                    }, 'json');
+                models = _.toArray(fromSection.model.getBlocks());
+                if (fromSection.model.get('id')!= toSection.model.get('id')){
+                    models = models.concat(_.toArray(toSection.model.getBlocks()));
                 }
+                // persist changes in the database
+                data['models'] = JSON.stringify(models);
+                $.post('dots/block/move/', data, function (resp) {
+
+                }, 'json');
             }
         }).disableSelection();
     }

@@ -25,7 +25,7 @@ class PageController extends AbstractActionController
         $viewModel->setTemplate($page->template);
         $viewModel->setVariable('page', $page);
 
-        $view = $this->getServiceLocator()->get('TwigViewRenderer');
+        $view = $this->getServiceLocator()->get('DotsTwigViewRenderer');
 
         if ($pageMeta){
             $view->plugin('headTitle')->append($pageMeta->title);

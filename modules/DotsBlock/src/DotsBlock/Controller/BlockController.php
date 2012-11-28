@@ -205,7 +205,7 @@ class BlockController extends AbstractActionController
         $request = $this->getRequest();
         $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
-        $view = $this->getServiceLocator()->get('TwigViewRenderer');
+        $view = $this->getServiceLocator()->get('DotsTwigViewRenderer');
         $blockId = $_REQUEST['block_id'];
         $block = $blockModel->getById($blockId);
         $page = $pageModel->getById($block->page_id);

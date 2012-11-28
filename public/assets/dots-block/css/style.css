@@ -5,8 +5,8 @@
 .dots-blocks {border: dashed 1px #DDD;min-height: 16px;margin-top: 22px;padding:2px;}
 .dots-blocks> .dots-block-header {width: 48px;position: absolute;margin-top: -22px;}
 .dots-blocks .dots-block {border: dashed 1px #AAA;min-height: 16px;}
-.dots-blocks .dots-block .dots-block-header {display:none;width: 48px;position: absolute;padding:0 3px;
-    margin:-1px 0 0 -55px;border: dashed 1px #AAA;border-right:0;background: #FFF;}
+.dots-blocks .dots-block .dots-block-header{display: none;width: 48px;position: absolute;padding: 0 3px;
+    margin: -21px 0 0 0;border: dashed 1px #AAA;border-bottom: 0;background: #FFF;}
 .dots-blocks .dots-block:hover .dots-block-header {display:block;}
 .dots-blocks .dots-block.edit-dots-block .dots-block-header{display:none;}
 

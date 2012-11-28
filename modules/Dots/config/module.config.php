@@ -31,6 +31,14 @@ return array(
             )
         )
     ),
+
+    'zfctwig' => array(
+        'extensions' => array(
+            'dots-twig'     => 'DotsTwigExtension'
+        ),
+        'disable_zf_model'  => false
+    ),
+
     // View Manager Service
     'view_manager' => array(
         'template_path_stack' => array(

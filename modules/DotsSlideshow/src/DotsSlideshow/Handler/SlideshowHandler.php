@@ -116,7 +116,7 @@ class SlideshowHandler implements HandlerInterface
     public function editBlock(Event $event)
     {
         $locator = Registry::get('service_locator');
-        $view = $locator->get('TwigViewRenderer');
+        $view = $locator->get('DotsTwigViewRenderer');
         $block = $event->getTarget();
         $page = $event->getParam('page');
         if ($block->id) {

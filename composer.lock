@@ -1,28 +1,28 @@
 {
-    "hash": "d7e7d298bf86712ee4006ff4d7f10aa5",
+    "hash": "06d715bcf1b9f9f90dc1ffc35118dc1d",
     "packages": [
         {
             "name": "twig/twig",
-            "version": "v1.10.3",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.10.3"
+                "reference": "v1.11.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/v1.10.3",
-                "reference": "v1.10.3",
+                "url": "https://github.com/fabpot/Twig/archive/v1.11.1.zip",
+                "reference": "v1.11.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-10-19 03:45:49",
+            "time": "2012-11-11 17:17:59",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "installation-source": "dist",
@@ -154,16 +154,16 @@
         },
         {
             "name": "zendframework/zendframework",
-            "version": "dev-master",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "700e799c2def9b820a6209108e6324f4cdd03627"
+                "reference": "release-2.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/700e799c2def9b820a6209108e6324f4cdd03627.zip",
-                "reference": "700e799c2def9b820a6209108e6324f4cdd03627",
+                "url": "https://github.com/zendframework/zf2/archive/release-2.0.4.zip",
+                "reference": "release-2.0.4",
                 "shasum": ""
             },
             "require": {
@@ -182,12 +182,14 @@
                 "zendframework/zend-db": "self.version",
                 "zendframework/zend-di": "self.version",
                 "zendframework/zend-dom": "self.version",
+                "zendframework/zend-escaper": "self.version",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-feed": "self.version",
                 "zendframework/zend-file": "self.version",
                 "zendframework/zend-filter": "self.version",
                 "zendframework/zend-form": "self.version",
                 "zendframework/zend-http": "self.version",
+                "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-inputfilter": "self.version",
                 "zendframework/zend-json": "self.version",
                 "zendframework/zend-ldap": "self.version",
@@ -214,9 +216,7 @@
                 "zendframework/zend-uri": "self.version",
                 "zendframework/zend-validator": "self.version",
                 "zendframework/zend-view": "self.version",
-                "zendframework/zend-xmlrpc": "self.version",
-                "zendframework/zend-escaper": "self.version",
-                "zendframework/zend-i18n": "self.version"
+                "zendframework/zend-xmlrpc": "self.version"
             },
             "require-dev": {
                 "doctrine/common": ">=2.1",
@@ -225,11 +225,11 @@
             "suggest": {
                 "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
                 "ext-intl": "ext/intl for i18n features",
-                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form",
+                "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler",
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
-                "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
+                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "1353530011",
+            "time": "2012-11-20 21:14:29",
             "bin": [
                 "bin/classmap_generator.php"
             ],
@@ -259,32 +259,29 @@
         },
         {
             "name": "zf-commons/zfc-twig",
-            "version": "dev-master",
+            "version": "dev-refactor",
             "source": {
                 "type": "git",
                 "url": "git://github.com/ZF-Commons/ZfcTwig.git",
-                "reference": "4ea92d6100e8be46da10009b282e0c5c0b779670"
+                "reference": "f5b116bc704229cfa7b68950d4bba4591bc9e201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZF-Commons/ZfcTwig/archive/4ea92d6100e8be46da10009b282e0c5c0b779670.zip",
-                "reference": "4ea92d6100e8be46da10009b282e0c5c0b779670",
+                "url": "https://github.com/ZF-Commons/ZfcTwig/archive/f5b116bc704229cfa7b68950d4bba4591bc9e201.zip",
+                "reference": "f5b116bc704229cfa7b68950d4bba4591bc9e201",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "twig/twig": "1.10.*"
+                "twig/twig": "1.11.*"
             },
-            "time": "1352795488",
+            "time": "1353604415",
             "type": "library",
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
-                    "ZfcTwig": "src/"
-                },
-                "classmap": [
-                    "./"
-                ]
+                    "ZfcTwig\\": "src/"
+                }
             },
             "authors": [
                 {
@@ -313,7 +310,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zendframework/zendframework": 20,
         "zf-commons/zfc-twig": 20,
         "zendexperts/ze-db": 20,
         "zendexperts/ze-theme": 20

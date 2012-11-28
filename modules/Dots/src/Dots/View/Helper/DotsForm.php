@@ -24,13 +24,13 @@ class DotsForm extends AbstractHelper
         $form->prepare();
         $view = $this->getView();
         $render = '';
-        $render .= $view->form()->openTag($form);
+        $render .= $view->plugin('form')->openTag($form);
         if ($form instanceof MultiForm){
             $render .= $view->render('dots/helpers/dots-form/multi-form', array('form'=>$form));
         }else{
             $render .= $view->render('dots/helpers/dots-form/form', array('form' => $form));
         }
-        $render .= $view->form()->closeTag($form);
+        $render .= $view->plugin('form')->closeTag($form);
         return $render;
     }
 

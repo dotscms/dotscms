@@ -20,7 +20,7 @@ class Admin
     public static function renderNav(Event $event)
     {
         $serviceLocator = Registry::get('service_locator');
-        $view = $serviceLocator->get('TwigViewRenderer');
+        $view = $serviceLocator->get('DotsTwigViewRenderer');
         $context = $serviceLocator->get('Application')->getMvcEvent();
         $routeMatch = $context->getRouteMatch();
         $routeMatchName = $context->getRouteMatch()->getMatchedRouteName();
