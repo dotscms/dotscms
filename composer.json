@@ -1,17 +1,22 @@
 {
     "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework":"dev-master",
-        "zf-commons/zfc-twig": "dev-master",
-        "zendexperts/ze-db":"dev-master",
-        "zendexperts/ze-theme":"dev-master"
+        "php":                          ">=5.3.3",
+        "zendframework/zendframework":  ">=2.0.3",
+        "zf-commons/zfc-twig":          "dev-refactor",
+        "zendexperts/ze-db":            "dev-master",
+        "zendexperts/ze-theme":         "dev-master"
     },
     "autoload":{
         "psr-0":{
-            "Core":     "core/Core/src",
-            "ZeAuth":   "core/ZeAuth/src",
-            "Dots":     "core/Dots/src",
-            "DotsPages":"core/DotsPages/src"
+            "ZeAuth":           "modules/ZeAuth/src",
+            "Dots":             "modules/Dots/src",
+            "DotsBlock":        "modules/DotsBlock/src",
+            "DotsHtmlBlock":    "modules/DotsHtmlBlock/src",
+            "DotsImageBlock":   "modules/DotsImageBlock/src",
+            "DotsLinkBlock":    "modules/DotsLinkBlock/src",
+            "DotsNavBlock":     "modules/DotsNavBlock/src",
+            "DotsPages":        "modules/DotsPages/src",
+            "DotsSlideshow":    "modules/DotsSlideshow/src"
         }
     }
 }

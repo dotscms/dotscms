@@ -1,0 +1,32 @@
+/* Dots: Links*/
+.dots-block .dots-links-block {}
+
+.dots-block .dots-links-block li a:hover{background: #F6F6F6;}
+.dots-block .dots-links-block li .link-edit{
+    opacity: 0.0;
+    filter: alpha(opacity = 0); /* For IE8 and earlier */
+    position: absolute;padding: 3px 3px;
+    margin: -1px 0 0 -76px;background: #F6F6F6;border: dashed 1px #AAA;border-right: 0px;}
+.dots-block .dots-links-block li .link-edit:hover + a{background: #F6F6F6;}
+.dots-block .dots-links-block li .link-edit:hover{
+    opacity: 1;
+    filter: alpha(opacity = 100); /* For IE8 and earlier */
+    background: #F6F6F6;}
+.dots-block .dots-links-block li:hover .link-edit{visibility: visible;
+    opacity: 1;filter: alpha(opacity = 100); /* For IE8 and earlier */}
+
+.dots-block .dots-links-block li.dots-move-link-helper{}
+.dots-block .dots-links-block li.dots-move-link-helper .link-edit {
+    opacity: 1;
+    filter: alpha(opacity = 100); /* For IE8 and earlier */
+    position: absolute;
+    padding: 3px 3px;
+    margin: -1px 0 0 -76px;
+    background: #F6F6F6;
+    border: dashed 1px #AAA;
+    border-right: 0px;
+}
+.dots-block .dots-links-block li.dots-move-link-helper .link-edit + a {background: #F6F6F6;}
+
+.icon-dots-links-big{min-height:65px; min-width:64px; background: url(../images/icon-links.png) no-repeat 50% 50%;}
+.icon-dots-links-big.helper{display:none;}

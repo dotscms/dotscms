@@ -1,0 +1,14 @@
+<div class="slider-wrapper theme-{{ slideshowBlock.theme }}">
+    <div class="nivoSlider">
+        {% for image in images %}
+            <img src="data/uploads/{{ image.src  }}" data-thumb="{{ image.src  }}" alt="{{ image.alt  }}"
+                    {% if image.caption %}
+                        title="{{ image.caption }}"
+                    {% endif %}
+                    />
+        {% endfor %}
+    </div>
+    <input type="hidden" value="{{ slideshowBlock.effect }}" class="effect">
+    <input type="hidden" value="{{ slideshowBlock.animSpeed }}" class="animSpeed">
+    <input type="hidden" value="{{ slideshowBlock.pauseTime }}" class="pauseTime">
+</div>

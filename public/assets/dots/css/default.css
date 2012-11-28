@@ -1,0 +1,49 @@
+/* Reset ALL Layout * /
+html,body{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,cite,code,del,dfn,em,img,q,s,samp,small,strike,strong,sub,sup,tt,var,dd,dl,dt,li,ol,ul,fieldset,form,label,legend,button,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;line-height:1;font-family:inherit;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul{list-style:none;}
+q:before,q:after,blockquote:before,blockquote:after{content:"";}
+html{overflow-y:scroll;font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+a:focus{outline:thin dotted;}
+a:hover,a:active{outline:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
+img{border:0;-ms-interpolation-mode:bicubic;}
+button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*vertical-align:middle;}
+button,input{line-height:normal;*overflow:visible;}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
+button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
+
+/* Bootstrap reset to some common base */
+body{padding-top:60px; font-family: Tahoma, Arial, sans-serif;font-size: 11px;}
+.btn-group > .btn, .btn-group > .dropdown-menu{font-size:11px;}
+h1, h2, h3, h4, h5, h6{font-size: 13px;}
+legend{font-size: 13px;}
+label, input, button, select, textarea{font-size: 11px;}
+
+/*body *{font-size: 11px;}*/
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+    font-size: 11px;
+}
+input,textarea{-webkit-transition:border linear 0.2s,box-shadow linear 0.2s;-moz-transition:border linear 0.2s,box-shadow linear 0.2s;-ms-transition:border linear 0.2s,box-shadow linear 0.2s;-o-transition:border linear 0.2s,box-shadow linear 0.2s;transition:border linear 0.2s,box-shadow linear 0.2s;-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);}
+input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 4px rgba(82, 168, 236, 0.6);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 4px rgba(82, 168, 236, 0.6);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 4px rgba(82, 168, 236, 0.6);}
+input[type=submit], input[type=button], button{background-color: rgba(82, 168, 236, 0.8);border-color:rgba(82, 168, 236, 0.8);color:#FFF;font-weight: bold;padding: 3px 6px;}
+label, input, select, textarea{font-family: Tahoma, Arial, sans-serif;}
+label{float:none;width:auto;padding: 0px;}
+
+/* Fix navigation container problem */
+.navbar .container:after{clear:left;}
+
+/* Login Box */
+.login dl{overflow: hidden;padding: 3px 0 3px 0;}
+.login dl dt{padding: 4px 5px 0 0;font-size:13px;line-height:18px;float:left;width:100px;text-align:right;color:#404040;clear:left;}
+.login dl dd{padding: 0 0 6px 0;float:left;margin-left: 4px;}
+.login dl dd ul.errors li{color:#b94a48;list-style: none;}
+.login dl dd input{padding: 3px;}
+
+.login dl dd label{display:inline;}
+.login ul, ol{margin: 0 0 0px 0px;}
+
+.login{width:370px;border: solid 1px #c6edf9;padding: 0 0 0px 0;margin: 70px auto 100px auto;}
+.login h3{width:366px;background: #049cdb;position:relative; color:#FFFFFF;line-height: 24px;padding:0 0 0 6px;margin: 0px 0 20px -1px;font-size: 13px;}

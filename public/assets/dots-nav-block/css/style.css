@@ -1,0 +1,19 @@
+/* Dots: Nav */
+.dots-block .dots-nav-block li>.nav-edit{display:none; position:absolute;margin:0 0 0 -39px;padding:2px 4px;border:dashed 1px #111;border-right:0;background: #222;}
+.dots-block .dots-nav-block li:hover>a{border:dashed 1px #111;border-top: 0;border-bottom: 0;background: #222;}
+.dots-block .dots-nav-block li:hover>.nav-edit{display:block;}
+
+.dots-block .dots-nav-block li.nav-header{margin:0;padding:0;}
+.dots-block .dots-nav-block li.nav-header span{display:block;padding: 12px 15px 3px 15px;}
+.dots-block .dots-nav-block li.nav-header:hover span{border: dashed 1px #111;border-top: 0;border-bottom: 0;background: #222;}
+
+.dots-block .dots-block-header .btn-group.open .dropdown-toggle{
+    box-shadow:none;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+}
+
+.dots-block .dots-block-header .btn-group > .dropdown-toggle{padding:0;}
+
+.icon-dots-nav-big{min-height:65px; min-width:64px; background: url(../images/icon-nav.png) no-repeat 50% 50%;}
+.icon-dots-nav-big.helper{display:none;}

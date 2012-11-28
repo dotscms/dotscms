@@ -1,0 +1,13 @@
+{% extends 'layout/html' %}
+
+{# DEFAULT HTML HEAD CONTENTS FOR ALL PAGES #}
+{% block head %}
+    {{ headScript() }}
+    {{ headLink() }}
+    {{ headStyle() }}
+{% endblock %}
+
+{# DEFAULT HTML BODY CONTENT FOR ALL PAGES #}
+{% block body %}
+    {{ content | raw }}
+{% endblock %}

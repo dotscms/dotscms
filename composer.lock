@@ -1,27 +1,28 @@
 {
-    "hash": "dec4aa6c6e2558ea385a8ab14d63c9b1",
+    "hash": "06d715bcf1b9f9f90dc1ffc35118dc1d",
     "packages": [
         {
             "name": "twig/twig",
-            "version": "v1.9.2",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.9.2"
+                "reference": "v1.11.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/v1.9.2",
-                "reference": "v1.9.2",
+                "url": "https://github.com/fabpot/Twig/archive/v1.11.1.zip",
+                "reference": "v1.11.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "time": "2012-11-11 17:17:59",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "installation-source": "dist",
@@ -36,15 +37,11 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": null,
-                    "role": null
+                    "email": "fabien@symfony.com"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "homepage": null,
-                    "role": null
+                    "email": "armin.ronacher@active-4.com"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -59,12 +56,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZendExperts/ZeDb",
-                "reference": "2cc9dd3e9b81bf2e724815a66c664bbeb3925350"
+                "reference": "be73f98ecb0eadcaa5db3504824f5800ae8647c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZendExperts/ZeDb/zipball/2cc9dd3e9b81bf2e724815a66c664bbeb3925350",
-                "reference": "2cc9dd3e9b81bf2e724815a66c664bbeb3925350",
+                "url": "https://github.com/ZendExperts/ZeDb/zipball/be73f98ecb0eadcaa5db3504824f5800ae8647c5",
+                "reference": "be73f98ecb0eadcaa5db3504824f5800ae8647c5",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +99,7 @@
                 "zf2",
                 "module"
             ],
-            "time": "1347875979"
+            "time": "1349358911"
         },
         {
             "name": "zendexperts/ze-theme",
@@ -157,16 +154,16 @@
         },
         {
             "name": "zendframework/zendframework",
-            "version": "dev-master",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "release-2.0.1"
+                "reference": "release-2.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/zipball/release-2.0.1",
-                "reference": "release-2.0.1",
+                "url": "https://github.com/zendframework/zf2/archive/release-2.0.4.zip",
+                "reference": "release-2.0.4",
                 "shasum": ""
             },
             "require": {
@@ -185,12 +182,14 @@
                 "zendframework/zend-db": "self.version",
                 "zendframework/zend-di": "self.version",
                 "zendframework/zend-dom": "self.version",
+                "zendframework/zend-escaper": "self.version",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-feed": "self.version",
                 "zendframework/zend-file": "self.version",
                 "zendframework/zend-filter": "self.version",
                 "zendframework/zend-form": "self.version",
                 "zendframework/zend-http": "self.version",
+                "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-inputfilter": "self.version",
                 "zendframework/zend-json": "self.version",
                 "zendframework/zend-ldap": "self.version",
@@ -217,24 +216,28 @@
                 "zendframework/zend-uri": "self.version",
                 "zendframework/zend-validator": "self.version",
                 "zendframework/zend-view": "self.version",
-                "zendframework/zend-xmlrpc": "self.version",
-                "zendframework/zend-escaper": "self.version",
-                "zendframework/zend-i18n": "self.version"
+                "zendframework/zend-xmlrpc": "self.version"
             },
             "require-dev": {
-                "doctrine/common": ">=2.1"
+                "doctrine/common": ">=2.1",
+                "phpunit/phpunit": "3.7.*"
             },
             "suggest": {
                 "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
                 "ext-intl": "ext/intl for i18n features",
-                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form",
+                "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler",
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
-                "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler"
+                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
+            "time": "2012-11-20 21:14:29",
+            "bin": [
+                "bin/classmap_generator.php"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.0-dev",
+                    "dev-develop": "2.1-dev"
                 }
             },
             "installation-source": "source",
@@ -252,36 +255,33 @@
             "keywords": [
                 "framework",
                 "zf2"
-            ],
-            "time": "1348173563"
+            ]
         },
         {
             "name": "zf-commons/zfc-twig",
-            "version": "dev-master",
+            "version": "dev-refactor",
             "source": {
                 "type": "git",
                 "url": "git://github.com/ZF-Commons/ZfcTwig.git",
-                "reference": "cdc570cff5d710555426a86d9cde967e05867176"
+                "reference": "f5b116bc704229cfa7b68950d4bba4591bc9e201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ZF-Commons/ZfcTwig/zipball/cdc570cff5d710555426a86d9cde967e05867176",
-                "reference": "cdc570cff5d710555426a86d9cde967e05867176",
+                "url": "https://github.com/ZF-Commons/ZfcTwig/archive/f5b116bc704229cfa7b68950d4bba4591bc9e201.zip",
+                "reference": "f5b116bc704229cfa7b68950d4bba4591bc9e201",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "twig/twig": "1.9.*"
+                "twig/twig": "1.11.*"
             },
+            "time": "1353604415",
             "type": "library",
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
-                    "ZfcTwig": "src/"
-                },
-                "classmap": [
-                    "./"
-                ]
+                    "ZfcTwig\\": "src/"
+                }
             },
             "authors": [
                 {
@@ -301,8 +301,7 @@
                 "twig",
                 "zf2",
                 "module"
-            ],
-            "time": "1347966322"
+            ]
         }
     ],
     "packages-dev": null,
@@ -311,7 +310,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zendframework/zendframework": 20,
         "zf-commons/zfc-twig": 20,
         "zendexperts/ze-db": 20,
         "zendexperts/ze-theme": 20

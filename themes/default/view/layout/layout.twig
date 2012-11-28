@@ -2,13 +2,8 @@
 
 {# DEFAULT HTML HEAD CONTENTS FOR ALL PAGES #}
 {% block head %}
-    <script src="/assets/default/js/html5.js" type="text/javascript"></script>
-    <script src="/assets/default/js/jquery.min.js" type="text/javascript"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     {{ headScript() }}
-    <link rel="shortcut icon" href="/assets/default/images/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/default/css/default.css" />
+    <link rel="shortcut icon" href="assets/dots/images/favicon.ico" />
     {{ headLink() }}
     {{ headStyle() }}
 {% endblock %}
