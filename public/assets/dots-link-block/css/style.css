@@ -30,3 +30,7 @@
 
 .icon-dots-links-big{min-height:65px; min-width:64px; background: url(../images/icon-links.png) no-repeat 50% 50%;}
 .icon-dots-links-big.helper{display:none;}
+
+.icon-dots-links-small{background: url(../images/icon-links-small.png) no-repeat 50% 50%;}
+.dropdown-menu > li > a:hover > .icon-dots-links-small{
+    background: url(../images/icon-links-white-small.png) no-repeat 50% 50%;}
