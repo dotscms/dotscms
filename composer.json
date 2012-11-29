@@ -2,7 +2,7 @@
     "require": {
         "php":                          ">=5.3.3",
         "zendframework/zendframework":  ">=2.0.3",
-        "zf-commons/zfc-twig":          "dev-refactor",
+        "zf-commons/zfc-twig":          ">=1.0",
         "zendexperts/ze-db":            "dev-master",
         "zendexperts/ze-theme":         "dev-master"
     },
@@ -10,12 +10,12 @@
         "psr-0":{
             "ZeAuth":           "modules/ZeAuth/src",
             "Dots":             "modules/Dots/src",
+            "DotsPages":        "modules/DotsPages/src",
             "DotsBlock":        "modules/DotsBlock/src",
             "DotsHtmlBlock":    "modules/DotsHtmlBlock/src",
             "DotsImageBlock":   "modules/DotsImageBlock/src",
             "DotsLinkBlock":    "modules/DotsLinkBlock/src",
             "DotsNavBlock":     "modules/DotsNavBlock/src",
-            "DotsPages":        "modules/DotsPages/src",
             "DotsSlideshow":    "modules/DotsSlideshow/src"
         }
     }

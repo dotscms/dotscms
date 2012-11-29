@@ -45,7 +45,7 @@ return array(
             'dots' => __DIR__ . '/../views',
         ),
         'template_map' => array(
-            'layouts/layout' => __DIR__ . '/../views/layouts/layout.twig',
+            'layout/layout' => __DIR__ . '/../views/layout/layout.twig',
         ),
     ),
 
