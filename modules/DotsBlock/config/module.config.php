@@ -6,6 +6,14 @@ return array(
             'dots-block' => __DIR__ . '/../views',
         ),
     ),
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsBlock\Db\Model\Block' => array(
+                'tableName' => 'blocks',
+                'entityClass' => 'DotsBlock\Db\Entity\Block',
+            ),
+        ),
+    ),
     // Add DotsBlock extension to ZfcTwig
     'zfctwig' => array(
         'extensions' => array(

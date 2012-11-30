@@ -8,6 +8,16 @@ return array(
             'dots-nav-block' => __DIR__ . '/../views',
         ),
     ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsNavBlock\Db\Model\NavigationBlock' => array(
+                'tableName' => 'block_navigation',
+                'entityClass' => 'DotsNavBlock\Db\Entity\NavigationBlock',
+            ),
+        ),
+    ),
+
     'dots'=>array(
         'blocks'=>array(
             __NAMESPACE__ . '\Handler\NavigationHandler'

@@ -1,5 +1,23 @@
 <?php
 return array(
+    'ze-auth' => array(
+        'restricted_routes' => array(),
+        'home_route' => 'dots-page',
+    ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsPages\Db\Model\Page' => array(
+                'tableName' => 'pages',
+                'entityClass' => 'DotsPages\Db\Entity\Page',
+            ),
+            'DotsPages\Db\Model\PageMeta' => array(
+                'tableName' => 'page_metas',
+                'entityClass' => 'DotsPages\Db\Entity\PageMeta',
+            ),
+        ),
+    ),
+
     // Dots Page templates
     'dots-pages' => array(
         'templates' => array(
@@ -26,10 +44,6 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             'dots-pages'    => __DIR__ . '/../views',
-        ),
-        'template_map' => array(
-            'dots-pages/admin/add'  => __DIR__ . '/../views/dots-pages/admin/add.twig',
-            'dots-pages/admin/edit' => __DIR__ . '/../views/dots-pages/admin/edit.twig',
         ),
     ),
 

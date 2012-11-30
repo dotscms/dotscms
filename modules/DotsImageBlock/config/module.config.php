@@ -6,6 +6,16 @@ return array(
             'dots-image-block' => __DIR__ . '/../views',
         ),
     ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsImageBlock\Db\Model\ImageBlock' => array(
+                'tableName' => 'block_image',
+                'entityClass' => 'DotsImageBlock\Db\Entity\ImageBlock',
+            ),
+        ),
+    ),
+
     'dots'=>array(
         'blocks'=>array(
             'DotsImageBlock\Handler\ImageHandler',

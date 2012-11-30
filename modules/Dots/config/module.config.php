@@ -1,4 +1,5 @@
 <?php
+$workingDir = getcwd();
 return array(
     'dots'=>array(
         'view'=>array(
@@ -32,6 +33,19 @@ return array(
         )
     ),
 
+    'zendexperts_zetwig' => array(
+        'environment_options' => array(
+            'cache' => $workingDir . '/data/cache/twig',
+        ),
+    ),
+
+    'ze_theme' => array(
+        'default_theme' => 'default',
+        'theme_paths' => array(
+            $workingDir . '/themes/'
+        ),
+    ),
+
     'zfctwig' => array(
         'extensions' => array(
             'dots-twig'     => 'DotsTwigExtension'
@@ -41,11 +55,13 @@ return array(
 
     // View Manager Service
     'view_manager' => array(
+        'display_exceptions' => true,
+        'display_not_found_reason' => true,
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
+        'layout' => 'layout/layout',
         'template_path_stack' => array(
             'dots' => __DIR__ . '/../views',
-        ),
-        'template_map' => array(
-            'layout/layout' => __DIR__ . '/../views/layout/layout.twig',
         ),
     ),
 

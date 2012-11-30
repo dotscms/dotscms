@@ -12,11 +12,6 @@
  */
 
 return array(
-    'zendexperts_zetwig' => array(
-        'environment_options' => array(
-            'cache' => BASE_PATH . '/data/cache/twig',
-        ),
-    ),
 
     'zendexperts_zedb' => array(
         'adapter' => array(
@@ -27,18 +22,4 @@ return array(
         )
     ),
 
-    'di' => array(
-        'instance' => array(
-            'Zend\Db\Adapter\Adapter' => array(
-                'parameters' => array(
-                    'driver' => array(
-                        'driver' => 'Pdo_Mysql', //'MySqli',
-                        'database' => 'www_dotscms_dev',
-                        'username' => 'root',
-                        'password' => ''
-                    )
-                )
-            ),
-        )
-    ),
 );

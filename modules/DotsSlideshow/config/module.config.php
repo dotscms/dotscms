@@ -1,4 +1,6 @@
 <?php
+namespace DotsSlideshow;
+
 return array(
     // View Manager Service
     'view_manager' => array(
@@ -6,9 +8,23 @@ return array(
             'dots-slideshow' => __DIR__ . '/../views',
         ),
     ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            __NAMESPACE__ . '\Db\Model\SlideshowBlock' => array(
+                'tableName' => 'block_slideshows',
+                'entityClass' => __NAMESPACE__ . '\Db\Entity\SlideshowBlock',
+            ),
+            __NAMESPACE__ . '\Db\Model\SlideshowImage' => array(
+                'tableName' => 'block_slideshow_images',
+                'entityClass' => __NAMESPACE__ . '\Db\Entity\SlideshowImage',
+            ),
+        ),
+    ),
+
     'dots'=>array(
         'blocks'=>array(
-            'DotsSlideshow\Handler\SlideshowHandler',
+            __NAMESPACE__ . '\Handler\SlideshowHandler',
         ),
         'view' => array(
             'events' => array(
@@ -45,7 +61,7 @@ return array(
     // Controller Service
     'controllers' => array(
         'invokables' => array(
-            'DotsSlideshow\Controller\Slideshow' => 'DotsSlideshow\Controller\SlideshowController'
+            __NAMESPACE__ . '\Controller\Slideshow' => __NAMESPACE__ . '\Controller\SlideshowController'
         ),
     ),
 
@@ -60,7 +76,7 @@ return array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
-                        'controller' => 'DotsSlideshow\Controller\Slideshow',
+                        'controller' => __NAMESPACE__ . '\Controller\Slideshow',
                         'action' => 'index',
                     ),
                 ),

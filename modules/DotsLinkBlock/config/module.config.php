@@ -9,6 +9,16 @@ return array(
             'dots-link-block' => __DIR__ . '/../views',
         ),
     ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsLinkBlock\Db\Model\LinkBlock' => array(
+                'tableName' => 'block_links',
+                'entityClass' => 'DotsLinkBlock\Db\Entity\LinkBlock',
+            ),
+        ),
+    ),
+
     'dots'=>array(
         'blocks'=>array(
             __NAMESPACE__ . '\Handler\LinksHandler',

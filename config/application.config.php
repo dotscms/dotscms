@@ -6,7 +6,6 @@ return array(
         'ZeDb',             //Database abstraction layer: defines how the application exchanges data with the database server
         'ZeAuth',           //Allows user accounts to log into the application
         'Dots', 'DotsPages', 'DotsBlock', 'DotsHtmlBlock', 'DotsImageBlock', 'DotsLinkBlock', 'DotsNavBlock', 'DotsSlideshow',
-
     ),
     'module_listener_options' => array(
         'config_glob_paths' => array(

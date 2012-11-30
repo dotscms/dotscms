@@ -6,6 +6,16 @@ return array(
             'dots-html-block' => __DIR__ . '/../views',
         ),
     ),
+
+    'zendexperts_zedb' => array(
+        'models' => array(
+            'DotsHtmlBlock\Db\Model\HtmlBlock' => array(
+                'tableName' => 'block_html',
+                'entityClass' => 'DotsHtmlBlock\Db\Entity\HtmlBlock',
+            ),
+        ),
+    ),
+
     'dots'=>array(
         'blocks'=>array(
             'DotsHtmlBlock\Handler\HtmlHandler',
