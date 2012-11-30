@@ -152,45 +152,18 @@ class Auth
     }
     
     /**
-     * Validate the identity of the user based in username/email or password
+     * Save identity into sesssion
      * @param array $data
-     * @return mixed
-     *
-     * - true: If the login was successful and the result was saved in the session
-     * - array: An array containing a list of error messages otherwise
      */
     public function login(array $data)
     {
-        if ( array_key_exists('identity', $data) && !empty($data['identity']) ){
-            $identity = $data['identity'];
-        }else{
-            return array('identity'=>'This field is required');
-        }
+        $identity = $data['identity'];
 
-        if ( array_key_exists('credential', $data) && !empty($data['credential']) ){
-            $credential = $data['credential'];
-        }else{
-            return array('credential'=>'This field is required');
+        //on successfull login save the identity in the storage
+        if ($this->auth->hasIdentity()){
+            $this->auth->clearIdentity();
         }
-
-        if ( $identity && $credential ){
-            $mapper = $this->getUserByIdentity($identity);
-            if (!$mapper){
-                return array('identity'=>'Invalid identity specified');
-            }
-            $salt = $mapper->getPasswordSalt();
-            $password = $mapper->getPassword();
-
-            if (!$this->_isValidCredential($password, $salt, $credential)){
-                return array('credential'=>'Invalid credential specified');
-            }
-            //on successfull login save the identity in the storage
-            if ($this->auth->hasIdentity()){
-                $this->auth->clearIdentity();
-            }
-            $this->auth->getStorage()->write($identity);
-        }
-        return true;
+        $this->auth->getStorage()->write($identity);
     }
 
     /**
