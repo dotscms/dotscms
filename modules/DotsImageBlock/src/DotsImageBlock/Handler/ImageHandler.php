@@ -147,6 +147,7 @@ class ImageHandler implements HandlerInterface
     {
         $request = $event->getParam('request');
         $locator = Registry::get('service_locator');
+        $appConfig = $locator->get('ApplicationConfig');
         $modelImageBlock = $locator->get('DotsImageBlock\Db\Model\ImageBlock');
         $block = $event->getTarget();
         $form = new MultiForm(array(
@@ -189,7 +190,7 @@ class ImageHandler implements HandlerInterface
             if (!empty($files['original_src']['tmp_name'])){
                 $upload = new Upload(array(
                     'path' => 'data/uploads/',
-                    'destination' => PUBLIC_PATH.'/'
+                    'destination' => $appConfig['public_path'].'/'
                 ));
                 $path = $upload->process($files);
                 $data['image_content']['original_src'] = $path['original_src'];
@@ -199,14 +200,14 @@ class ImageHandler implements HandlerInterface
                 // success - do something with the uploaded file
                 $fullFilePath = $data['image_content']['original_src'];
                 if ($imageBlock->original_src){
-                    unlink(PUBLIC_PATH . '/' . $imageBlock->original_src);
+                    unlink($appConfig['public_path'] . '/' . $imageBlock->original_src);
                 }
                 if ($imageBlock->src != $imageBlock->original_src) {
-                    unlink(PUBLIC_PATH . '/' . $imageBlock->src);
+                    unlink($appConfig['public_path'] . '/' . $imageBlock->src);
                 }
                 $imageBlock->original_src = $fullFilePath;
                 $imageBlock->src = $fullFilePath;
-                $thumb = PhpThumbFactory::create(PUBLIC_PATH . '/' . $imageBlock->original_src);
+                $thumb = PhpThumbFactory::create($appConfig['public_path'] . '/' . $imageBlock->original_src);
                 $dimensions = $thumb->getCurrentDimensions();
                 $imageBlock->width = $dimensions['width'];
                 $imageBlock->height = $dimensions['height'];
@@ -215,10 +216,10 @@ class ImageHandler implements HandlerInterface
             if ($editedCrop){
 
                 if ($imageBlock->src != $imageBlock->original_src) {
-                    unlink(PUBLIC_PATH . '/' . $imageBlock->src);
+                    unlink($appConfig['public_path'] . '/' . $imageBlock->src);
                 }
                 if ($imageBlock->crop_x1 !== "" && $imageBlock->crop_y1 !== "" && $imageBlock->crop_x2 !== "" && $imageBlock->crop_y2 !== "") {
-                    $thumb = PhpThumbFactory::create(PUBLIC_PATH . '/' . $imageBlock->original_src);
+                    $thumb = PhpThumbFactory::create($appConfig['public_path'] . '/' . $imageBlock->original_src);
                     if ($imageBlock->width && $imageBlock->height){
                         $w = $imageBlock->width;
                         $h = $imageBlock->height;
@@ -236,7 +237,7 @@ class ImageHandler implements HandlerInterface
                     $filename = basename($imageBlock->original_src);
                     $filename = substr($filename, 0, strrpos($filename, '.')) . '.jpg';
                     $filename = 'data/uploads/edited/' . uniqid(rand()) . '_' . $filename;
-                    $thumb->save(PUBLIC_PATH .'/'. $filename, 'jpg');
+                    $thumb->save($appConfig['public_path'] .'/'. $filename, 'jpg');
                     $imageBlock->src = $filename;
                 } else {
                     $imageBlock->src = $imageBlock->original_src;
@@ -259,15 +260,16 @@ class ImageHandler implements HandlerInterface
     public function removeBlock(Event $event)
     {
         $locator = Registry::get('service_locator');
+        $appConfig = $locator->get('ApplicationConfig');
         $modelImageBlock = $locator->get('DotsImageBlock\Db\Model\ImageBlock');
         $block = $event->getTarget();
         $imageBlock = $modelImageBlock->getByBlockId($block->id);
         if ($imageBlock){
-            if ($imageBlock->original_src && file_exists(PUBLIC_PATH . '/' . $imageBlock->original_src)){
-                unlink(PUBLIC_PATH .'/'. $imageBlock->original_src);
+            if ($imageBlock->original_src && file_exists($appConfig['public_path'] . '/' . $imageBlock->original_src)){
+                unlink($appConfig['public_path'] .'/'. $imageBlock->original_src);
             }
-            if ($imageBlock->src && file_exists(PUBLIC_PATH . '/' . $imageBlock->src)) {
-                unlink(PUBLIC_PATH .'/'. $imageBlock->src);
+            if ($imageBlock->src && file_exists($appConfig['public_path'] . '/' . $imageBlock->src)) {
+                unlink($appConfig['public_path'] .'/'. $imageBlock->src);
             }
             $imageBlock->delete();
         }

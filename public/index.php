@@ -3,10 +3,7 @@
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
-defined('PUBLIC_PATH')
-    || define('PUBLIC_PATH', __DIR__);
-defined('BASE_PATH')
-    || define('BASE_PATH', dirname(PUBLIC_PATH));
+chdir(dirname(__DIR__));
 
 defined('IMAGE_PATH')
     || define('IMAGE_PATH', realpath(__DIR__."/data/uploads")."/");
@@ -15,10 +12,12 @@ date_default_timezone_set('Europe/Bucharest');
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-chdir(dirname(__DIR__));
-
 // Setup autoloading
 include 'init_autoloader.php';
 
+$config = include 'config/application.config.php';
+// set the public path in the application configuration so we know where all the public files are located
+$config['public_path'] = __DIR__;
+
 // Run the application!
-Zend\Mvc\Application::init(include 'config/application.config.php')->run();
+Zend\Mvc\Application::init($config)->run();

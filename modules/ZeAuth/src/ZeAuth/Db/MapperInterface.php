@@ -9,11 +9,12 @@
  */
 namespace ZeAuth\Db;
 
+use ZeDb\EntityInterface;
 /**
  * ZeAuth User Mapper Interface
  * Abstracts the user objects to allow any type of database abstraction layer
  */
-interface MapperInterface
+interface MapperInterface extends EntityInterface
 {
     /**
      * Get the encrypted password for the current user
@@ -36,18 +37,4 @@ interface MapperInterface
      * @return ZeAuth\Db\Mapper
      */
     public function setLastLogin($date = null);
-
-    /**
-     * Persist the object into the database
-     * @abstract
-     * @return ZeAuth\Db\MapperInterface
-     */
-    public function save();
-
-    /**
-     * Return an array representation of the data
-     * @abstract
-     * @return array
-     */
-    public function toArray();
 }

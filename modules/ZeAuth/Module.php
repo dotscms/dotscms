@@ -65,7 +65,7 @@ class Module implements AutoloaderProviderInterface
         return array(
             'factories'=>array(
                 'ZeAuth'=>'ZeAuth\\Service\\AuthFactory',
-                'ZeLoginInputFilter'=>function($sm){
+                'ZeAuth\LoginInputFilter'=>function($sm){
                     return new \ZeAuth\Form\LoginInputFilter($sm);
                 },
             ),

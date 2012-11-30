@@ -22,7 +22,7 @@ class AuthController extends AbstractActionController
         // Get the login form and authentication service
         $service = $this->getServiceLocator()->get('ZeAuth');
         $homeRoute = $service->getHomeRoute();
-        $loginFilter = $this->getServiceLocator()->get('ZeLoginInputFilter');
+        $loginFilter = $this->getServiceLocator()->get('ZeAuth\LoginInputFilter');
         $form = $service->getLoginForm();
         $form->setInputFilter($loginFilter);
         // If the form is valid

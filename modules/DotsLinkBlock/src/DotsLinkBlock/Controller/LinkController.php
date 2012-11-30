@@ -96,6 +96,7 @@ class LinkController extends AbstractActionController
     public function saveAction()
     {
         $locator = $this->getServiceLocator();
+        $appConfig = $locator->get('ApplicationConfig');
         $modelPage = $locator->get('DotsPages\Db\Model\Page');
         $modelBlock = $locator->get('DotsBlock\Db\Model\Block');
         $modelLinkBlock = $locator->get('DotsLinkBlock\Db\Model\LinkBlock');
@@ -140,7 +141,7 @@ class LinkController extends AbstractActionController
                 case 'file':
                     $upload = new Upload(array(
                         'path' => 'data/uploads/',
-                        'destination' => PUBLIC_PATH . '/'
+                        'destination' => $appConfig['public_path'] . '/'
                     ));
                     $path = $upload->process(array('file'=>$POST['file']));
                     $data['file'] = $path['file'];
