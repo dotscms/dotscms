@@ -96,40 +96,4 @@ class Login extends Form
             $this->isPrepared = true;
         }
     }
-
-    public function getInputFilter()
-    {
-        if (!$this->filter){
-            $factory = new InputFilterFactory();
-            $identity_type = $this->loginOptions['identity_type'];
-            $inputFilterSpec = array();
-            if ($identity_type != 'email_address'){
-                $inputFilterSpec['identity'] = array(
-                    'required' => true,
-                    'filters' => array(
-                        array('name' => 'Zend\Filter\StringTrim'),
-                    ),
-                );
-            }else {
-                $inputFilterSpec['identity'] = array(
-                    'required' => true,
-                    'filters' => array(
-                        array('name' => 'Zend\Filter\StringTrim'),
-                    ),
-                    'validators' => array(
-                        new EmailAddress(),
-                    ),
-                );
-            }
-            $inputFilterSpec['credential'] = array(
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'Zend\Filter\StringTrim'),
-                ),
-            );
-            $this->filter = $factory->createInputFilter($inputFilterSpec);
-        }
-        return $this->filter;
-    }
-
 }
