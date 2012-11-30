@@ -22,6 +22,9 @@ class DotsForm extends AbstractHelper
             return $this;
         }
         $form->prepare();
+        if(method_exists($form, 'getInputFilter')){
+            $form->setMessages($form->getInputFilter()->getMessages());
+        }
         $view = $this->getView();
         $render = '';
         $render .= $view->plugin('form')->openTag($form);

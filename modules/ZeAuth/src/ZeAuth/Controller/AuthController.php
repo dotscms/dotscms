@@ -22,22 +22,17 @@ class AuthController extends AbstractActionController
         // Get the login form and authentication service
         $service = $this->getServiceLocator()->get('ZeAuth');
         $homeRoute = $service->getHomeRoute();
+        $loginFilter = $this->getServiceLocator()->get('ZeLoginInputFilter');
         $form = $service->getLoginForm();
+        $form->setInputFilter($loginFilter);
         // If the form is valid
         if ($this->request->isPost()){
             $data = $this->request->getPost()->toArray();
             $form->setData($data);
             if ($form->isValid()){
                 // Login the user and redirect to the home route
-                $result = $service->login($data);
-                // on successfull login redirect to homepage.
-                if ( $result === true ){
-                    return $this->redirect()->toRoute($homeRoute);
-                }
-                // otherwise display the errors in the form
-                foreach($result as $key=>$error){
-                    $form->$key->addError($error);
-                }
+                $service->login($data);
+                return $this->redirect()->toRoute($homeRoute);
             }
         }
         // Return the form and display it in the view
