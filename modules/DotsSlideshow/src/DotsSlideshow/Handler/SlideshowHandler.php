@@ -194,6 +194,8 @@ class SlideshowHandler implements HandlerInterface
     public function removeBlock(Event $event)
     {
         $locator = Registry::get('service_locator');
+        $appConfig = $locator->get('ApplicationConfig');
+        $config = $locator->get('Configuration');
         $modelSlideshowBlock = $locator->get('DotsSlideshow\Db\Model\SlideshowBlock');
         $modelSlideshowImage = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
         $block = $event->getTarget();
@@ -204,7 +206,7 @@ class SlideshowHandler implements HandlerInterface
         if(!empty($images)){
             foreach($images as $image){
                 $image->delete();
-                $filename = IMAGE_PATH."/".$image->src;
+                $filename = $appConfig['public_path'].'/'. $config['dots_slideshow']['image_path'] .$image->src;
                 unlink($filename);
             }
         }

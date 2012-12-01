@@ -17,8 +17,10 @@ class SlideshowController extends AbstractActionController
 {
     public function uploadAction()
     {
+        $appConfig = $this->getServiceLocator()->get('ApplicationConfig');
+        $config = $this->getServiceLocator()->get('Configuration');
         $upload_handler = new UploadHandler(
-            array('upload_dir' => IMAGE_PATH, 'upload_url' => 'data/uploads/'), false
+            array('upload_dir' => $appConfig['public_path'] . '/' . $config['dots_slideshow']['image_path'], 'upload_url' => $config['dots_slideshow']['image_path']), false
         );
         $response = $upload_handler->post(false);
 
@@ -28,13 +30,16 @@ class SlideshowController extends AbstractActionController
 
     public function deleteImageAction()
     {
-        $locator = Registry::get('service_locator');
+        $locator = $this->getServiceLocator();
+        $appConfig = $locator->get('ApplicationConfig');
+        $config = $locator->get('Configuration');
+
         $post = $this->getRequest()->getPost()->toArray();
         $modelSlideshowImage = $locator->get('DotsSlideshow\Db\Model\SlideshowImage');
         if($post['id']){
             $modelSlideshowImage->removeById($post['id']);
         }
-        $filename = IMAGE_PATH."/".$post['filename'];
+        $filename = $appConfig['public_path'] . '/' . $config['dots_slideshow']['image_path'].$post['filename'];
         $deleted = unlink($filename);
         return $this->jsonResponse(array("success"=>$deleted));
     }

@@ -9,6 +9,10 @@ return array(
         ),
     ),
 
+    'dots_slideshow' => array(
+        'image_path'=>'data/uploads/'
+    ),
+
     'zendexperts_zedb' => array(
         'models' => array(
             __NAMESPACE__ . '\Db\Model\SlideshowBlock' => array(

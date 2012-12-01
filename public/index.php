@@ -5,9 +5,6 @@
  */
 chdir(dirname(__DIR__));
 
-defined('IMAGE_PATH')
-    || define('IMAGE_PATH', realpath(__DIR__."/data/uploads")."/");
-
 date_default_timezone_set('Europe/Bucharest');
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
