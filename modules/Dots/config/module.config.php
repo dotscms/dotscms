@@ -53,6 +53,12 @@ return array(
         'disable_zf_model'  => false
     ),
 
+    'service_manager' => array(
+        'factories' => array(
+            'Router' => 'Dots\Mvc\Service\RouterFactory',
+        ),
+    ),
+
     // View Manager Service
     'view_manager' => array(
         'display_exceptions' => true,

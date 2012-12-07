@@ -8,17 +8,22 @@
  * file that was distributed with this source code.
  */
 namespace DotsPages\Router;
-use Dots\Registry,
-    Zend\Mvc\Router\Http\RouteInterface,
-    Zend\Http\PhpEnvironment\Request as PhpRequest,
-    Zend\Stdlib\RequestInterface as Request,
-    Zend\Mvc\Router\Http\RouteMatch,
-    Zend\Mvc\Router\Exception\InvalidArgumentException,
-    Zend\Stdlib\ArrayUtils;
+//use Dots\Registry;
+use Zend\Mvc\Router\Http\RouteInterface;
+use Zend\Stdlib\RequestInterface as Request;
+use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Mvc\Router\Exception\InvalidArgumentException;
+use Zend\Stdlib\ArrayUtils;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Page implements RouteInterface
+class Page implements RouteInterface, ServiceLocatorAwareInterface
 {
     protected $defaults = array();
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $routerPluginManager = null;
 
     /**
      * Create a new page route.
@@ -28,6 +33,27 @@ class Page implements RouteInterface
     {
         $this->defaults = $defaults;
     }
+
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $routerPluginManager
+     */
+    public function setServiceLocator(ServiceLocatorInterface $routerPluginManager)
+    {
+        $this->routerPluginManager = $routerPluginManager;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->routerPluginManager;
+    }
+
 
     /**
      * Create a new route with given options.
@@ -70,7 +96,7 @@ class Page implements RouteInterface
         $path = substr($fullPath, $pathOffset);
         $alias = trim($path, '/');
 
-        $model = Registry::get('service_locator')->get('DotsPages\Db\Model\Page');
+        $model = $this->routerPluginManager->getServiceLocator()->get('DotsPages\Db\Model\Page');
         $page = $model->getByAlias($alias);
 
         if ($page) {
