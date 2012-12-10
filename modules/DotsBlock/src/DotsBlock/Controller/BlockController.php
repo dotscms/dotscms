@@ -13,7 +13,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
-use Dots\Registry;
 use Dots\Form\MultiForm;
 use DotsBlock\Db\Entity\Block;
 use DotsBlock\Form\Setting\DefaultBlockSettingsForm;
@@ -47,7 +46,7 @@ class BlockController extends AbstractActionController
         $pageModel = $this->getServiceLocator()->get('DotsPages\Db\Model\Page');
 
         $page = $pageModel->getByAlias($alias);
-        $blockManager = Registry::get('block_manager');
+        $blockManager = $this->getServiceLocator()->get('DotsBlockManager');
 
         $results = $blockManager->events()->trigger('editBlock/' . $type, $block, array('page' => $page, 'section' => $section, 'request'=>$request));
         $params = array('html'=>$results->last());
@@ -79,7 +78,7 @@ class BlockController extends AbstractActionController
                     $block->page_id = $page->id;
                 }
 
-                $blockManager = Registry::get('block_manager');
+                $blockManager = $this->getServiceLocator()->get('DotsBlockManager');
                 $responses = $blockManager->events()->trigger('saveBlock/' . $model['type'], $block, array('page' => $page, 'section' => $model['section'], 'request' => $request));
                 if ($responses->stopped()) {
                     return $this->jsonResponse(array('success' => false, 'errors' => $responses->last()));
@@ -107,7 +106,7 @@ class BlockController extends AbstractActionController
     {
         //get instances of the block manager and model classes
         $request = $this->getRequest();
-        $blockManager = Registry::get('block_manager');
+        $blockManager = $this->getServiceLocator()->get('DotsBlockManager');
         $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
         //get the current block based on the provided id
         $id = $_REQUEST['id'];
@@ -189,7 +188,7 @@ class BlockController extends AbstractActionController
         $blockModel = $this->getServiceLocator()->get('DotsBlock\Db\Model\Block');
 
         $block = $blockModel->getById($blockId);
-        $blockManager = Registry::get('block_manager');
+        $blockManager = $this->getServiceLocator()->get('DotsBlockManager');
 
         $responses = $blockManager->events()->trigger('removeBlock/' . $block->type, $block, array('request' => $request));
         $success = $responses->last();

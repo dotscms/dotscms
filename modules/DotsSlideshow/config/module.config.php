@@ -47,7 +47,8 @@ return array(
                 ),
                 'head.pre' => array(
                     'scripts' => array(
-                        'jquery.nivo.slider'                => 'assets/dots-slideshow/lib/nivo_slider/jquery.nivo.slider.pack.js',
+//                        'jquery.nivo.slider'                => 'assets/dots-slideshow/lib/nivo_slider/jquery.nivo.slider.pack.js',
+                        'jquery.nivo.slider'                => '//cdnjs.cloudflare.com/ajax/libs/jquery-nivoslider/3.1/jquery.nivo.slider.pack.js',
                         'dots-slider'                       => 'assets/dots-slideshow/js/slider.js'
                     ),
                     'links' => array(
