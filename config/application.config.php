@@ -8,12 +8,15 @@ return array(
         'Dots', 'DotsPages', 'DotsBlock', 'DotsHtmlBlock', 'DotsImageBlock', 'DotsLinkBlock', 'DotsNavBlock', 'DotsSlideshow',
     ),
     'module_listener_options' => array(
+        //configure caching
+        'config_cache_enabled' => true,
+        'config_cache_key' => 'global',
+        'cache_dir' => 'data/cache',
+
         'config_glob_paths' => array(
             'config/autoload/{,*.}global.php',
             'config/autoload/{,*.}local.php',
         ),
-        'config_cache_enabled' => false,
-        'cache_dir' => dirname(__DIR__) . '/data/cache',
         'module_paths' => array(
             './modules',
             './vendor',

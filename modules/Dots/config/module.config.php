@@ -6,13 +6,6 @@ return array(
             'events'=>array(
                 'head.pre'=>array(
                     'scripts'=>array(
-//                        'html5'         => 'assets/dots/lib/html5.js',
-//                        'jquery'        => 'assets/dots/lib/jquery.min.js',
-//                        'jquery-ui'     => 'assets/dots/lib/jquery-ui/js/jquery-ui.min.js',
-//                        'bootstrap'     => 'assets/dots/lib/bootstrap/js/bootstrap.min.js',
-//                        'underscore'    => 'assets/dots/lib/underscore.min.js',
-//                        'json2'         => 'assets/dots/lib/json2.js',
-//                        'backbone'      => 'assets/dots/lib/backbone.min.js',
                         'html5shiv'         => '//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js',
                         'jquery'        => '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js',
                         'jquery-ui'     => '//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js',
@@ -28,7 +21,6 @@ return array(
                 ),
                 'admin.head.pre' => array(
                     'scripts' => array(
-//                        'jquery.form'   => 'assets/dots/lib/jquery.form.js',
                         'jquery.form'   => '//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.20/jquery.form.js',
                         'jquery.json'   => 'assets/dots/lib/jquery.json.js',
                         'dots'          => 'assets/dots/js/dots.js',
