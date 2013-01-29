@@ -12,7 +12,14 @@
 
     {# HTML BODY SECTION#}
     <body>
-        {% block body %}{% endblock %}
+        {% block dotsNavigation %}
+        {{ dotsNav() | raw }}
+        {% endblock %}
+
+        {% block body %}
+        {% endblock %}
+
+        {% trigger 'dots:inlineScript' %}
     </body>
 
 </html>

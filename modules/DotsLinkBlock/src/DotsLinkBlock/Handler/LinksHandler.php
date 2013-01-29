@@ -15,7 +15,6 @@ use Zend\View\Model\ViewModel;
 
 use Dots\Registry;
 use Dots\Form\MultiForm;
-use Dots\EventManager\GlobalEventManager;
 use DotsLinkBlock\Db\Entity\LinkBlock;
 use DotsBlock\ContentHandler;
 use DotsBlock\HandlerInterface;
@@ -47,7 +46,7 @@ class LinksHandler implements HandlerInterface
      */
     public function attach(EventManagerInterface $events, $priority = 100)
     {
-        GlobalEventManager::attach('admin.body.inline', array($this, 'initTemplates'), $priority);
+        $events->getSharedManager()->attach('dots', 'admin.body.inline', array($this, 'initTemplates'), $priority);
         $this->listeners[] = $events->attach('listHandlers', array($this, 'getHandler'), $priority);
         $this->listeners[] = $events->attach('renderBlock/' . static::TYPE, array($this, 'renderBlock'), $priority);
         $this->listeners[] = $events->attach('editBlock/' . static::TYPE, array($this, 'editBlock'), $priority);

@@ -1,11 +1,13 @@
-SetEnv APPLICATION_ENV development
+<ifModule mod_php5.c>
+    php_flag magic_quotes_gpc off
+</ifModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-#    RewriteCond %{REQUEST_FILENAME} -s [OR]
-#    RewriteCond %{REQUEST_FILENAME} -l [OR]
-#    RewriteCond %{REQUEST_FILENAME} -d
-#    RewriteRule ^.*$ - [NC,L]
+    RewriteCond %{REQUEST_FILENAME} -s [OR]
+    RewriteCond %{REQUEST_FILENAME} -l [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^.*$ - [NC,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^.*$ index.php [NC,L]
 </IfModule>

@@ -13,6 +13,7 @@ ini_set('display_errors', 'on');
 include 'init_autoloader.php';
 
 $config = include 'config/application.config.php';
+
 // set the public path in the application configuration so we know where all the public files are located
 $config['public_path'] = __DIR__;
 

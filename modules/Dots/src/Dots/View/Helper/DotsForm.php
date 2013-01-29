@@ -13,10 +13,18 @@ use Zend\View\Helper\AbstractHelper;
 use Zend\Form\Form;
 use Dots\Form\MultiForm;
 
+/**
+ * View Helper class for completely rendering a form
+ */
 class DotsForm extends AbstractHelper
 {
 
-    public function __invoke($form = null, $options=null)
+    /**
+     * Invoke the rendering of the specified form
+     * @param null $options
+     * @return DotsForm|string
+     */
+    public function __invoke($form = null)
     {
         if ($form == null){
             return $this;

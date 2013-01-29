@@ -9,6 +9,10 @@
  */
 namespace Dots;
 
+/**
+ * @todo Remove Dots\Registry out of all the code and pass the service manager and the block manager
+ * without the Singleton class
+ */
 class Registry
 {
     protected static $data = array();
