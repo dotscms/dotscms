@@ -69,6 +69,12 @@ return array(
         ),
     ),
 
+    'ze-auth' => array(
+        'restricted_routes' => array(
+            'dots-slideshow' => array('dots-slideshow')
+        ),
+    ),
+
     //Router Service
     'router' => array(
         'routes' => array(

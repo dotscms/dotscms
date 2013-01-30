@@ -46,6 +46,12 @@ return array(
         ),
     ),
 
+    'ze-auth' => array(
+        'restricted_routes' => array(
+            'dots-link-block' => array('dots-link-block')
+        ),
+    ),
+
     //Router Service
     'router' => array(
         'routes' => array(

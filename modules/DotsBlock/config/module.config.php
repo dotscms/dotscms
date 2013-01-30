@@ -38,6 +38,13 @@ return array(
             )
         )
     ),
+
+    'ze-auth' => array(
+        'restricted_routes' => array(
+            'dots-block' => array('dots-block')
+        ),
+    ),
+
     // Set up default functionality for managing blocks
     'controllers' => array(
         'invokables' => array(

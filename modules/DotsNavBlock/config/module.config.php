@@ -48,6 +48,12 @@ return array(
         ),
     ),
 
+    'ze-auth' => array(
+        'restricted_routes' => array(
+            'dots-nav-block' => array('dots-nav-block')
+        ),
+    ),
+
     //Router Service
     'router' => array(
         'routes' => array(

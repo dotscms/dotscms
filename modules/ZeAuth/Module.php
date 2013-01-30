@@ -30,7 +30,7 @@ class Module implements AutoloaderProviderInterface
     public function init(ModuleManager $moduleManager)
     {
         $moduleManager->getEventManager()->getSharedManager()
-            ->attach('application', 'bootstrap', array($this, 'initListener'), self::PRIORITY);
+            ->attach('Zend\\Mvc\\Application', 'bootstrap', array($this, 'initListener'), self::PRIORITY);
     }
     
     /**

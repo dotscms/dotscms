@@ -1,7 +1,9 @@
 <?php
 return array(
     'ze-auth' => array(
-        'restricted_routes' => array(),
+        'restricted_routes' => array(
+            'dots-pages'=>array('dots-admin-page')
+        ),
         'home_route' => 'dots-page',
     ),
 
