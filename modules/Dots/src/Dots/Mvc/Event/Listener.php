@@ -128,6 +128,7 @@ class Listener implements ListenerAggregateInterface, ServiceLocatorAwareInterfa
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach('dispatch', array($this, 'onDispatch'), 10000);
+        $this->listeners[] = $events->attach('dispatch.error', array($this, 'onDispatch'), 10000);
     }
 
     /**

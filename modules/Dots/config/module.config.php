@@ -44,7 +44,7 @@ return array(
         'extensions' => array(
             'dots-twig'     => 'DotsTwigExtension'
         ),
-        'disable_zf_model'  => false
+        'disable_zf_model'  => true
     ),
 
     'service_manager' => array(

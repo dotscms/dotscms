@@ -23,10 +23,12 @@ class Admin
         $view = $serviceLocator->get('DotsTwigViewRenderer');
         $context = $serviceLocator->get('Application')->getMvcEvent();
         $routeMatch = $context->getRouteMatch();
-        $routeMatchName = $context->getRouteMatch()->getMatchedRouteName();
+        $routeMatchName = null;
+        if ($routeMatch){
+            $routeMatchName = $routeMatch->getMatchedRouteName();
+        }
         $params = array();
         $params['editable'] = ($routeMatchName == 'dots-page' || ($routeMatchName == 'home' && $routeMatch->getParam('page') instanceof Page));
-
 
         //render admin navigation
         $viewModel = new ViewModel($params);

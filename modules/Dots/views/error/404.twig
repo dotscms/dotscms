@@ -1,47 +1,50 @@
-<h1>A 404 error occurred</h1>
-<h2>{{message}}</h2>
+{% extends 'layout/main' %}
+{% block content %}
+    <h1>A 404 error occurred</h1>
+    <h2>{{message}}</h2>
 
-{% if reason %}
+    {% if reason %}
 
-    {% if (reason == 'error-controller-cannot-dispatch') %}
-        {% set reasonMessage = 'The requested controller was unable to dispatch the request.' %}
-    {% elseif (reason == 'error-controller-not-found') %}
-        {% set reasonMessage = 'The requested controller could not be mapped to an existing controller class.'%}
-    {% elseif (reason == 'error-controller-invalid') %}
-        {% set reasonMessage = 'The requested controller was not dispatchable.'%}
-    {% elseif (reason == 'error-router-no-match') %}
-        {% set reasonMessage = 'The requested URL could not be matched by routing.'%}
-    {% else %}
-        {% set reasonMessage = 'We cannot determine at this time why a 404 was generated.'%}
+        {% if (reason == 'error-controller-cannot-dispatch') %}
+            {% set reasonMessage = 'The requested controller was unable to dispatch the request.' %}
+        {% elseif (reason == 'error-controller-not-found') %}
+            {% set reasonMessage = 'The requested controller could not be mapped to an existing controller class.'%}
+        {% elseif (reason == 'error-controller-invalid') %}
+            {% set reasonMessage = 'The requested controller was not dispatchable.'%}
+        {% elseif (reason == 'error-router-no-match') %}
+            {% set reasonMessage = 'The requested URL could not be matched by routing.'%}
+        {% else %}
+            {% set reasonMessage = 'We cannot determine at this time why a 404 was generated.'%}
+        {% endif %}
+
+        <p>{{reasonMessage}}</p>
+
     {% endif %}
 
-    <p>{{reasonMessage}}</p>
+    {% if controller %}
 
-{% endif %}
+    <dl>
+        <dt>Controller:</dt>
+        <dd>{{controller}}
+        {% if controller_class and controller_class !=controller %}
+             (resolves to {{ controller_class }})
+        {% endif %}
+        </dd>
+    </dl>
 
-{% if controller %}
-
-<dl>
-    <dt>Controller:</dt>
-    <dd>{{controller}}
-    {% if controller_class and controller_class !=controller %}
-         (resolves to {{ controller_class }})
     {% endif %}
-    </dd>
-</dl>
 
-{% endif %}
+    {% if exception %}
 
-{% if exception %}
+    <h2>Exception:</h2>
 
-<h2>Exception:</h2>
+    <p><b>{{exception.getMessage()}}</b></p>
 
-<p><b>{{exception.getMessage()}}</b></p>
+    <h3>Stack trace</h3>
 
-<h3>Stack trace</h3>
+    <pre>
+    {{exception.getTraceAsString()}}
+    </pre>
 
-<pre>
-{{exception.getTraceAsString()}}
-</pre>
-
-{% endif %}
+    {% endif %}
+{% endblock %}
