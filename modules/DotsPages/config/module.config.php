@@ -57,6 +57,12 @@ return array(
         ),
     ),
 
+    'route_manager'=>array(
+        'invokables'=>array(
+            'dots-page'=>'DotsPages\\Router\\Page',
+        )
+    ),
+
     //Router Service
     'router' => array(
         'routes' => array(
@@ -75,7 +81,7 @@ return array(
             ),
 
             'dots-page' => array(
-                'type' => 'DotsPages\Router\Page',
+                'type' => 'dots-page',
                 'options' => array(
                     'defaults' => array(
                         'controller' => 'DotsPages\Controller\Page',

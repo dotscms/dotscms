@@ -49,7 +49,8 @@ return array(
 
     'service_manager' => array(
         'factories' => array(
-            'Router' => 'Dots\Mvc\Service\RouterFactory',
+            'Router' => 'Dots\\Mvc\\Service\\RouterFactory',
+            'RoutePluginManager' => 'Dots\\Mvc\\Service\\RoutePluginManagerFactory',
         ),
     ),
 

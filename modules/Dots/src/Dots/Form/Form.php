@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  */
 namespace Dots\Form;
+use Zend\Form\FormInterface;
 use Zend\Form\Form as BaseForm;
 
 class Form extends BaseForm
@@ -30,7 +31,7 @@ class Form extends BaseForm
         return parent::setData($data);
     }
 
-    public function prepareElement(BaseForm $form)
+    public function prepareElement(FormInterface $form)
     {
         $name = $this->getName();
         if ($name){

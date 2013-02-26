@@ -9,7 +9,7 @@ return array(
     ),
     'module_listener_options' => array(
         //configure caching
-        'config_cache_enabled' => true,
+        'config_cache_enabled' => false,
         'config_cache_key' => 'global',
         'cache_dir' => 'data/cache',
 

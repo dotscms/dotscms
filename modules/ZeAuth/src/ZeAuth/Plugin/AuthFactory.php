@@ -11,6 +11,7 @@ namespace ZeAuth\Plugin;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 use ZeAuth\Plugin\Auth;
 
 /**
@@ -29,7 +30,10 @@ class AuthFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Configuration');
+        if ($serviceLocator instanceof AbstractPluginManager){
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
+        $config = $serviceLocator->get('Config');
         $config = isset($config['ze-auth']) && (is_array($config['ze-auth']) || $config['ze-auth'] instanceof ArrayAccess)
             ? $config['ze-auth']
             : array();

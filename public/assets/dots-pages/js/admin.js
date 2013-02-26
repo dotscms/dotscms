@@ -6,8 +6,17 @@ Dots.namespace("Dots.Pages.View");
 Dots.View.Menu.Admin = Dots.View.Menu.Admin.extend({
     events:{
         'click #dots_pages_admin_add':'_addPageEvent',
+        'click #dots_pages_admin_manage':'_managePageEvent',
         'click #dots_pages_admin_edit':'_editPageEvent',
         'click #dots_pages_admin_remove':'_removePageEvent'
+    },
+    _managePageEvent:function () {
+        Dots.View.Dialog.open({
+            url:'dots-pages/manage/',
+            id:'dotsPagesAdmin_ManageDialog'
+        });
+        this.$el.find('.dropdown.open').removeClass('open');
+        return false;
     },
     _addPageEvent:function () {
         Dots.View.Dialog.open({

@@ -21,6 +21,12 @@ use DotsPages\Form\PageMeta;
 
 class AdminController extends AbstractActionController
 {
+
+    public function manageAction()
+    {
+
+        return new ViewModel();
+    }
     /**
      * Show add view or add a new page
      * @return \Zend\View\Model\ViewModel

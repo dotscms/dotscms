@@ -43,4 +43,18 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
+    public function getServiceConfig()
+    {
+        return array(
+            'factories'=>array(
+                'DotsPages\Router\Page'=>function (){
+                    return new \DotsPages\Router\Page();
+                }
+            ),
+            'shared'=>array(
+                'DotsPages\Router\Page'=> false,
+            )
+        );
+    }
+
 }

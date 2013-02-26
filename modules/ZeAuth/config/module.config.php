@@ -64,8 +64,8 @@ return array(
     ),
 
     'view_helpers' => array(
-        'invokables' => array(
-            'auth' => __NAMESPACE__ . '\\Plugin\\Auth',
+        'factories' => array(
+            'auth' => __NAMESPACE__ . '\\Plugin\\AuthFactory',
         )
     ),
 
